@@ -2505,7 +2505,7 @@ namespace Microsoft.Dafny.Compilers.Csharp {
 
       var w = new ConcreteSyntaxTree();
       if (to.IsRefType) {
-        wr.Format($"({TypeName(to, wr, tok)})({w})");
+        wr.Format($"(({TypeName(to, wr, tok)})({w}))");
       } else {
         Contract.Assert(Type.SameHead(from, to));
 
