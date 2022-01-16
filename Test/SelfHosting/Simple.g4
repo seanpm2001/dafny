@@ -1,7 +1,7 @@
 grammar Simple;
 options { language=CSharp; }
 
-seq  : (s=stmt ';')*;
+prog : (s+=stmt ';')*;
 
 stmt : 'print' '(' e=expr ')' # Print;
 
