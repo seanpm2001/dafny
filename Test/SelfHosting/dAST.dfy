@@ -35,8 +35,7 @@ module Translator {
   import opened Global
 
   function method {:verify false} translateExpr(c: CSharp.Expr) : Dafny.Expr
-    // TODO: It would be nice to be able to use the function syntax.
-    //       Isn't there a way to assume termination for a function?
+    // TODO: Isn't there a way to assume termination for a function?
     reads *
   {
     if c is CSharp.Const then

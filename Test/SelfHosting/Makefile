@@ -1,4 +1,7 @@
-dAST.cs: dAST.dfy cAST.cs
+cAST.cs.dfy: cAST.cs
+	dotnet run --project ../../Source/Dafny/AST/ASTExport/ASTExport.csproj -- "$<" > "$@"
+
+dAST.cs: dAST.dfy cAST.cs.dfy
 	../../Binaries/Dafny /spillTargetCode:3 /noVerify $<
 
 dll := bin/Debug/net6.0/SelfHosting.dll
