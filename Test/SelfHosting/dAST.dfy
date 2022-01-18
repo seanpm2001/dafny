@@ -1,74 +1,6 @@
-module {:extern "System.Collections.Generic"} CSharpGenerics {
-  class {:extern "List"} List<T> {}
-}
-
-module {:extern "SelfHosting.CSharpUtils"} CSharpUtils {
-  import opened CSharpGenerics
-
-  class ListUtils {
-    static function method {:extern "FoldR"} FoldR<A, B>(f: (A, B) -> B, b0: B, l: List<A>) : B
-
-    static method {:extern "Mk"} Mk<T>() returns (l: List<T>)
-    static method {:extern "Append"} Append<T>(l: List<T>, t: T)
-
-    static method AppendSeq<T>(l: List<T>, s:seq<T>) {
-      var i := 0;
-      while (i < |s|) {
-        Append(l, s[i]);
-        i := i + 1;
-      }
-    }
-  }
-}
-
-module LinkedList {
-  datatype List<T> =
-    | Cons(hd: T, tl: List<T>)
-    | Nil
-
-  function method Singleton<T>(t: T) : List<T> {
-    Cons(t, Nil)
-  }
-
-  function method Concat<T>(l1: List<T>, l2: List<T>) : List<T> {
-    match l1 {
-      case Nil => l2
-      case Cons(h, t) => Cons(h, Concat<T>(t, l2))
-    }
-  }
-
-  function method ToSeq<T>(l: List<T>) : seq<T> {
-    match l {
-      case Nil => []
-      case Cons(h, t) => [h] + ToSeq(t)
-    }
-  }
-}
-
-module {:extern "SelfHosting.CSharp"} CSharp {
-  import CSharpGenerics
-
-  trait {:compile false} {:extern "Expr"} Expr {}
-
-  trait {:compile false} {:extern "Const"} Const extends Expr {
-    var n: int
-  }
-
-  trait {:compile false} {:extern "Add"} Add extends Expr {
-    var e1: Expr
-    var e2: Expr
-  }
-
-  trait {:compile false} {:extern "Stmt"} Stmt {}
-
-  trait {:compile false} {:extern "Print"} Print extends Stmt {
-    var e: Expr
-  }
-
-  trait {:compile false} {:extern "Prog"} Prog {
-    var s: CSharpGenerics.List<Stmt>
-  }
-}
+include "CSharpCompat.dfy"
+include "cAST.cs.dfy"
+include "Utils.dfy"
 
 module Dafny {
   datatype Expr =
@@ -94,12 +26,6 @@ module Dafny {
       case Seq(s1, s2) => interpStmt(s1) + interpStmt(s2)
     }
   }
-}
-
-module Global {
-  function method unreachable<T>() : T
-    requires false
-  { match () {} }
 }
 
 module Translator {
