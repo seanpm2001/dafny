@@ -1,7 +1,7 @@
 cAST.cs.dfy: cAST.cs
 	dotnet run --project ../../Source/Dafny/AST/ASTExport/ASTExport.csproj -- "$<" "CSharpAST" > "$@"
 
-CSharpCompat.dfy: ../../Source/Dafny/AST/ASTExport/CSharpCompat.dfy
+CSharpCompat.dfy: ../../Source/Dafny/Compilers/SelfHosting/CSharpCompat.dfy
 	cp "$<" "$@"
 
 dAST.cs: dAST.dfy CSharpCompat.dfy cAST.cs.dfy

@@ -18,10 +18,8 @@ module {:extern "Microsoft.Dafny"} Dafny {
   class {:extern} Graph<T> {}
   class {:extern} Translator {}
   class {:extern} VisibilityScope {}
-}
-
-module {:extern "Microsoft.Dafny.Resolver"} DafnyResolver {
-  class {:extern} TypeConstraint {}
+  class {:extern} ConcreteSyntaxTree {}
+  class {:extern} TypeConstraint {} // In Dafny.Resolver
 }
 
 module {:extern "Microsoft.Boogie"} Boogie {
