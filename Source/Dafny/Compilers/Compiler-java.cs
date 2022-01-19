@@ -3796,7 +3796,7 @@ namespace Microsoft.Dafny.Compilers.Java {
             if (literal != null) {
               // Optimize constant to avoid intermediate BigInteger
               EmitNativeIntegerLiteral((BigInteger)literal, toNative, wr);
-            } else if (u != null && u.Op == UnaryOpExpr.Opcode.Cardinality) {
+            } else if (u != null && u.Op == UnaryOpExpr.UnOpcode.Cardinality) {
               // Optimize || to avoid intermediate BigInteger
               wr.Write(CastIfSmallNativeType(toType));
               TrParenExpr("", u.E, wr, inLetExprBody);

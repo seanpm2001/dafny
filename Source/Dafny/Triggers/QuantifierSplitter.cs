@@ -17,11 +17,11 @@ namespace Microsoft.Dafny.Triggers {
     /// also split quantifiers.
     private Dictionary<QuantifierExpr, List<Expression>> splits = new Dictionary<QuantifierExpr, List<Expression>>();
 
-    private static BinaryExpr.Opcode FlipOpcode(BinaryExpr.Opcode opCode) {
-      if (opCode == BinaryExpr.Opcode.And) {
-        return BinaryExpr.Opcode.Or;
-      } else if (opCode == BinaryExpr.Opcode.Or) {
-        return BinaryExpr.Opcode.And;
+    private static BinaryExpr.BinOpcode FlipOpcode(BinaryExpr.BinOpcode opCode) {
+      if (opCode == BinaryExpr.BinOpcode.And) {
+        return BinaryExpr.BinOpcode.Or;
+      } else if (opCode == BinaryExpr.BinOpcode.Or) {
+        return BinaryExpr.BinOpcode.And;
       } else {
         throw new ArgumentException();
       }
@@ -35,20 +35,20 @@ namespace Microsoft.Dafny.Triggers {
     //   forall x :: P(x) ==> (Q(x) && R(x))
 
     private static UnaryOpExpr Not(Expression expr) {
-      return new UnaryOpExpr(expr.tok, UnaryOpExpr.Opcode.Not, expr) { Type = expr.Type };
+      return new UnaryOpExpr(expr.tok, UnaryOpExpr.UnOpcode.Not, expr) { Type = expr.Type };
     }
 
-    internal static IEnumerable<Expression> SplitExpr(Expression expr, BinaryExpr.Opcode separator) {
+    internal static IEnumerable<Expression> SplitExpr(Expression expr, BinaryExpr.BinOpcode separator) {
       expr = expr.Resolved;
       var unary = expr as UnaryOpExpr;
       var binary = expr as BinaryExpr;
 
-      if (unary != null && unary.Op == UnaryOpExpr.Opcode.Not) {
+      if (unary != null && unary.Op == UnaryOpExpr.UnOpcode.Not) {
         foreach (var e in SplitExpr(unary.E, FlipOpcode(separator))) { yield return Not(e); }
       } else if (binary != null && binary.Op == separator) {
         foreach (var e in SplitExpr(binary.E0, separator)) { yield return e; }
         foreach (var e in SplitExpr(binary.E1, separator)) { yield return e; }
-      } else if (binary != null && binary.Op == BinaryExpr.Opcode.Imp && separator == BinaryExpr.Opcode.Or) {
+      } else if (binary != null && binary.Op == BinaryExpr.BinOpcode.Imp && separator == BinaryExpr.BinOpcode.Or) {
         foreach (var e in SplitExpr(Not(binary.E0), separator)) { yield return e; }
         foreach (var e in SplitExpr(binary.E1, separator)) { yield return e; }
       } else {
@@ -56,7 +56,7 @@ namespace Microsoft.Dafny.Triggers {
       }
     }
 
-    internal static IEnumerable<Expression> SplitAndStich(BinaryExpr pair, BinaryExpr.Opcode separator) {
+    internal static IEnumerable<Expression> SplitAndStich(BinaryExpr pair, BinaryExpr.BinOpcode separator) {
       foreach (var e1 in SplitExpr(pair.E1, separator)) {
         // Notice the token. This makes triggers/splitting-picks-the-right-tokens.dfy possible
         yield return new BinaryExpr(e1.tok, pair.Op, pair.E0, e1) { ResolvedOp = pair.ResolvedOp, Type = pair.Type };
@@ -69,10 +69,10 @@ namespace Microsoft.Dafny.Triggers {
 
       if (quantifier is ForallExpr) {
         IEnumerable<Expression> stream;
-        if (binary != null && (binary.Op == BinaryExpr.Opcode.Imp || binary.Op == BinaryExpr.Opcode.Or)) {
-          stream = SplitAndStich(binary, BinaryExpr.Opcode.And);
+        if (binary != null && (binary.Op == BinaryExpr.BinOpcode.Imp || binary.Op == BinaryExpr.BinOpcode.Or)) {
+          stream = SplitAndStich(binary, BinaryExpr.BinOpcode.And);
         } else {
-          stream = SplitExpr(body, BinaryExpr.Opcode.And);
+          stream = SplitExpr(body, BinaryExpr.BinOpcode.And);
         }
         foreach (var e in stream) {
           var tok = new NestedToken(quantifier.tok, e.tok);
@@ -80,10 +80,10 @@ namespace Microsoft.Dafny.Triggers {
         }
       } else if (quantifier is ExistsExpr) {
         IEnumerable<Expression> stream;
-        if (binary != null && binary.Op == BinaryExpr.Opcode.And) {
-          stream = SplitAndStich(binary, BinaryExpr.Opcode.Or);
+        if (binary != null && binary.Op == BinaryExpr.BinOpcode.And) {
+          stream = SplitAndStich(binary, BinaryExpr.BinOpcode.Or);
         } else {
-          stream = SplitExpr(body, BinaryExpr.Opcode.Or);
+          stream = SplitExpr(body, BinaryExpr.BinOpcode.Or);
         }
         foreach (var e in stream) {
           var tok = new NestedToken(quantifier.tok, e.tok);

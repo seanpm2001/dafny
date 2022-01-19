@@ -248,8 +248,8 @@ namespace Microsoft.Dafny.Triggers {
       do {
         ret = expr;
         if (expr is BinaryExpr bin) {
-          if (bin.Op == BinaryExpr.Opcode.NotIn) {
-            expr = new BinaryExpr(bin.tok, BinaryExpr.Opcode.In, bin.E0, bin.E1) {
+          if (bin.Op == BinaryExpr.BinOpcode.NotIn) {
+            expr = new BinaryExpr(bin.tok, BinaryExpr.BinOpcode.In, bin.E0, bin.E1) {
               ResolvedOp = RemoveNotInBinaryExprIn(bin.ResolvedOp),
               Type = bin.Type
             };

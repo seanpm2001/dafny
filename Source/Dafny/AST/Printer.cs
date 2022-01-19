@@ -2360,26 +2360,26 @@ namespace Microsoft.Dafny {
 
       } else if (expr is UnaryOpExpr) {
         var e = (UnaryOpExpr)expr;
-        if (e.Op == UnaryOpExpr.Opcode.Cardinality) {
+        if (e.Op == UnaryOpExpr.UnOpcode.Cardinality) {
           wr.Write("|");
           PrintExpression(e.E, false);
           wr.Write("|");
-        } else if (e.Op == UnaryOpExpr.Opcode.Allocated) {
+        } else if (e.Op == UnaryOpExpr.UnOpcode.Allocated) {
           wr.Write("allocated(");
           PrintExpression(e.E, false);
           wr.Write(")");
-        } else if (e.Op == UnaryOpExpr.Opcode.Lit) {
+        } else if (e.Op == UnaryOpExpr.UnOpcode.Lit) {
           wr.Write("Lit(");
           PrintExpression(e.E, false);
           wr.Write(")");
         } else {
-          Contract.Assert(e.Op != UnaryOpExpr.Opcode.Fresh); // this is handled is "is FreshExpr" case above
+          Contract.Assert(e.Op != UnaryOpExpr.UnOpcode.Fresh); // this is handled is "is FreshExpr" case above
           // Prefix operator.
           // determine if parens are needed
           string op;
           int opBindingStrength;
           switch (e.Op) {
-            case UnaryOpExpr.Opcode.Not:
+            case UnaryOpExpr.UnOpcode.Not:
               op = "!"; opBindingStrength = 0x80; break;
             default:
               Contract.Assert(false); throw new cce.UnreachableException();  // unexpected unary opcode
@@ -2411,51 +2411,51 @@ namespace Microsoft.Dafny {
         bool fragileLeftContext = false;  // false means "allow same binding power on left without parens"
         bool fragileRightContext = false;  // false means "allow same binding power on right without parens"
         switch (e.Op) {
-          case BinaryExpr.Opcode.LeftShift:
-          case BinaryExpr.Opcode.RightShift:
+          case BinaryExpr.BinOpcode.LeftShift:
+          case BinaryExpr.BinOpcode.RightShift:
             opBindingStrength = 0x48; fragileRightContext = true; break;
-          case BinaryExpr.Opcode.Add: {
+          case BinaryExpr.BinOpcode.Add: {
               opBindingStrength = 0x40;
               var t1 = e.E1.Type;
               fragileRightContext = t1 == null || !(t1.IsIntegerType || t1.IsRealType || t1.IsBigOrdinalType || t1.IsBitVectorType);
               break;
             }
-          case BinaryExpr.Opcode.Sub:
+          case BinaryExpr.BinOpcode.Sub:
             opBindingStrength = 0x40; fragileRightContext = true; break;
-          case BinaryExpr.Opcode.Mul: {
+          case BinaryExpr.BinOpcode.Mul: {
               opBindingStrength = 0x50;
               var t1 = e.E1.Type;
               fragileRightContext = t1 == null || !(t1.IsIntegerType || t1.IsRealType || t1.IsBigOrdinalType || t1.IsBitVectorType);
               break;
             }
-          case BinaryExpr.Opcode.Div:
-          case BinaryExpr.Opcode.Mod:
+          case BinaryExpr.BinOpcode.Div:
+          case BinaryExpr.BinOpcode.Mod:
             opBindingStrength = 0x50; fragileRightContext = true; break;
-          case BinaryExpr.Opcode.BitwiseAnd:
+          case BinaryExpr.BinOpcode.BitwiseAnd:
             opBindingStrength = 0x60; break;
-          case BinaryExpr.Opcode.BitwiseOr:
+          case BinaryExpr.BinOpcode.BitwiseOr:
             opBindingStrength = 0x61; break;
-          case BinaryExpr.Opcode.BitwiseXor:
+          case BinaryExpr.BinOpcode.BitwiseXor:
             opBindingStrength = 0x62; break;
-          case BinaryExpr.Opcode.Eq:
-          case BinaryExpr.Opcode.Neq:
-          case BinaryExpr.Opcode.Gt:
-          case BinaryExpr.Opcode.Ge:
-          case BinaryExpr.Opcode.Lt:
-          case BinaryExpr.Opcode.Le:
-          case BinaryExpr.Opcode.Disjoint:
-          case BinaryExpr.Opcode.In:
-          case BinaryExpr.Opcode.NotIn:
+          case BinaryExpr.BinOpcode.Eq:
+          case BinaryExpr.BinOpcode.Neq:
+          case BinaryExpr.BinOpcode.Gt:
+          case BinaryExpr.BinOpcode.Ge:
+          case BinaryExpr.BinOpcode.Lt:
+          case BinaryExpr.BinOpcode.Le:
+          case BinaryExpr.BinOpcode.Disjoint:
+          case BinaryExpr.BinOpcode.In:
+          case BinaryExpr.BinOpcode.NotIn:
             opBindingStrength = 0x30; fragileLeftContext = fragileRightContext = true; break;
-          case BinaryExpr.Opcode.And:
+          case BinaryExpr.BinOpcode.And:
             opBindingStrength = 0x20; break;
-          case BinaryExpr.Opcode.Or:
+          case BinaryExpr.BinOpcode.Or:
             opBindingStrength = 0x21; break;
-          case BinaryExpr.Opcode.Imp:
+          case BinaryExpr.BinOpcode.Imp:
             opBindingStrength = 0x10; fragileLeftContext = true; break;
-          case BinaryExpr.Opcode.Exp:
+          case BinaryExpr.BinOpcode.Exp:
             opBindingStrength = 0x11; fragileRightContext = true; break;
-          case BinaryExpr.Opcode.Iff:
+          case BinaryExpr.BinOpcode.Iff:
             opBindingStrength = 0x08; break;
           default:
             Contract.Assert(false); throw new cce.UnreachableException();  // unexpected binary operator
@@ -2468,24 +2468,24 @@ namespace Microsoft.Dafny {
         string op = BinaryExpr.OpcodeString(e.Op);
         if (parensNeeded) { wr.Write("("); }
         var sem = !parensNeeded && isFollowedBySemicolon;
-        if (0 <= indent && e.Op == BinaryExpr.Opcode.And) {
+        if (0 <= indent && e.Op == BinaryExpr.BinOpcode.And) {
           PrintExpr(e.E0, opBindingStrength, fragileLeftContext, false, sem, indent, keyword);
           wr.WriteLine(" {0}", op);
           Indent(indent);
           PrintExpr(e.E1, opBindingStrength, fragileRightContext, parensNeeded || isRightmost, sem, indent, keyword);
-        } else if (0 <= indent && e.Op == BinaryExpr.Opcode.Imp) {
+        } else if (0 <= indent && e.Op == BinaryExpr.BinOpcode.Imp) {
           PrintExpr(e.E0, opBindingStrength, fragileLeftContext, false, sem, indent, keyword);
           wr.WriteLine(" {0}", op);
           int ind = indent + IndentAmount;
           Indent(ind);
           PrintExpr(e.E1, opBindingStrength, fragileRightContext, parensNeeded || isRightmost, sem, ind, keyword);
-        } else if (0 <= indent && e.Op == BinaryExpr.Opcode.Exp) {
+        } else if (0 <= indent && e.Op == BinaryExpr.BinOpcode.Exp) {
           PrintExpr(e.E1, opBindingStrength, fragileLeftContext, false, sem, indent, keyword);
           wr.WriteLine(" {0}", op);
           int ind = indent + IndentAmount;
           Indent(ind);
           PrintExpr(e.E0, opBindingStrength, fragileRightContext, parensNeeded || isRightmost, sem, ind, keyword);
-        } else if (e.Op == BinaryExpr.Opcode.Exp) {
+        } else if (e.Op == BinaryExpr.BinOpcode.Exp) {
           PrintExpr(e.E1, opBindingStrength, fragileLeftContext, false, sem, -1, keyword);
           wr.Write(" {0} ", op);
           PrintExpr(e.E0, opBindingStrength, fragileRightContext, parensNeeded || isRightmost, sem, -1, keyword);
@@ -2499,8 +2499,8 @@ namespace Microsoft.Dafny {
       } else if (expr is TernaryExpr) {
         var e = (TernaryExpr)expr;
         switch (e.Op) {
-          case TernaryExpr.Opcode.PrefixEqOp:
-          case TernaryExpr.Opcode.PrefixNeqOp:
+          case TernaryExpr.TerOpcode.PrefixEqOp:
+          case TernaryExpr.TerOpcode.PrefixNeqOp:
             var opBindingStrength = 0x30;
             var fragileLeftContext = true;
             var fragileRightContext = true;
@@ -2513,7 +2513,7 @@ namespace Microsoft.Dafny {
             if (parensNeeded) { wr.Write("("); }
             var sem = !parensNeeded && isFollowedBySemicolon;
             PrintExpr(e.E1, opBindingStrength, fragileLeftContext, false, sem, -1, keyword);
-            wr.Write(" {0}#[", e.Op == TernaryExpr.Opcode.PrefixEqOp ? "==" : "!=");
+            wr.Write(" {0}#[", e.Op == TernaryExpr.TerOpcode.PrefixEqOp ? "==" : "!=");
             PrintExpression(e.E0, false);
             wr.Write("] ");
             PrintExpr(e.E2, opBindingStrength, fragileRightContext, parensNeeded || isRightmost, sem, -1, keyword);

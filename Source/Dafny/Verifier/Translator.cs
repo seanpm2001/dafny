@@ -1354,7 +1354,7 @@ namespace Microsoft.Dafny {
             var tyB = Resolver.SubstType(ty, rsu);
             var aa = CondApplyUnbox(tok, a, ty, tyA);
             var bb = CondApplyUnbox(tok, b, ty, tyB);
-            var equal = new BinaryExpr(tok, BinaryExpr.Opcode.Eq, new BoogieWrapper(aa, tyA), new BoogieWrapper(bb, tyB));
+            var equal = new BinaryExpr(tok, BinaryExpr.BinOpcode.Eq, new BoogieWrapper(aa, tyA), new BoogieWrapper(bb, tyB));
             equal.ResolvedOp = Resolver.ResolveOp(equal.Op, tyA, tyB);  // resolve here
             equal.Type = Type.Bool;  // resolve here
             q = etran.TrExpr(equal);
@@ -1700,7 +1700,7 @@ namespace Microsoft.Dafny {
       var yeEtran = new ExpressionTranslator(this, predef, etran.HeapExpr, new Bpl.IdentifierExpr(iter.tok, "$_OldIterHeap", predef.HeapType));
       var old_nw = new OldExpr(iter.tok, nw);
       old_nw.Type = nw.Type;  // resolve here
-      var setDiff = new BinaryExpr(iter.tok, BinaryExpr.Opcode.Sub, nw, old_nw);
+      var setDiff = new BinaryExpr(iter.tok, BinaryExpr.BinOpcode.Sub, nw, old_nw);
       setDiff.ResolvedOp = BinaryExpr.ResolvedOpcode.SetDifference; setDiff.Type = nw.Type;  // resolve here
       Expression cond = new FreshExpr(iter.tok, setDiff);
       cond.Type = Type.Bool;  // resolve here
@@ -1721,7 +1721,7 @@ namespace Microsoft.Dafny {
         oldThisYs.Type = thisYs.Type;  // resolve here
         var singleton = new SeqDisplayExpr(iter.tok, new List<Expression>() { thisY });
         singleton.Type = thisYs.Type;  // resolve here
-        var concat = new BinaryExpr(iter.tok, BinaryExpr.Opcode.Add, oldThisYs, singleton);
+        var concat = new BinaryExpr(iter.tok, BinaryExpr.BinOpcode.Add, oldThisYs, singleton);
         concat.ResolvedOp = BinaryExpr.ResolvedOpcode.Concat; concat.Type = oldThisYs.Type;  // resolve here
 
         // In the yield-ensures case:  assume this.ys == old(this.ys) + [this.y];
@@ -2314,7 +2314,7 @@ namespace Microsoft.Dafny {
         if (lits != null && lits.Exists(p => p is ThisSurrogate)) {
           args.Add(Lit(bvThisIdExpr));
           var th = new ThisExpr(f);
-          var l = new UnaryOpExpr(f.tok, UnaryOpExpr.Opcode.Lit, th) {
+          var l = new UnaryOpExpr(f.tok, UnaryOpExpr.UnOpcode.Lit, th) {
             Type = th.Type
           };
           receiverReplacement = l;
@@ -2346,7 +2346,7 @@ namespace Microsoft.Dafny {
           var ie = new IdentifierExpr(p.tok, p.AssignUniqueName(f.IdGenerator));
           ie.Var = p;
           ie.Type = ie.Var.Type;
-          var l = new UnaryOpExpr(p.tok, UnaryOpExpr.Opcode.Lit, ie);
+          var l = new UnaryOpExpr(p.tok, UnaryOpExpr.UnOpcode.Lit, ie);
           l.Type = ie.Var.Type;
           substMap.Add(p, l);
         } else {
@@ -2630,7 +2630,7 @@ namespace Microsoft.Dafny {
           // Here, instead of using the usual ORD#Less, we use the semantically equivalent ORD#LessThanLimit, because this
           // allows us to write a good trigger for a targeted monotonicity axiom.  That axiom, in turn, makes the
           // automatic verification more powerful for least lemmas that have more than one focal-predicate term.
-          var smaller = new BinaryExpr(kprime.tok, BinaryExpr.Opcode.Lt, kprime, k) {
+          var smaller = new BinaryExpr(kprime.tok, BinaryExpr.BinOpcode.Lt, kprime, k) {
             ResolvedOp = BinaryExpr.ResolvedOpcode.LessThanLimit,
             Type = Type.Bool
           };
@@ -5967,8 +5967,8 @@ namespace Microsoft.Dafny {
           CheckWellformed(ee, options, locals, builder, etran);
         }
         switch (e.Op) {
-          case TernaryExpr.Opcode.PrefixEqOp:
-          case TernaryExpr.Opcode.PrefixNeqOp:
+          case TernaryExpr.TerOpcode.PrefixEqOp:
+          case TernaryExpr.TerOpcode.PrefixNeqOp:
             if (e.E0.Type.IsNumericBased(Type.NumericPersuasion.Int)) {
               builder.Add(Assert(expr.tok, Bpl.Expr.Le(Bpl.Expr.Literal(0), etran.TrExpr(e.E0)), "prefix-equality limit must be at least 0", options.AssertKv));
             }
@@ -11019,7 +11019,7 @@ namespace Microsoft.Dafny {
 
       } else if (expr is UnaryOpExpr) {
         var e = (UnaryOpExpr)expr;
-        if (e.Op == UnaryOpExpr.Opcode.Not) {
+        if (e.Op == UnaryOpExpr.UnOpcode.Not) {
           var ss = new List<SplitExprInfo>();
           if (TrSplitExpr(e.E, ss, !position, heightLimit, inlineProtectedFunctions, apply_induction, etran)) {
             foreach (var s in ss) {
@@ -11065,7 +11065,7 @@ namespace Microsoft.Dafny {
 
       } else if (expr is TernaryExpr) {
         var e = (TernaryExpr)expr;
-        if ((e.Op == TernaryExpr.Opcode.PrefixEqOp && position) || (e.Op == TernaryExpr.Opcode.PrefixNeqOp && !position)) {
+        if ((e.Op == TernaryExpr.TerOpcode.PrefixEqOp && position) || (e.Op == TernaryExpr.TerOpcode.PrefixNeqOp && !position)) {
           var e1type = e.E1.Type.NormalizeExpand();
           var e2type = e.E2.Type.NormalizeExpand();
           var codecl = e1type.AsCoDatatype;

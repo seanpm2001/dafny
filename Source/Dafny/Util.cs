@@ -878,8 +878,8 @@ namespace Microsoft.Dafny {
         }
       } else if (expr is TernaryExpr ternaryExpr) {
         switch (ternaryExpr.Op) {
-          case TernaryExpr.Opcode.PrefixEqOp:
-          case TernaryExpr.Opcode.PrefixNeqOp:
+          case TernaryExpr.TerOpcode.PrefixEqOp:
+          case TernaryExpr.TerOpcode.PrefixNeqOp:
             reporter?.Error(MessageSource.Resolver, ternaryExpr, "prefix equalities are allowed only in specification and ghost contexts");
             return false;
         }
@@ -1087,7 +1087,7 @@ namespace Microsoft.Dafny {
         return true;
       } else if (expr is UnaryExpr) {
         var e = (UnaryExpr)expr;
-        if (e is UnaryOpExpr unaryOpExpr && (unaryOpExpr.Op == UnaryOpExpr.Opcode.Fresh || unaryOpExpr.Op == UnaryOpExpr.Opcode.Allocated)) {
+        if (e is UnaryOpExpr unaryOpExpr && (unaryOpExpr.Op == UnaryOpExpr.UnOpcode.Fresh || unaryOpExpr.Op == UnaryOpExpr.UnOpcode.Allocated)) {
           return true;
         }
         if (expr is TypeTestExpr tte && !IsTypeTestCompilable(tte)) {
@@ -1106,8 +1106,8 @@ namespace Microsoft.Dafny {
       } else if (expr is TernaryExpr) {
         var e = (TernaryExpr)expr;
         switch (e.Op) {
-          case TernaryExpr.Opcode.PrefixEqOp:
-          case TernaryExpr.Opcode.PrefixNeqOp:
+          case TernaryExpr.TerOpcode.PrefixEqOp:
+          case TernaryExpr.TerOpcode.PrefixNeqOp:
             return true;
           default:
             break;

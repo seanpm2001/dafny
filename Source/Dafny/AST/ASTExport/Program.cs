@@ -48,13 +48,17 @@ abstract class PrettyPrintable {
   }
 
   protected void PpBlockOpen(TextWriter wr, string indent, object? kind, object? name,
-    Dictionary<string, string?>? attrs, IEnumerable<Type>? inheritance) {
+    IEnumerable<string>? parameters,
+    Dictionary<string, string?>? attrs,
+    IEnumerable<Type>? inheritance)
+  {
     var parts = new List<string>();
     parts.Add($"{kind}");
     if (attrs != null) {
       parts.Add(FmtAttrs(attrs));
     }
-    parts.Add($"{name}");
+    var paramsStr = parameters == null ? "" : $"<{String.Join(", ", parameters)}>";
+    parts.Add($"{name}{paramsStr}");
     if (inheritance != null) {
       parts.Add($"extends {String.Join(", ", inheritance.Select(t => t.ToString()))}");
     }
@@ -63,15 +67,6 @@ abstract class PrettyPrintable {
 
   protected void PpBlockClose(TextWriter wr, string indent) {
     wr.WriteLine($"{indent}}}");
-  }
-
-  public static IEnumerable<PrettyPrintable> Dispatch(SyntaxNode node) {
-    return node switch {
-      NamespaceDeclarationSyntax s => s.ChildNodes().SelectMany(Dispatch),
-      TypeDeclarationSyntax s => new[] { new TypeDecl(s) },
-      FieldDeclarationSyntax s => new[] { new Field(s) },
-      _ => Enumerable.Empty<PrettyPrintable>()
-    };
   }
 
   public abstract void Pp(TextWriter wr, string indent);
@@ -89,23 +84,28 @@ class AST : PrettyPrintable {
     return new AST(CSharpSyntaxTree.ParseText(reader.ReadToEnd()));
   }
 
-  private IEnumerable<PrettyPrintable> Children =>
-    syntax.GetCompilationUnitRoot().ChildNodes().SelectMany(Dispatch);
+  private CompilationUnitSyntax root => syntax.GetCompilationUnitRoot();
+
+  private IEnumerable<PrettyPrintable> Decls =>
+    Enumerable.Empty<PrettyPrintable>()
+      .Concat(root.DescendantNodes().OfType<EnumDeclarationSyntax>().Select(s => new Enum(s)))
+      .Concat(root.DescendantNodes().OfType<TypeDeclarationSyntax>().Select(s => new TypeDecl(s)));
 
   public override void Pp(TextWriter wr, string indent) {
     wr.WriteLine("include \"CSharpCompat.dfy\"");
     wr.WriteLine();
 
     PpBlockOpen(wr, indent, "module", "CSharp",
-      new Dictionary<string, string?> {{"extern", "\"SelfHosting.CSharp\""}}, null);
+      null, new Dictionary<string, string?> {{"extern", "\"SelfHosting.CSharp\""}}, null);
 
     PpChild(wr, indent, "import opened CSharpGenerics");
     PpChild(wr, indent, "import opened CSharpSystem");
     PpChild(wr, indent, "import opened Boogie");
     PpChild(wr, indent, "import opened Dafny");
+    PpChild(wr, indent, "import opened DafnyResolver");
     wr.WriteLine();
 
-    PpChildren(wr, indent, Children);
+    PpChildren(wr, indent, Decls);
 
     PpBlockClose(wr, indent);
   }
@@ -120,14 +120,15 @@ class TypeDecl : PrettyPrintable {
     this.syntax = syntax;
   }
 
-  private IEnumerable<PrettyPrintable> Children =>
-    syntax.ChildNodes().SelectMany(Dispatch);
+  private IEnumerable<PrettyPrintable> Fields =>
+    syntax.ChildNodes().OfType<FieldDeclarationSyntax>().Select(s => new Field(s));
 
   public override void Pp(TextWriter wr, string indent) {
-    PpBlockOpen(wr, indent, "trait", new Identifier(syntax.Identifier).WithAttrs(),
+    PpBlockOpen(wr, indent, "trait", new Identifier(syntax.Identifier),
+      syntax.TypeParameterList?.Parameters.Select(s => new Identifier(s.Identifier).EscapedId),
       new Dictionary<string, string?> {{"compile", "false"}, {"extern", null}},
       syntax.BaseList?.Types.Select(t => new Type(t.Type)));
-    PpChildren(wr, indent, Children);
+    PpChildren(wr, indent, Fields);
     PpBlockClose(wr, indent);
   }
 }
@@ -144,9 +145,9 @@ class Enum : PrettyPrintable {
 
   public override void Pp(TextWriter wr, string indent) {
     var decl = new Identifier(syntax.Identifier);
-    wr.WriteLine($"{indent}datatype {decl.WithAttrs()} =");
+    wr.WriteLine($"{indent}datatype {decl} =");
     foreach (var m in Members) {
-      PpChild(wr, indent, $"| {m.WithAttrs()}");
+      PpChild(wr, indent, $"| {m}");
     }
   }
 }
@@ -176,17 +177,38 @@ internal class Type {
     this.syntax = syntax;
   }
 
+  private static string GenericNameToString(GenericNameSyntax s) {
+    var name = s.Identifier.Text switch {
+      "Tuple" => $"Tuple{s.TypeArgumentList.Arguments.Count}",
+      _ => new Identifier(s.Identifier).EscapedId
+    };
+    var typeArgs = String.Join(", ", s.TypeArgumentList.Arguments.Select(t => new Type(t)));
+    return @$"{name}<{typeArgs}>";
+  }
+
   public override string ToString() {
-    if (syntax is ArrayTypeSyntax arr) {
-      return $"array<{arr.ElementType.GetText().ToString().Trim()}>";
-    }
-    return syntax.GetText().ToString().Trim();
+    return syntax switch {
+      ArrayTypeSyntax s =>
+        $"array<{new Type(s.ElementType)}>",
+      GenericNameSyntax s =>
+        GenericNameToString(s),
+      SimpleNameSyntax s =>
+        s.Identifier.Text switch {
+          "BigInteger" => "int",
+          _ => new Identifier(s.Identifier).ToString(),
+        },
+      QualifiedNameSyntax s when s.Left.ToString() != "Boogie" =>
+        // Drop qualifications since we flatten the nested structure
+        new Identifier(s.Right.Identifier).ToString(),
+      _ =>
+        syntax.GetText().ToString().Trim()
+    };
   }
 }
 
 internal class Identifier {
   private const string EscapePrefix = "CSharp_";
-  private static readonly Regex DisallowedNameRe = new Regex("^(type$|_)");
+  private static readonly Regex DisallowedNameRe = new Regex("^(type$|ORDINAL$|_)");
 
   private readonly SyntaxToken token;
 
@@ -195,17 +217,14 @@ internal class Identifier {
   }
 
   private string Id => token.Text;
-  private string EscapedId => Id.StartsWith(EscapePrefix) || DisallowedNameRe.IsMatch(Id) ?
+
+  public string EscapedId => Id.StartsWith(EscapePrefix) || DisallowedNameRe.IsMatch(Id) ?
     EscapePrefix + Id : Id;
 
-  public string WithAttrs() {
+  public override string ToString() {
     string id = Id, eId = EscapedId;
     var attr = id != eId ? $"{{:extern \"{id}\"}} " : "";
     return $"{attr}{eId}";
-  }
-
-  public override string ToString() {
-    return EscapedId;
   }
 }
 
@@ -219,7 +238,7 @@ internal class Variable : PrettyPrintable {
   }
 
   public override void Pp(TextWriter wr, string indent) {
-    wr.WriteLine($"{indent}var {identifier.WithAttrs()}: {type}");
+    wr.WriteLine($"{indent}var {identifier}: {type}");
   }
 }
 

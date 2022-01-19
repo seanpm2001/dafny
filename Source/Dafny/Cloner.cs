@@ -1210,11 +1210,11 @@ namespace Microsoft.Dafny {
       } else if (expr is BinaryExpr && isCoContext) {
         var e = (BinaryExpr)expr;
         if ((e.ResolvedOp == BinaryExpr.ResolvedOpcode.EqCommon || e.ResolvedOp == BinaryExpr.ResolvedOpcode.NeqCommon) && friendlyCalls.Contains(e)) {
-          var op = e.ResolvedOp == BinaryExpr.ResolvedOpcode.EqCommon ? TernaryExpr.Opcode.PrefixEqOp : TernaryExpr.Opcode.PrefixNeqOp;
+          var op = e.ResolvedOp == BinaryExpr.ResolvedOpcode.EqCommon ? TernaryExpr.TerOpcode.PrefixEqOp : TernaryExpr.TerOpcode.PrefixNeqOp;
           var A = CloneExpr(e.E0);
           var B = CloneExpr(e.E1);
           var teq = new TernaryExpr(Tok(e.tok), op, k, A, B);
-          var opString = op == TernaryExpr.Opcode.PrefixEqOp ? "==" : "!=";
+          var opString = op == TernaryExpr.TerOpcode.PrefixEqOp ? "==" : "!=";
           reporter.Info(MessageSource.Cloner, e.tok, opString + suffix);
           return teq;
         }

@@ -92,14 +92,14 @@ namespace Microsoft.Dafny {
         usesHeap = true; // because the translation of an ApplyExpr always throws in the heap variable
       } else if (expr is UnaryOpExpr) {
         var e = (UnaryOpExpr)expr;
-        if (e.Op == UnaryOpExpr.Opcode.Fresh) {
+        if (e.Op == UnaryOpExpr.UnOpcode.Fresh) {
           var f = (FreshExpr)e;
           if (f.AtLabel == null) {
             usesOldHeap = true;
           } else {
             freeHeapAtVariables.Add(f.AtLabel);
           }
-        } else if (e.Op == UnaryOpExpr.Opcode.Allocated) {
+        } else if (e.Op == UnaryOpExpr.UnOpcode.Allocated) {
           usesHeap = true;
         }
       }

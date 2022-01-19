@@ -2764,7 +2764,7 @@ namespace Microsoft.Dafny {
         // to make it more target-language idiomatic and improve performance
         ConcreteSyntaxTree guardWriter;
         ConcreteSyntaxTree bodyWriter = EmitIf(out guardWriter, false, wr);
-        var negated = new UnaryOpExpr(s.Tok, UnaryOpExpr.Opcode.Not, s.Expr);
+        var negated = new UnaryOpExpr(s.Tok, UnaryOpExpr.UnOpcode.Not, s.Expr);
         negated.Type = Type.Bool;
         TrExpr(negated, guardWriter, false);
         EmitHalt(s.Tok, s.Message, bodyWriter);
@@ -4385,7 +4385,7 @@ namespace Microsoft.Dafny {
       } else if (expr is UnaryOpExpr) {
         var e = (UnaryOpExpr)expr;
         switch (e.Op) {
-          case UnaryOpExpr.Opcode.Not:
+          case UnaryOpExpr.UnOpcode.Not:
             if (e.Type.IsBitVectorType) {
               var bvType = e.Type.AsBitVectorType;
               var wrTruncOperand = EmitBitvectorTruncation(bvType, false, wr);
@@ -4394,7 +4394,7 @@ namespace Microsoft.Dafny {
               EmitUnaryExpr(ResolvedUnaryOp.BoolNot, e.E, inLetExprBody, wr);
             }
             break;
-          case UnaryOpExpr.Opcode.Cardinality:
+          case UnaryOpExpr.UnOpcode.Cardinality:
             EmitUnaryExpr(ResolvedUnaryOp.Cardinality, e.E, inLetExprBody, wr);
             break;
           default:
@@ -5012,7 +5012,7 @@ namespace Microsoft.Dafny {
     }
 
     private bool IsComparisonWithZeroOnRight(
-      BinaryExpr.Opcode op, Expression right,
+      BinaryExpr.BinOpcode op, Expression right,
       out int sign, out bool negated) {
 
       var rightVal = PartiallyEvaluate(right);
@@ -5022,32 +5022,32 @@ namespace Microsoft.Dafny {
         return false;
       } else {
         switch (op) {
-          case BinaryExpr.Opcode.Lt:
+          case BinaryExpr.BinOpcode.Lt:
             // x < 0 <==> sign(x) == -1
             sign = -1;
             negated = false;
             return true;
-          case BinaryExpr.Opcode.Le:
+          case BinaryExpr.BinOpcode.Le:
             // x <= 0 <==> sign(x) != 1
             sign = 1;
             negated = true;
             return true;
-          case BinaryExpr.Opcode.Eq:
+          case BinaryExpr.BinOpcode.Eq:
             // x == 0 <==> sign(x) == 0
             sign = 0;
             negated = false;
             return true;
-          case BinaryExpr.Opcode.Neq:
+          case BinaryExpr.BinOpcode.Neq:
             // x != 0 <==> sign(x) != 0
             sign = 0;
             negated = true;
             return true;
-          case BinaryExpr.Opcode.Gt:
+          case BinaryExpr.BinOpcode.Gt:
             // x > 0 <==> sign(x) == 1
             sign = 1;
             negated = false;
             return true;
-          case BinaryExpr.Opcode.Ge:
+          case BinaryExpr.BinOpcode.Ge:
             // x >= 0 <==> sign(x) != -1
             sign = -1;
             negated = true;
