@@ -104,7 +104,6 @@ class AST : PrettyPrintable {
     PpChild(wr, indent, "import opened CSharpSystem");
     PpChild(wr, indent, "import opened Boogie");
     PpChild(wr, indent, "import opened Dafny");
-    PpChild(wr, indent, "import opened DafnyResolver");
     wr.WriteLine();
 
     PpChildren(wr, indent, Decls);
