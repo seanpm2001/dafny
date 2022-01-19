@@ -1,4 +1,4 @@
-namespace SelfHosting.CSharp;
+namespace CSharpAST;
 
 public class AST { } // ANTLR root
 

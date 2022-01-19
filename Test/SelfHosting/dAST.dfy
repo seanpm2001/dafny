@@ -2,7 +2,7 @@ include "CSharpCompat.dfy"
 include "cAST.cs.dfy"
 include "Utils.dfy"
 
-module Dafny {
+module DafnyAST {
   datatype Expr =
     | Const(n: int)
     | Add(e1: Expr, e2: Expr)
@@ -29,71 +29,71 @@ module Dafny {
 }
 
 module Translator {
-  import CSharp
-  import Dafny
+  import CSharpAST
+  import DafnyAST
   import CSharpUtils
   import opened Global
 
-  function method {:verify false} translateExpr(c: CSharp.Expr) : Dafny.Expr
+  function method {:verify false} translateExpr(c: CSharpAST.Expr) : DafnyAST.Expr
     // TODO: Isn't there a way to assume termination for a function?
     reads *
   {
-    if c is CSharp.Const then
-      Dafny.Const((c as CSharp.Const).n)
-    else if c is CSharp.Add then
-      var c := c as CSharp.Add;
-      Dafny.Add(translateExpr(c.e1), translateExpr(c.e2))
+    if c is CSharpAST.Const then
+      DafnyAST.Const((c as CSharpAST.Const).n)
+    else if c is CSharpAST.Add then
+      var c := c as CSharpAST.Add;
+      DafnyAST.Add(translateExpr(c.e1), translateExpr(c.e2))
     else
       // assume false;
-      unreachable<Dafny.Expr>() /* TODO: How do I model this properly? */
+      unreachable<DafnyAST.Expr>() /* TODO: How do I model this properly? */
   }
 
   import opened LinkedList
 
-  function method {:verify false} translateStmt(c: CSharp.Stmt) : Dafny.Stmt
+  function method {:verify false} translateStmt(c: CSharpAST.Stmt) : DafnyAST.Stmt
     reads *
   {
-    if c is CSharp.Print then
-      var e := translateExpr((c as CSharp.Print).e);
-      Dafny.Print(e)
+    if c is CSharpAST.Print then
+      var e := translateExpr((c as CSharpAST.Print).e);
+      DafnyAST.Print(e)
     else
       // assume false;
-      unreachable<Dafny.Stmt>()
+      unreachable<DafnyAST.Stmt>()
   }
 
-  function method {:verify false} translateProg(c: CSharp.Prog) : Dafny.Stmt
+  function method {:verify false} translateProg(c: CSharpAST.Prog) : DafnyAST.Stmt
     reads *
   {
-    if c is CSharp.Prog then
+    if c is CSharpAST.Prog then
       CSharpUtils.ListUtils.FoldR(
-        (c, ds) => Dafny.Seq(translateStmt(c), ds),
-        Dafny.Skip, (c as CSharp.Prog).s)
+        (c, ds) => DafnyAST.Seq(translateStmt(c), ds),
+        DafnyAST.Skip, (c as CSharpAST.Prog).s)
     else
       // assume false;
-      unreachable<Dafny.Stmt>()
+      unreachable<DafnyAST.Stmt>()
   }
 
-  // function method cExpr2dExpr(e: cExpr) : Dafny.Expr
+  // function method cExpr2dExpr(e: cExpr) : DafnyAST.Expr
   //   reads e
   //   decreases *
   // {
-  //   if e is CSharp.Const then
-  //     Dafny.Const((e as CSharp.Const).n)
-  //   else if e is CSharp.Add then
-  //     Dafny.Add(cExpr2dExpr((e as CSharp.Add).e1), cExpr2dExpr((e as CSharp.Add).e2))
+  //   if e is CSharpAST.Const then
+  //     DafnyAST.Const((e as CSharpAST.Const).n)
+  //   else if e is CSharpAST.Add then
+  //     DafnyAST.Add(cExpr2dExpr((e as CSharpAST.Add).e1), cExpr2dExpr((e as CSharpAST.Add).e2))
   //   else
-  //     unreachable<Dafny.Expr>() /* How can I seal a trait? */
+  //     unreachable<DafnyAST.Expr>() /* How can I seal a trait? */
   // }
 }
 
 module Rewriter {
-  import opened Dafny
+  import opened DafnyAST
 
-  function method simplExpr(e: Expr) : Expr {
+  function method simplifyExpr(e: Expr) : Expr {
     match e {
       case Const(n: int) => e
       case Add(e1: Expr, e2: Expr) =>
-        match (simplExpr(e1), simplExpr(e2)) {
+        match (simplifyExpr(e1), simplifyExpr(e2)) {
           case (Const(0), Const(0)) => Const(0)
           case (Const(0), e2) => e2
           case (e1, Const(0)) => e1
@@ -102,12 +102,12 @@ module Rewriter {
     }
   }
 
-  function method simplStmt(s: Stmt) : Stmt {
+  function method simplifyStmt(s: Stmt) : Stmt {
     match s {
       case Skip => Skip
-      case Print(e) => Print(simplExpr(e))
+      case Print(e) => Print(simplifyExpr(e))
       case Seq(s1, s2) =>
-        match (simplStmt(s1), simplStmt(s2)) {
+        match (simplifyStmt(s1), simplifyStmt(s2)) {
           case (s1, Skip) => s1
           case (Skip, s2) => s2
           case (s1, s2) => Seq(s1, s2)
@@ -209,17 +209,17 @@ module StackMachine {
 module Compiler {
   import opened LinkedList
 
-  import Dafny
+  import DafnyAST
   import opened StackMachine
 
-  function method compileExpr(e: Dafny.Expr): Prog {
+  function method compileExpr(e: DafnyAST.Expr): Prog {
     match e {
       case Const(n) => Singleton(PushConst(n))
       case Add(e1, e2) => Cons(PopAdd, Concat(compileExpr(e2), compileExpr(e1)))
     }
   }
 
-  function method compileStmt(s: Dafny.Stmt): Prog {
+  function method compileStmt(s: DafnyAST.Stmt): Prog {
     match s {
       case Skip => Nil
       case Print(e) => Cons(PopPrint, compileExpr(e))
@@ -232,9 +232,9 @@ module Compiler {
             interpProg'(p1, interpProg'(p2, st))
   {}
 
-  lemma compileExprCorrect'(e: Dafny.Expr, st: State)
+  lemma compileExprCorrect'(e: DafnyAST.Expr, st: State)
     ensures interpProg'(compileExpr(e), st) ==
-            State(Cons(Dafny.interpExpr(e), st.stack), st.output)
+            State(Cons(DafnyAST.interpExpr(e), st.stack), st.output)
   {
     match e {
       case Const(n) =>
@@ -250,26 +250,26 @@ module Compiler {
     }
   }
 
-  lemma compileStmtCorrect'(s: Dafny.Stmt, st: State)
+  lemma compileStmtCorrect'(s: DafnyAST.Stmt, st: State)
     ensures interpProg'(compileStmt(s), st) ==
-            State(st.stack, st.output + Dafny.interpStmt(s))
+            State(st.stack, st.output + DafnyAST.interpStmt(s))
   {
     match s {
       case Skip =>
       case Print(e) =>
         calc {
           interpProg'(compileStmt(s), st);
-          interpProg'(compileStmt(Dafny.Print(e)), st);
+          interpProg'(compileStmt(DafnyAST.Print(e)), st);
           interpProg'(Cons(PopPrint, compileExpr(e)), st);
           interpOp(PopPrint, interpProg'(compileExpr(e), st));
           { compileExprCorrect'(e, st); }
-          interpOp(PopPrint, State(Cons(Dafny.interpExpr(e), st.stack), st.output));
-          State(st.stack, st.output + [Dafny.interpExpr(e)]);
+          interpOp(PopPrint, State(Cons(DafnyAST.interpExpr(e), st.stack), st.output));
+          State(st.stack, st.output + [DafnyAST.interpExpr(e)]);
         }
       case Seq(s1, s2) =>
         calc {
           interpProg'(compileStmt(s), st);
-          interpProg'(compileStmt(Dafny.Seq(s1, s2)), st);
+          interpProg'(compileStmt(DafnyAST.Seq(s1, s2)), st);
           interpProg'(Concat(compileStmt(s2), compileStmt(s1)), st);
           { interpProg'_Concat(compileStmt(s2), compileStmt(s1), st); }
           interpProg'(compileStmt(s2), interpProg'(compileStmt(s1), st));
@@ -277,8 +277,8 @@ module Compiler {
     }
   }
 
-  lemma compileStmtCorrect(s: Dafny.Stmt, st: State)
-    ensures interpProg(compileStmt(s)) == Dafny.interpStmt(s)
+  lemma compileStmtCorrect(s: DafnyAST.Stmt, st: State)
+    ensures interpProg(compileStmt(s)) == DafnyAST.interpStmt(s)
   {
     compileStmtCorrect'(s, EmptyState);
   }
@@ -286,8 +286,8 @@ module Compiler {
 
 module {:extern "SelfHosting"} Interop {
   import LinkedList
-  import CSharp
-  import Dafny
+  import CSharpAST
+  import DafnyAST
   import StackMachine
   import Translator
   import Rewriter
@@ -296,11 +296,11 @@ module {:extern "SelfHosting"} Interop {
   import CSharpUtils
 
   class DafnyCompiler {
-    static method CompileAndExport(cAST: CSharp.Prog)
+    static method CompileAndExport(cAST: CSharpAST.Prog)
       returns (output: CSharpGenerics.List<string>)
     {
-      var translated: Dafny.Stmt := Translator.translateProg(cAST);
-      var optimized: Dafny.Stmt := Rewriter.simplStmt(translated);
+      var translated: DafnyAST.Stmt := Translator.translateProg(cAST);
+      var optimized: DafnyAST.Stmt := Rewriter.simplifyStmt(translated);
       var compiled: StackMachine.Prog := Compiler.compileStmt(translated);
       var prettyPrinted: LinkedList.List<string> := StackMachine.prettyPrint(compiled);
 
@@ -309,8 +309,8 @@ module {:extern "SelfHosting"} Interop {
       print "compiled = \n  "; print compiled; print "\n";
 
       print "";
-      print "interp(translated) = \n  "; print Dafny.interpStmt(translated); print "\n";
-      print "interp(optimized) = \n  "; print Dafny.interpStmt(optimized); print "\n";
+      print "interp(translated) = \n  "; print DafnyAST.interpStmt(translated); print "\n";
+      print "interp(optimized) = \n  "; print DafnyAST.interpStmt(optimized); print "\n";
       print "interp(compiled) = \n  "; print StackMachine.interpProg'(compiled, StackMachine.EmptyState).output; print "\n";
 
       output := CSharpUtils.ListUtils.Mk<string>();

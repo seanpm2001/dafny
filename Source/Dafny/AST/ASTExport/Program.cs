@@ -73,30 +73,32 @@ abstract class PrettyPrintable {
 }
 
 class AST : PrettyPrintable {
+  private readonly string rootName;
   private readonly SyntaxTree syntax;
 
-  private AST(SyntaxTree syntax) {
+  private AST(string rootName, SyntaxTree syntax) {
     this.syntax = syntax;
+    this.rootName = rootName;
   }
 
-  public static AST FromFile(string fileName) {
+  public static AST FromFile(string fileName, string rootName) {
     using var reader = new StreamReader(fileName);
-    return new AST(CSharpSyntaxTree.ParseText(reader.ReadToEnd()));
+    return new AST(rootName, CSharpSyntaxTree.ParseText(reader.ReadToEnd()));
   }
 
-  private CompilationUnitSyntax root => syntax.GetCompilationUnitRoot();
+  private CompilationUnitSyntax Root => syntax.GetCompilationUnitRoot();
 
   private IEnumerable<PrettyPrintable> Decls =>
     Enumerable.Empty<PrettyPrintable>()
-      .Concat(root.DescendantNodes().OfType<EnumDeclarationSyntax>().Select(s => new Enum(s)))
-      .Concat(root.DescendantNodes().OfType<TypeDeclarationSyntax>().Select(s => new TypeDecl(s)));
+      .Concat(Root.DescendantNodes().OfType<EnumDeclarationSyntax>().Select(s => new Enum(s)))
+      .Concat(Root.DescendantNodes().OfType<TypeDeclarationSyntax>().Select(s => new TypeDecl(s)));
 
   public override void Pp(TextWriter wr, string indent) {
     wr.WriteLine("include \"CSharpCompat.dfy\"");
     wr.WriteLine();
 
-    PpBlockOpen(wr, indent, "module", "CSharp",
-      null, new Dictionary<string, string?> {{"extern", "\"SelfHosting.CSharp\""}}, null);
+    PpBlockOpen(wr, indent, "module", rootName,
+      null, new Dictionary<string, string?> {{"extern", $"\"{rootName}\""}}, null);
 
     PpChild(wr, indent, "import opened CSharpGenerics");
     PpChild(wr, indent, "import opened CSharpSystem");
@@ -244,6 +246,6 @@ internal class Variable : PrettyPrintable {
 
 public static class Program {
   public static void Main(string[] args) {
-    AST.FromFile(args[0]).Pp(Console.Out, "");
+    AST.FromFile(args[0], args[1]).Pp(Console.Out, "");
   }
 }
