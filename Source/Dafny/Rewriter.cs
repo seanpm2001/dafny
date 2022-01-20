@@ -503,9 +503,9 @@ namespace Microsoft.Dafny {
           valid.Reads.Add(new FrameExpression(tok, r0, null));
           valid.Reads.Add(new FrameExpression(tok, r1, null));
           // ensures Valid() ==> this in Repr
-          var post = new BinaryExpr(tok, BinaryExpr.BinOpcode.Imp,
+          var post = new BinaryExpr(tok, BinaryExpr.Opcode.Imp,
             new FunctionCallExpr(tok, "Valid", new ImplicitThisExpr(tok), tok, new List<ActualBinding>()),
-            new BinaryExpr(tok, BinaryExpr.BinOpcode.In,
+            new BinaryExpr(tok, BinaryExpr.Opcode.In,
               new ThisExpr(tok),
                new MemberSelectExpr(tok, new ImplicitThisExpr(tok), "Repr")));
           valid.Ens.Insert(0, new AttributedExpression(post));
@@ -714,7 +714,7 @@ namespace Microsoft.Dafny {
             // ensures fresh(Repr - old(Repr));
             var e0 = new OldExpr(tok, Repr);
             e0.Type = Repr.Type;
-            var e1 = new BinaryExpr(tok, BinaryExpr.BinOpcode.Sub, Repr, e0);
+            var e1 = new BinaryExpr(tok, BinaryExpr.Opcode.Sub, Repr, e0);
             e1.ResolvedOp = BinaryExpr.ResolvedOpcode.SetDifference;
             e1.Type = Repr.Type;
             var freshness = new FreshExpr(tok, e1);
@@ -749,7 +749,7 @@ namespace Microsoft.Dafny {
         Expression e = new SetDisplayExpr(tok, true, new List<Expression>() { F }) {
           Type = new SetType(true, builtIns.ObjectQ())  // resolve here
         };
-        var rhs = new BinaryExpr(tok, BinaryExpr.BinOpcode.Add, Repr, e) {
+        var rhs = new BinaryExpr(tok, BinaryExpr.Opcode.Add, Repr, e) {
           ResolvedOp = BinaryExpr.ResolvedOpcode.Union,
           Type = Repr.Type
         };
@@ -759,7 +759,7 @@ namespace Microsoft.Dafny {
         } else {
           // Repr := Repr + {F} + F.Repr
           var FRepr = new MemberSelectExpr(tok, F, ff.Item2);  // create resolved MemberSelectExpr
-          rhs = new BinaryExpr(tok, BinaryExpr.BinOpcode.Add, rhs, FRepr) {
+          rhs = new BinaryExpr(tok, BinaryExpr.Opcode.Add, rhs, FRepr) {
             ResolvedOp = BinaryExpr.ResolvedOpcode.Union,
             Type = Repr.Type
           };
@@ -1932,8 +1932,8 @@ namespace Microsoft.Dafny {
       } else if (expr is TernaryExpr) {
         var e = (TernaryExpr)expr;
         switch (e.Op) {
-          case TernaryExpr.TerOpcode.PrefixEqOp:
-          case TernaryExpr.TerOpcode.PrefixNeqOp:
+          case TernaryExpr.Opcode.PrefixEqOp:
+          case TernaryExpr.Opcode.PrefixNeqOp:
             return VarOccursInArgumentToRecursiveFunction(e.E0, n, true) ||
               VarOccursInArgumentToRecursiveFunction(e.E1, n, subExprIsProminent) ||
               VarOccursInArgumentToRecursiveFunction(e.E2, n, subExprIsProminent);

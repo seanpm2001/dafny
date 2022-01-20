@@ -706,9 +706,9 @@ namespace Microsoft.Dafny {
           var e = (UnaryOpExpr)expr;
           Boogie.Expr arg = TrExpr(e.E);
           switch (e.Op) {
-            case UnaryOpExpr.UnOpcode.Lit:
+            case UnaryOpExpr.Opcode.Lit:
               return MaybeLit(arg);
-            case UnaryOpExpr.UnOpcode.Not:
+            case UnaryOpExpr.Opcode.Not:
               if (expr.Type.IsBitVectorType) {
                 var bvWidth = expr.Type.AsBitVectorType.Width;
                 var bvType = translator.BplBvType(bvWidth);
@@ -720,7 +720,7 @@ namespace Microsoft.Dafny {
               } else {
                 return Boogie.Expr.Unary(expr.tok, UnaryOperator.Opcode.Not, arg);
               }
-            case UnaryOpExpr.UnOpcode.Cardinality:
+            case UnaryOpExpr.Opcode.Cardinality:
               var eType = e.E.Type.NormalizeExpand();
               if (eType is SeqType) {
                 return translator.FunctionCall(expr.tok, BuiltinFunction.SeqLength, null, arg);
@@ -733,7 +733,7 @@ namespace Microsoft.Dafny {
               } else {
                 Contract.Assert(false); throw new cce.UnreachableException();  // unexpected sized type
               }
-            case UnaryOpExpr.UnOpcode.Fresh:
+            case UnaryOpExpr.Opcode.Fresh:
               var freshLabel = ((FreshExpr)e).AtLabel;
               var eeType = e.E.Type.NormalizeExpand();
               if (eeType is SetType) {
@@ -770,7 +770,7 @@ namespace Microsoft.Dafny {
                 Boogie.Expr oIsFresh = Boogie.Expr.Not(OldAt(freshLabel).IsAlloced(expr.tok, TrExpr(e.E)));
                 return Boogie.Expr.Binary(expr.tok, BinaryOperator.Opcode.And, oNull, oIsFresh);
               }
-            case UnaryOpExpr.UnOpcode.Allocated: {
+            case UnaryOpExpr.Opcode.Allocated: {
                 var aType = e.E.Type.NormalizeExpand();
                 return translator.MkIsAlloc(TrExpr(e.E), aType, HeapExpr);
               }
@@ -1175,14 +1175,14 @@ namespace Microsoft.Dafny {
           var e1 = TrExpr(e.E1);
           var e2 = TrExpr(e.E2);
           switch (e.Op) {
-            case TernaryExpr.TerOpcode.PrefixEqOp:
-            case TernaryExpr.TerOpcode.PrefixNeqOp:
+            case TernaryExpr.Opcode.PrefixEqOp:
+            case TernaryExpr.Opcode.PrefixNeqOp:
               var e1type = e.E1.Type.NormalizeExpand();
               var e2type = e.E2.Type.NormalizeExpand();
               var cot = e1type.AsCoDatatype;
               Contract.Assert(cot != null);  // the argument types of prefix equality (and prefix disequality) are codatatypes
               var r = translator.CoEqualCall(cot, e1type.TypeArgs, e2type.TypeArgs, e0, this.layerInterCluster.LayerN((int)FuelSetting.FuelAmount.HIGH), e1, e2);
-              if (e.Op == TernaryExpr.TerOpcode.PrefixEqOp) {
+              if (e.Op == TernaryExpr.Opcode.PrefixEqOp) {
                 return r;
               } else {
                 return Boogie.Expr.Unary(expr.tok, UnaryOperator.Opcode.Not, r);

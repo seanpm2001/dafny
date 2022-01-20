@@ -2257,7 +2257,7 @@ namespace Microsoft.Dafny.Compilers.Cpp {
             if (literal != null) {
               // Optimize constant to avoid intermediate BigInteger
               wr.Write("{0}({1})", GetNativeTypeName(toNative), literal);
-            } else if (u != null && u.Op == UnaryOpExpr.UnOpcode.Cardinality) {
+            } else if (u != null && u.Op == UnaryOpExpr.Opcode.Cardinality) {
               wr.Write("({0})(", GetNativeTypeName(toNative));
               TrParenExpr(u.E, wr, inLetExprBody);
               wr.Write(".size())");

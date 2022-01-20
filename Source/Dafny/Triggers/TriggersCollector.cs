@@ -254,7 +254,7 @@ namespace Microsoft.Dafny.Triggers {
         return true;
       } else if (expr is BinaryExpr) {
         var e = (BinaryExpr)expr;
-        if ((e.Op == BinaryExpr.BinOpcode.NotIn || e.Op == BinaryExpr.BinOpcode.In) && !Translator.ExpressionTranslator.RewriteInExpr(e.E1, false)) {
+        if ((e.Op == BinaryExpr.Opcode.NotIn || e.Op == BinaryExpr.Opcode.In) && !Translator.ExpressionTranslator.RewriteInExpr(e.E1, false)) {
           return true;
         } else if (CandidateCollectionOperation(e)) {
           return true;
@@ -266,7 +266,7 @@ namespace Microsoft.Dafny.Triggers {
         }
       } else if (expr is UnaryOpExpr) {
         var e = (UnaryOpExpr)expr;
-        return e.Op == UnaryOpExpr.UnOpcode.Cardinality;  // FIXME || e.Op == UnaryOpExpr.Opcode.Fresh doesn't work, as fresh is a pretty tricky predicate when it's not about datatypes. See translator.cs:10944
+        return e.Op == UnaryOpExpr.Opcode.Cardinality;  // FIXME || e.Op == UnaryOpExpr.Opcode.Fresh doesn't work, as fresh is a pretty tricky predicate when it's not about datatypes. See translator.cs:10944
       } else if (expr is ConversionExpr) {
         var e = (ConversionExpr)expr;
         return e.ToType.IsBigOrdinalType;

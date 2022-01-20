@@ -2212,7 +2212,7 @@ namespace Microsoft.Dafny.Compilers.Js {
             if (literal != null) {
               // Optimize constant to avoid intermediate BigInteger
               wr.Write("(" + literal + ")");
-            } else if (u != null && u.Op == UnaryOpExpr.UnOpcode.Cardinality) {
+            } else if (u != null && u.Op == UnaryOpExpr.Opcode.Cardinality) {
               // Optimize .Count to avoid intermediate BigInteger
               TrParenExpr(u.E, wr, inLetExprBody);
               wr.Write(".length");

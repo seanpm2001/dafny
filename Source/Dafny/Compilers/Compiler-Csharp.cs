@@ -2797,7 +2797,7 @@ namespace Microsoft.Dafny.Compilers.Csharp {
             if (literal != null) {
               // Optimize constant to avoid intermediate BigInteger
               wr.Write("(" + literal + toNativeSuffix + ")");
-            } else if (u != null && u.Op == UnaryOpExpr.UnOpcode.Cardinality) {
+            } else if (u != null && u.Op == UnaryOpExpr.Opcode.Cardinality) {
               // Optimize .Count to avoid intermediate BigInteger
               TrParenExpr(u.E, wr, inLetExprBody);
               if (toNative.UpperBound <= new BigInteger(0x80000000U)) {
