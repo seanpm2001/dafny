@@ -17,5 +17,14 @@ CSharpDafnyAST.dfy: $(DafnyPipeline).csproj $(DafnyAST).cs $(ASTExport)/Program.
 CSharp/CSharpUtils.cs: CSharpUtils.cs
 	cp $< $@
 
-build: CSharp/Compiler.cs CSharp/CSharpUtils.cs
+dll := CSharp/bin/Debug/net6.0/CSharpCompiler.dll
+
+$(dll): CSharp/Compiler.cs CSharp/CSharpUtils.cs
 	dotnet build CSharp/CSharpCompiler.csproj
+
+build: $(dll)
+
+run: $(dll)
+	dotnet run --project ../DafnyDriver/DafnyDriver.csproj -- \
+		/spillTargetCode:3 /compile:0 /noVerify /compileTarget:$(dll) \
+		minimal.dfy

@@ -1,4 +1,4 @@
-namespace SelfHosting.CSharpUtils {
+namespace CSharpUtils {
   public partial class ListUtils {
     public static List<T> Mk<T>() => new List<T>();
 
@@ -16,6 +16,11 @@ namespace SelfHosting.CSharpUtils {
         b0 = f(lA[i], b0);
       }
       return b0;
+    }
+  }
+  public partial class StringUtils {
+    public static string OfString(object o) {
+      return o.ToString() ?? "null";
     }
   }
 }

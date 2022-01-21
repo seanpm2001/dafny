@@ -13,16 +13,22 @@ module {:extern "System"} {:compile false} System {
 }
 
 module {:extern "Microsoft.Dafny"} {:compile false} Microsoft.Dafny {
+  import System
+
   class {:extern} FreshIdGenerator {}
   class {:extern} Graph<T> {}
   class {:extern} Translator {}
   class {:extern} VisibilityScope {}
   class {:extern} ErrorReporter {}
 
-  class {:extern} ConcreteSyntaxTree {}
-
   class {:extern} Resolver {}
   class {:extern "Resolver.TypeConstraint"} Resolver__TypeConstraint {}
+
+  class {:extern} ConcreteSyntaxTree {
+    // Changed return type to void (we lose chaining but stop Dafny from
+    // complaining about missing return parameters when we don't chain.
+    method {:extern} Write(value: System.String)
+  }
 }
 
 module {:extern "Microsoft.Boogie"} {:compile false} Microsoft.Boogie {
@@ -32,7 +38,8 @@ module {:extern "Microsoft.Boogie"} {:compile false} Microsoft.Boogie {
   class {:extern} Function {}
 }
 
-module {:extern "SelfHosting.CSharpUtils"} {:compile false} CSharpUtils {
+module {:extern "CSharpUtils"} CSharpUtils {
+  import System
   import opened System.Collections.Generic
 
   class {:extern} Tuple2<T1, T2> {}
@@ -44,6 +51,10 @@ module {:extern "SelfHosting.CSharpUtils"} {:compile false} CSharpUtils {
     static method {:extern} Mk<T>() returns (l: List<T>)
     static method {:extern} Append<T>(l: List<T>, t: T)
 
+    static function method {:extern} ToSeq<T>(l: List<T>) : seq<T> {
+      FoldR((t, s) => [t] + s, [], l)
+    }
+
     static method AppendSeq<T>(l: List<T>, s:seq<T>) {
       var i := 0;
       while (i < |s|) {
@@ -51,5 +62,10 @@ module {:extern "SelfHosting.CSharpUtils"} {:compile false} CSharpUtils {
         i := i + 1;
       }
     }
+  }
+
+  class StringUtils {
+    static function method {:extern} ToCString(s: string) : System.String
+    static function method {:extern} OfCString(s: System.String) : string
   }
 }

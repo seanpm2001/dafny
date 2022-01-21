@@ -2,25 +2,25 @@
 
 namespace Microsoft.Dafny.Compilers.SelfHosting.CSharp;
 
-class Factory : Microsoft.Dafny.Compilers.Csharp.Factory {
+public class Factory : Microsoft.Dafny.Compilers.Csharp.Factory {
   public override ICompiler CreateInstance(ErrorReporter reporter, ReadOnlyCollection<string> otherFileNames) {
     return new SelfHostingCSharpCompiler(this, reporter);
   }
 }
 
 internal class SelfHostingCSharpCompiler : SelfHostingCompiler {
-  //private readonly DafnyCSharpCompiler Compiler;
+  private readonly DafnyCSharpCompiler compiler;
 
   public SelfHostingCSharpCompiler(Factory factory, ErrorReporter reporter)
     : base(factory, reporter) {
-    //Compiler = new DafnyCSharpCompiler();
+    compiler = new DafnyCSharpCompiler();
   }
 
   public override void Compile(Program dafnyProgram, ConcreteSyntaxTree output) {
-    //Compiler.Compile(dafnyProgram, output);
+    compiler.Compile(dafnyProgram, output);
   }
 
   public override void EmitCallToMain(Method mainMethod, string baseName, ConcreteSyntaxTree output) {
-    //Compiler.EmitCallToMain(mainMethod, baseName, output);
+    compiler.EmitCallToMain(mainMethod, baseName, output);
   }
 }

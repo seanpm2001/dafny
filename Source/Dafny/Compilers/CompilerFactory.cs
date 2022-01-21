@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Microsoft.Dafny;
@@ -54,19 +55,16 @@ public abstract class CompilerFactory {
     }
 
     // Otherwise, load from disk
-    string dllPath;
-
-    if (compileTarget.EndsWith(".dll")) {
-      dllPath = compileTarget;
-    } else {
-      var root = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-                 ?? throw new FileNotFoundException("Unknown root directory");
-      dllPath = System.IO.Path.Combine(root, "Dafny.Compilers." + compileTarget + ".dll");
+    if (!compileTarget.EndsWith(".dll")) {
+      throw new ArgumentException($"Unknown /compileTarget: {compileTarget}");
     }
 
-    var asm = Assembly.LoadFrom(dllPath);
-    var factoryType = asm.GetType(asm.GetName().Name + ".Factory")
-                      ?? throw new ArgumentException("Assembly does not contain a compiler factory class");
+    var asm = Assembly.LoadFrom(compileTarget);
+    var factoryType = asm.GetTypes().FirstOrDefault(t => t.IsAssignableTo(typeof(CompilerFactory)));
+    if (factoryType == null) {
+      var found = asm.GetTypes().Select(t => t.FullName);
+      throw new ArgumentException($"Assembly does not contain a compiler factory class; found {String.Join(", ", found)}");
+    }
     return (CompilerFactory?)Activator.CreateInstance(factoryType)
            ?? throw new ArgumentException("Could not instantiate the compiler factory class");
   }

@@ -88,6 +88,8 @@ namespace Microsoft.Dafny.Compilers.Csharp {
       wr.WriteLine("// Optionally, you may want to include compiler switches like");
       wr.WriteLine("//     /debug /nowarn:162,164,168,183,219,436,1717,1718");
       wr.WriteLine();
+      wr.WriteLine("#nullable disable");
+      wr.WriteLine();
       wr.WriteLine("using System;");
       wr.WriteLine("using System.Numerics;");
       EmitDafnySourceAttribute(program, wr);

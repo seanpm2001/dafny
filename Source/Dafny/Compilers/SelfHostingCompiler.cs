@@ -29,7 +29,5 @@ public abstract class SelfHostingCompiler : ICompiler {
     throw new NotImplementedException();
   }
 
-  public void WriteCoverageLegendFile() {
-    throw new NotImplementedException();
-  }
+  public virtual void WriteCoverageLegendFile() {}
 }
