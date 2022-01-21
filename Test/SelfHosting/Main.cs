@@ -1,5 +1,5 @@
 using Antlr4.Runtime;
-using CSharpAST;
+using SelfHosting.CSharpAST;
 
 namespace SelfHosting.CSharp;
 
@@ -13,7 +13,11 @@ public class SimpleVisitor : SimpleBaseVisitor<AST> {
   }
 
   public override AST VisitAdd(SimpleParser.AddContext context) {
-    return new Add((Expr)Visit(context.l), (Expr)Visit(context.r));
+    return new Op(Op.BinOp.Add, (Expr)Visit(context.l), (Expr)Visit(context.r));
+  }
+
+  public override AST VisitSub(SimpleParser.SubContext context) {
+    return new Op(Op.BinOp.Sub, (Expr)Visit(context.l), (Expr)Visit(context.r));
   }
 
   public override AST VisitConst(SimpleParser.ConstContext context) {

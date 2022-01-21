@@ -1,28 +1,31 @@
+c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\minimal.cs(3,22): warning CS8618: Non-nullable field 'child' must contain a non-null value when exiting constructor. Consider declaring the field as nullable. [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
+c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\Program.cs(313,11): warning CS0219: The variable 'caretPosition' is assigned but its value is never used [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
+c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\minimal.cs(3,22): warning CS0169: The field 'MY_PARENT.child' is never used [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
 include "CSharpCompat.dfy"
 
-module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
+module {:extern} Microsoft.Dafny. {
   import opened CSharpGenerics
   import opened CSharpSystem
   import opened Boogie
   import opened Dafny
 
-  datatype {:extern "Attributes.MatchingValueOption"} Attributes_MatchingValueOption =
+  datatype {:extern "Attributes.MatchingValueOption"} Attributes__MatchingValueOption =
     | Empty
     | Bool
     | Int
     | String
     | Expression
 
-  datatype {:extern "Type.NumericPersuasion"} Type_NumericPersuasion =
+  datatype {:extern "Type.NumericPersuasion"} Type__NumericPersuasion =
     | Int
     | Real
 
-  datatype {:extern "Type.AutoInitInfo"} Type_AutoInitInfo =
+  datatype {:extern "Type.AutoInitInfo"} Type__AutoInitInfo =
     | MaybeEmpty
     | Nonempty
     | CompilableValue
 
-  datatype {:extern "TypeProxy.Family"} TypeProxy_Family =
+  datatype {:extern "TypeProxy.Family"} TypeProxy__Family =
     | Unknown
     | Bool
     | Char
@@ -34,29 +37,29 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | Ref
     | Opaque
 
-  datatype {:extern "TypeParameter.TPVarianceSyntax"} TypeParameter_TPVarianceSyntax =
+  datatype {:extern "TypeParameter.TPVarianceSyntax"} TypeParameter__TPVarianceSyntax =
     | NonVariant_Strict
     | NonVariant_Permissive
     | Covariant_Strict
     | Covariant_Permissive
     | Contravariance
 
-  datatype {:extern "TypeParameter.TPVariance"} TypeParameter_TPVariance =
+  datatype {:extern "TypeParameter.TPVariance"} TypeParameter__TPVariance =
     | Co
     | Non
     | Contra
 
-  datatype {:extern "TypeParameter.EqualitySupportValue"} TypeParameter_EqualitySupportValue =
+  datatype {:extern "TypeParameter.EqualitySupportValue"} TypeParameter__EqualitySupportValue =
     | Required
     | InferredRequired
     | Unspecified
 
-  datatype {:extern "IndDatatypeDecl.ES"} IndDatatypeDecl_ES =
+  datatype {:extern "IndDatatypeDecl.ES"} IndDatatypeDecl__ES =
     | NotYetComputed
     | Never
     | ConsultTypeArguments
 
-  datatype {:extern "SpecialField.ID"} SpecialField_ID =
+  datatype {:extern "SpecialField.ID"} SpecialField__ID =
     | UseIdParam
     | ArrayLength
     | ArrayLengthInt
@@ -72,7 +75,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | Modifies
     | New
 
-  datatype {:extern "NativeType.Selection"} NativeType_Selection =
+  datatype {:extern "NativeType.Selection"} NativeType__Selection =
     | Byte
     | SByte
     | UShort
@@ -83,14 +86,14 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | ULong
     | Long
 
-  datatype {:extern "SubsetTypeDecl.WKind"} SubsetTypeDecl_WKind =
+  datatype {:extern "SubsetTypeDecl.WKind"} SubsetTypeDecl__WKind =
     | CompiledZero
     | Compiled
     | Ghost
     | OptOut
     | Special
 
-  datatype {:extern "Function.TailStatus"} Function_TailStatus =
+  datatype {:extern "Function.TailStatus"} Function__TailStatus =
     | TriviallyTailRecursive
     | TailRecursive
     | NotTailRecursive
@@ -104,33 +107,33 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | AccumulateLeft_Concat
     | AccumulateRight_Concat
 
-  datatype {:extern "Function.CoCallClusterInvolvement"} Function_CoCallClusterInvolvement =
+  datatype {:extern "Function.CoCallClusterInvolvement"} Function__CoCallClusterInvolvement =
     | None
     | IsMutuallyRecursiveTarget
     | CoRecursiveTargetAllTheWay
 
-  datatype {:extern "Predicate.BodyOriginKind"} Predicate_BodyOriginKind =
+  datatype {:extern "Predicate.BodyOriginKind"} Predicate__BodyOriginKind =
     | OriginalOrInherited
     | DelayedDefinition
     | Extension
 
-  datatype {:extern "ExtremePredicate.KType"} ExtremePredicate_KType =
+  datatype {:extern "ExtremePredicate.KType"} ExtremePredicate__KType =
     | Unspecified
     | Nat
     | {:extern "ORDINAL"} CSharp_ORDINAL
 
-  datatype {:extern "AssignStmt.NonGhostKind"} AssignStmt_NonGhostKind =
+  datatype {:extern "AssignStmt.NonGhostKind"} AssignStmt__NonGhostKind =
     | IsGhost
     | Variable
     | Field
     | ArrayElement
 
-  datatype {:extern "ForallStmt.BodyKind"} ForallStmt_BodyKind =
+  datatype {:extern "ForallStmt.BodyKind"} ForallStmt__BodyKind =
     | Assign
     | Call
     | Proof
 
-  datatype {:extern "FunctionCallExpr.CoCallResolution"} FunctionCallExpr_CoCallResolution =
+  datatype {:extern "FunctionCallExpr.CoCallResolution"} FunctionCallExpr__CoCallResolution =
     | No
     | Yes
     | NoBecauseFunctionHasSideEffects
@@ -139,14 +142,14 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | NoBecauseIsNotGuarded
     | NoBecauseRecursiveCallsInDestructiveContext
 
-  datatype {:extern "UnaryOpExpr.UnOpcode"} UnaryOpExpr_UnOpcode =
+  datatype {:extern "UnaryOpExpr.Opcode"} UnaryOpExpr__Opcode =
     | Not
     | Cardinality
     | Fresh
     | Allocated
     | Lit
 
-  datatype {:extern "BinaryExpr.BinOpcode"} BinaryExpr_BinOpcode =
+  datatype {:extern "BinaryExpr.Opcode"} BinaryExpr__Opcode =
     | Iff
     | Imp
     | Exp
@@ -172,7 +175,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | BitwiseOr
     | BitwiseXor
 
-  datatype {:extern "BinaryExpr.ResolvedOpcode"} BinaryExpr_ResolvedOpcode =
+  datatype {:extern "BinaryExpr.ResolvedOpcode"} BinaryExpr__ResolvedOpcode =
     | YetUndetermined
     | Iff
     | Imp
@@ -239,16 +242,16 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     | RankLt
     | RankGt
 
-  datatype {:extern "BinaryExpr.AccumulationOperand"} BinaryExpr_AccumulationOperand =
+  datatype {:extern "BinaryExpr.AccumulationOperand"} BinaryExpr__AccumulationOperand =
     | None
     | Left
     | Right
 
-  datatype {:extern "TernaryExpr.TerOpcode"} TernaryExpr_TerOpcode =
+  datatype {:extern "TernaryExpr.Opcode"} TernaryExpr__Opcode =
     | PrefixEqOp
     | PrefixNeqOp
 
-  datatype {:extern "BoundedPool.PoolVirtues"} BoundedPool_PoolVirtues =
+  datatype {:extern "ComprehensionExpr.BoundedPool.PoolVirtues"} ComprehensionExpr__BoundedPool__PoolVirtues =
     | None
     | Finite
     | Enumerable
@@ -399,9 +402,9 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} TypeProxy extends Type {
     var T: Type
-    var SupertypeConstraints: List<Resolver_TypeConstraint>
-    var SubtypeConstraints: List<Resolver_TypeConstraint>
-    var family: Family
+    var SupertypeConstraints: List<Resolver__TypeConstraint>
+    var SubtypeConstraints: List<Resolver__TypeConstraint>
+    var family: TypeProxy__Family
     var {:extern "_id"} CSharp__id: int
     var id: int
   }
@@ -435,19 +438,19 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} TypeParameter extends TopLevelDecl {
-    var parent: ParentType
-    var VarianceSyntax: TPVarianceSyntax
-    var Characteristics: TypeParameterCharacteristics
+    var parent: TypeParameter__ParentType
+    var VarianceSyntax: TypeParameter__TPVarianceSyntax
+    var Characteristics: TypeParameter__TypeParameterCharacteristics
     var NecessaryForEqualitySupportOfSurroundingInductiveDatatype: bool
     var PositionalIndex: int
   }
 
-  trait {:compile false} {:extern} {:extern "TypeParameter.ParentType"} TypeParameter_ParentType {
+  trait {:compile false} {:extern "TypeParameter.ParentType"} TypeParameter__ParentType {
   }
 
-  trait {:compile false} {:extern} {:extern "TypeParameter.TypeParameterCharacteristics"} TypeParameter_TypeParameterCharacteristics {
-    var EqualitySupport: EqualitySupportValue
-    var AutoInit: Type_AutoInitInfo
+  trait {:compile false} {:extern "TypeParameter.TypeParameterCharacteristics"} TypeParameter__TypeParameterCharacteristics {
+    var EqualitySupport: TypeParameter__EqualitySupportValue
+    var AutoInit: Type__AutoInitInfo
     var ContainsNoReferenceTypes: bool
   }
 
@@ -530,7 +533,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Includes: List<Include>
     var TopLevelDecls: List<TopLevelDecl>
     var PrefixNamedModules: List<Tuple2<List<IToken>, LiteralModuleDecl>>
-    var CallGraph: Graph<ICallable>
+    var CallGraph: Graph<Microsoft__Dafny__ICallable><ICallable>
     var Height: int
     var IsAbstract: bool
     var IsFacade: bool
@@ -544,7 +547,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} DefaultModuleDecl extends ModuleDefinition {
   }
 
-  trait {:compile false} {:extern} TopLevelDecl extends Declaration, TypeParameter_ParentType {
+  trait {:compile false} {:extern} TopLevelDecl extends Declaration, TypeParameter__ParentType {
     var EnclosingModuleDefinition: ModuleDefinition
     var TypeArgs: List<TypeParameter>
   }
@@ -555,11 +558,11 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var ParentTraits: List<Type>
     var ParentFormalTypeParametersToActuals: Dictionary<TypeParameter, Type>
     var ParentTraitHeads: List<TraitDecl>
-    var ParentTypeInformation: InheritanceInformationClass
+    var ParentTypeInformation: TopLevelDeclWithMembers__InheritanceInformationClass
   }
 
-  trait {:compile false} {:extern} {:extern "TopLevelDeclWithMembers.InheritanceInformationClass"} TopLevelDeclWithMembers_InheritanceInformationClass {
-    var info: Dictionary<TraitDecl, List<(Type, List<TraitDecl> /*via this parent path*/)>>
+  trait {:compile false} {:extern "TopLevelDeclWithMembers.InheritanceInformationClass"} TopLevelDeclWithMembers__InheritanceInformationClass {
+    var info: Dictionary<TraitDecl, List<ValueTuple>>
   }
 
   trait {:compile false} {:extern} TraitDecl extends ClassDecl {
@@ -590,7 +593,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} IndDatatypeDecl extends DatatypeDecl, RevealableTypeDecl {
     var GroundingCtor: DatatypeCtor
     var TypeParametersUsedInConstructionByGroundingCtor: array<bool>
-    var EqualitySupport: ES
+    var EqualitySupport: IndDatatypeDecl__ES
   }
 
   trait {:compile false} {:extern} TupleTypeDecl extends IndDatatypeDecl {
@@ -607,7 +610,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var typeCreator: Func<List<Type>, Type>
   }
 
-  trait {:compile false} {:extern} DatatypeCtor extends Declaration, TypeParameter_ParentType {
+  trait {:compile false} {:extern} DatatypeCtor extends Declaration, TypeParameter__ParentType {
     var Formals: List<Formal>
     var EnclosingDatatype: DatatypeDecl
     var QueryField: SpecialField
@@ -641,9 +644,9 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} IteratorDecl extends ClassDecl, IMethodCodeContext {
     var Ins: List<Formal>
     var Outs: List<Formal>
-    var Reads: Specification<FrameExpression>
-    var Modifies: Specification<FrameExpression>
-    var Decreases: Specification<Expression>
+    var Reads: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
+    var Modifies: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
+    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
     var Requires: List<AttributedExpression>
     var Ensures: List<AttributedExpression>
     var YieldRequires: List<AttributedExpression>
@@ -663,7 +666,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
   }
 
-  trait {:compile false} {:extern} {:extern "IteratorDecl.EverIncreasingType"} IteratorDecl_EverIncreasingType extends BasicType {
+  trait {:compile false} {:extern "IteratorDecl.EverIncreasingType"} IteratorDecl__EverIncreasingType extends BasicType {
   }
 
   trait {:compile false} {:extern} MemberDecl extends Declaration {
@@ -685,7 +688,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} SpecialField extends Field {
-    var SpecialId: ID
+    var SpecialId: SpecialField__ID
     var IdParam: object
   }
 
@@ -698,8 +701,8 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Rhs: Expression
   }
 
-  trait {:compile false} {:extern} OpaqueTypeDecl extends TopLevelDeclWithMembers, TypeParameter_ParentType, RevealableTypeDecl {
-    var Characteristics: TypeParameter_TypeParameterCharacteristics
+  trait {:compile false} {:extern} OpaqueTypeDecl extends TopLevelDeclWithMembers, TypeParameter__ParentType, RevealableTypeDecl {
+    var Characteristics: TypeParameter__TypeParameterCharacteristics
   }
 
   trait {:compile false} {:extern} RedirectingTypeDecl extends ICallable {
@@ -710,7 +713,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var LowerBound: int
     var UpperBound: int
     var Bitwidth: int
-    var Sel: Selection
+    var Sel: NativeType__Selection
   }
 
   trait {:compile false} {:extern} RevealableTypeDeclHelper {
@@ -724,13 +727,13 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var BaseType: Type
     var Var: BoundVar
     var Constraint: Expression
-    var WitnessKind: SubsetTypeDecl_WKind
+    var WitnessKind: SubsetTypeDecl__WKind
     var Witness: Expression
     var NativeType: NativeType
   }
 
   trait {:compile false} {:extern} TypeSynonymDeclBase extends TopLevelDecl, RedirectingTypeDecl {
-    var Characteristics: TypeParameter_TypeParameterCharacteristics
+    var Characteristics: TypeParameter__TypeParameterCharacteristics
     var Rhs: Type
   }
 
@@ -743,7 +746,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} SubsetTypeDecl extends TypeSynonymDecl, RedirectingTypeDecl {
     var Var: BoundVar
     var Constraint: Expression
-    var WitnessKind: SubsetTypeDecl_WKind
+    var WitnessKind: SubsetTypeDecl__WKind
     var Witness: Expression
     var ConstraintIsCompilable: bool
     var CheckedIfConstraintIsCompilable: bool
@@ -798,9 +801,9 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var arguments: List<Expression>
   }
 
-  trait {:compile false} {:extern} Function extends MemberDecl, TypeParameter_ParentType, ICallable {
+  trait {:compile false} {:extern} Function extends MemberDecl, TypeParameter__ParentType, ICallable {
     var IsRecursive: bool
-    var TailRecursion: TailStatus
+    var TailRecursion: Function__TailStatus
     var IsFueled: bool
     var TypeArgs: List<TypeParameter>
     var Formals: List<Formal>
@@ -809,7 +812,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Req: List<AttributedExpression>
     var Reads: List<FrameExpression>
     var Ens: List<AttributedExpression>
-    var Decreases: Specification<Expression>
+    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
     var Body: Expression
     var ByMethodTok: IToken
     var ByMethodBody: BlockStmt
@@ -818,12 +821,12 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var OverriddenFunction: Function
     var containsQuantifier: bool
     var AllCalls: List<FunctionCallExpr>
-    var CoClusterTarget: CoCallClusterInvolvement
+    var CoClusterTarget: Function__CoCallClusterInvolvement
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
   }
 
   trait {:compile false} {:extern} Predicate extends Function {
-    var BodyOrigin: BodyOriginKind
+    var BodyOrigin: Predicate__BodyOriginKind
   }
 
   trait {:compile false} {:extern} PrefixPredicate extends Function {
@@ -832,7 +835,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} ExtremePredicate extends Function {
-    var TypeOfK: KType
+    var TypeOfK: ExtremePredicate__KType
     var Uses: List<FunctionCallExpr>
     var PrefixPredicate: PrefixPredicate
   }
@@ -849,7 +852,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} TwoStatePredicate extends TwoStateFunction {
   }
 
-  trait {:compile false} {:extern} Method extends MemberDecl, TypeParameter_ParentType, IMethodCodeContext {
+  trait {:compile false} {:extern} Method extends MemberDecl, TypeParameter__ParentType, IMethodCodeContext {
     var SignatureEllipsis: IToken
     var IsByMethod: bool
     var MustReverify: bool
@@ -858,9 +861,9 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Ins: List<Formal>
     var Outs: List<Formal>
     var Req: List<AttributedExpression>
-    var Mod: Specification<FrameExpression>
+    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
     var Ens: List<AttributedExpression>
-    var Decreases: Specification<Expression>
+    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
     var methodBody: BlockStmt
     var IsRecursive: bool
     var IsTailRecursive: bool
@@ -885,7 +888,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} ExtremeLemma extends Method {
-    var TypeOfK: ExtremePredicate_KType
+    var TypeOfK: ExtremePredicate__KType
     var PrefixLemma: PrefixLemma
   }
 
@@ -898,15 +901,15 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} Statement extends IAttributeBearingDeclaration {
     var Tok: IToken
     var EndTok: IToken
-    var Labels: LList<Label>
+    var Labels: LList<Microsoft__Dafny__Label><Label>
     var attributes: Attributes
     var IsGhost: bool
   }
 
-  trait {:compile false} {:extern} LList<T> {
+  trait {:compile false} {:extern} LList<T><T> {
     var Data: T
-    var Next: LList<T>
-    var Empty: LList<T>
+    var Next: LList<T><T>
+    var Empty: LList<T><T>
   }
 
   trait {:compile false} {:extern} Label {
@@ -916,7 +919,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} AssertLabel extends Label {
-    var E: Boogie.Expr
+    var E: Expr
   }
 
   trait {:compile false} {:extern} PredicateStmt extends Statement {
@@ -992,7 +995,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} VarDeclPattern extends Statement {
-    var LHS: CasePattern<LocalVariable>
+    var LHS: CasePattern<Microsoft__Dafny__LocalVariable><LocalVariable>
     var RHS: Expression
     var HasGhostModifier: bool
   }
@@ -1004,11 +1007,11 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} AssignSuchThatStmt extends ConcreteUpdateStatement {
     var Expr: Expression
     var AssumeToken: IToken
-    var Bounds: List<ComprehensionExpr_BoundedPool>
+    var Bounds: List<ComprehensionExpr__BoundedPool>
     var MissingBounds: List<IVariable>
   }
 
-  trait {:compile false} {:extern} {:extern "AssignSuchThatStmt.WiggleWaggleBound"} AssignSuchThatStmt_WiggleWaggleBound extends ComprehensionExpr_BoundedPool {
+  trait {:compile false} {:extern "AssignSuchThatStmt.WiggleWaggleBound"} AssignSuchThatStmt__WiggleWaggleBound extends ComprehensionExpr__BoundedPool {
   }
 
   trait {:compile false} {:extern} UpdateStmt extends ConcreteUpdateStatement {
@@ -1081,21 +1084,21 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} LoopStmt extends Statement {
     var Invariants: List<AttributedExpression>
-    var Decreases: Specification<Expression>
+    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
     var InferredDecreases: bool
-    var Mod: Specification<FrameExpression>
+    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
   }
 
   trait {:compile false} {:extern} OneBodyLoopStmt extends LoopStmt {
     var Body: BlockStmt
-    var BodySurrogate: WhileStmt_LoopBodySurrogate/*?*/
+    var BodySurrogate: WhileStmt__LoopBodySurrogate
   }
 
   trait {:compile false} {:extern} WhileStmt extends OneBodyLoopStmt {
     var Guard: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "WhileStmt.LoopBodySurrogate"} WhileStmt_LoopBodySurrogate {
+  trait {:compile false} {:extern "WhileStmt.LoopBodySurrogate"} WhileStmt__LoopBodySurrogate {
     var LocalLoopTargets: List<IVariable>
     var UsesHeap: bool
   }
@@ -1122,34 +1125,34 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Body: Statement
     var ForallExpressions: List<Expression>
     var CanConvert: bool
-    var Bounds: List<ComprehensionExpr_BoundedPool>
-    var Kind: BodyKind
+    var Bounds: List<ComprehensionExpr__BoundedPool>
+    var Kind: ForallStmt__BodyKind
   }
 
   trait {:compile false} {:extern} ModifyStmt extends Statement {
-    var Mod: Specification<FrameExpression>
+    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
     var Body: BlockStmt
   }
 
   trait {:compile false} {:extern} CalcStmt extends Statement {
     var Lines: List<Expression>
     var Hints: List<BlockStmt>
-    var UserSuppliedOp: CalcOp
-    var Op: CalcOp
-    var StepOps: List<CalcOp>
+    var UserSuppliedOp: CalcStmt__CalcOp
+    var Op: CalcStmt__CalcOp
+    var StepOps: List<CalcStmt__CalcOp>
     var Steps: List<Expression>
     var Result: Expression
-    var DefaultOp: CalcOp
+    var DefaultOp: CalcStmt__CalcOp
   }
 
-  trait {:compile false} {:extern} {:extern "CalcStmt.CalcOp"} CalcStmt_CalcOp {
+  trait {:compile false} {:extern "CalcStmt.CalcOp"} CalcStmt__CalcOp {
   }
 
-  trait {:compile false} {:extern} {:extern "CalcStmt.BinaryCalcOp"} CalcStmt_BinaryCalcOp extends CalcOp {
-    var Op: BinaryExpr_BinOpcode
+  trait {:compile false} {:extern "CalcStmt.BinaryCalcOp"} CalcStmt__BinaryCalcOp extends CalcStmt__CalcOp {
+    var Op: BinaryExpr__Opcode
   }
 
-  trait {:compile false} {:extern} {:extern "CalcStmt.TernaryCalcOp"} CalcStmt_TernaryCalcOp extends CalcOp {
+  trait {:compile false} {:extern "CalcStmt.TernaryCalcOp"} CalcStmt__TernaryCalcOp extends CalcStmt__CalcOp {
     var Index: Expression
   }
 
@@ -1244,13 +1247,13 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var TypeArgs: List<Type>
   }
 
-  trait {:compile false} {:extern} {:extern "Resolver_IdentifierExpr.ResolverType"} Resolver_IdentifierExpr_ResolverType extends Type {
+  trait {:compile false} {:extern "Resolver_IdentifierExpr.ResolverType"} Resolver_IdentifierExpr__ResolverType extends Type {
   }
 
-  trait {:compile false} {:extern} {:extern "Resolver_IdentifierExpr.ResolverType_Module"} Resolver_IdentifierExpr_ResolverType_Module extends ResolverType {
+  trait {:compile false} {:extern "Resolver_IdentifierExpr.ResolverType_Module"} Resolver_IdentifierExpr__ResolverType_Module extends Resolver_IdentifierExpr__ResolverType {
   }
 
-  trait {:compile false} {:extern} {:extern "Resolver_IdentifierExpr.ResolverType_Type"} Resolver_IdentifierExpr_ResolverType_Type extends ResolverType {
+  trait {:compile false} {:extern "Resolver_IdentifierExpr.ResolverType_Type"} Resolver_IdentifierExpr__ResolverType_Type extends Resolver_IdentifierExpr__ResolverType {
   }
 
   trait {:compile false} {:extern} DisplayExpression extends Expression {
@@ -1315,7 +1318,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var TypeApplication_AtEnclosingClass: List<Type>
     var TypeApplication_JustFunction: List<Type>
     var IsByMethodCall: bool
-    var CoCall: CoCallResolution
+    var CoCall: FunctionCallExpr__CoCallResolution
     var CoCallHint: string
     var Function: Function
   }
@@ -1332,13 +1335,13 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} OldExpr extends Expression {
     var E: Expression
-    var At: string/*?*/
+    var At: string
     var AtLabel: Label
   }
 
   trait {:compile false} {:extern} UnchangedExpr extends Expression {
     var Frame: List<FrameExpression>
-    var At: string/*?*/
+    var At: string
     var AtLabel: Label
   }
 
@@ -1347,11 +1350,11 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} UnaryOpExpr extends UnaryExpr {
-    var Op: UnOpcode
+    var Op: UnaryOpExpr__Opcode
   }
 
   trait {:compile false} {:extern} FreshExpr extends UnaryOpExpr {
-    var At: string/*?*/
+    var At: string
     var AtLabel: Label
   }
 
@@ -1366,15 +1369,15 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} BinaryExpr extends Expression {
-    var Op: BinOpcode
-    var {:extern "_theResolvedOp"} CSharp__theResolvedOp: ResolvedOpcode
+    var Op: BinaryExpr__Opcode
+    var {:extern "_theResolvedOp"} CSharp__theResolvedOp: BinaryExpr__ResolvedOpcode
     var E0: Expression
     var E1: Expression
-    var AccumulatesForTailRecursion: AccumulationOperand
+    var AccumulatesForTailRecursion: BinaryExpr__AccumulationOperand
   }
 
   trait {:compile false} {:extern} TernaryExpr extends Expression {
-    var Op: TerOpcode
+    var Op: TernaryExpr__Opcode
     var E0: Expression
     var E1: Expression
     var E2: Expression
@@ -1382,12 +1385,12 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} LetExpr extends Expression, IAttributeBearingDeclaration, IBoundVarsBearingExpression {
-    var LHSs: List<CasePattern<BoundVar>>
+    var LHSs: List<CasePattern<Microsoft__Dafny__BoundVar><BoundVar>>
     var RHSs: List<Expression>
     var Body: Expression
     var Exact: bool
     var Attributes: Attributes
-    var Constraint_Bounds: List<ComprehensionExpr_BoundedPool>
+    var Constraint_Bounds: List<ComprehensionExpr__BoundedPool>
     var translationDesugaring: Expression
     var lastTranslatorUsed: Translator
     var BodyStartTok: IToken
@@ -1395,7 +1398,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} LetOrFailExpr extends ConcreteSyntaxExpression {
-    var Lhs: CasePattern<BoundVar>
+    var Lhs: CasePattern<Microsoft__Dafny__BoundVar><BoundVar>
     var Rhs: Expression
     var Body: Expression
   }
@@ -1407,77 +1410,77 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var BodyStartTok: IToken
     var BodyEndTok: IToken
     var Attributes: Attributes
-    var Bounds: List<BoundedPool>
+    var Bounds: List<ComprehensionExpr__BoundedPool>
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.BoundedPool"} ComprehensionExpr_BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.BoundedPool"} ComprehensionExpr__BoundedPool {
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.ExactBoundedPool"} ComprehensionExpr_ExactBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.ExactBoundedPool"} ComprehensionExpr__ExactBoundedPool extends ComprehensionExpr__BoundedPool {
     var E: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.BoolBoundedPool"} ComprehensionExpr_BoolBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.BoolBoundedPool"} ComprehensionExpr__BoolBoundedPool extends ComprehensionExpr__BoundedPool {
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.CharBoundedPool"} ComprehensionExpr_CharBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.CharBoundedPool"} ComprehensionExpr__CharBoundedPool extends ComprehensionExpr__BoundedPool {
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.AllocFreeBoundedPool"} ComprehensionExpr_AllocFreeBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.AllocFreeBoundedPool"} ComprehensionExpr__AllocFreeBoundedPool extends ComprehensionExpr__BoundedPool {
     var Type: Type
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.ExplicitAllocatedBoundedPool"} ComprehensionExpr_ExplicitAllocatedBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.ExplicitAllocatedBoundedPool"} ComprehensionExpr__ExplicitAllocatedBoundedPool extends ComprehensionExpr__BoundedPool {
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.SpecialAllocIndependenceAllocatedBoundedPool"} ComprehensionExpr_SpecialAllocIndependenceAllocatedBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.SpecialAllocIndependenceAllocatedBoundedPool"} ComprehensionExpr__SpecialAllocIndependenceAllocatedBoundedPool extends ComprehensionExpr__BoundedPool {
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.IntBoundedPool"} ComprehensionExpr_IntBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.IntBoundedPool"} ComprehensionExpr__IntBoundedPool extends ComprehensionExpr__BoundedPool {
     var LowerBound: Expression
     var UpperBound: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.CollectionBoundedPool"} ComprehensionExpr_CollectionBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.CollectionBoundedPool"} ComprehensionExpr__CollectionBoundedPool extends ComprehensionExpr__BoundedPool {
     var BoundVariableType: Type
     var CollectionElementType: Type
     var IsFiniteCollection: bool
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.SetBoundedPool"} ComprehensionExpr_SetBoundedPool extends CollectionBoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.SetBoundedPool"} ComprehensionExpr__SetBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
     var Set: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.SubSetBoundedPool"} ComprehensionExpr_SubSetBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.SubSetBoundedPool"} ComprehensionExpr__SubSetBoundedPool extends ComprehensionExpr__BoundedPool {
     var UpperBound: Expression
     var IsFiniteCollection: bool
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.SuperSetBoundedPool"} ComprehensionExpr_SuperSetBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.SuperSetBoundedPool"} ComprehensionExpr__SuperSetBoundedPool extends ComprehensionExpr__BoundedPool {
     var LowerBound: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.MultiSetBoundedPool"} ComprehensionExpr_MultiSetBoundedPool extends CollectionBoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.MultiSetBoundedPool"} ComprehensionExpr__MultiSetBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
     var MultiSet: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.MapBoundedPool"} ComprehensionExpr_MapBoundedPool extends CollectionBoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.MapBoundedPool"} ComprehensionExpr__MapBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
     var Map: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.SeqBoundedPool"} ComprehensionExpr_SeqBoundedPool extends CollectionBoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.SeqBoundedPool"} ComprehensionExpr__SeqBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
     var Seq: Expression
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.DatatypeBoundedPool"} ComprehensionExpr_DatatypeBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.DatatypeBoundedPool"} ComprehensionExpr__DatatypeBoundedPool extends ComprehensionExpr__BoundedPool {
     var Decl: DatatypeDecl
   }
 
-  trait {:compile false} {:extern} {:extern "ComprehensionExpr.DatatypeInclusionBoundedPool"} ComprehensionExpr_DatatypeInclusionBoundedPool extends BoundedPool {
+  trait {:compile false} {:extern "ComprehensionExpr.DatatypeInclusionBoundedPool"} ComprehensionExpr__DatatypeInclusionBoundedPool extends ComprehensionExpr__BoundedPool {
     var IsIndDatatype: bool
   }
 
-  trait {:compile false} {:extern} QuantifierExpr extends ComprehensionExpr, TypeParameter_ParentType {
+  trait {:compile false} {:extern} QuantifierExpr extends ComprehensionExpr, TypeParameter__ParentType {
     var UniqueId: int
     var TypeArgs: List<TypeParameter>
     var currentQuantId: int
@@ -1498,7 +1501,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} MapComprehension extends ComprehensionExpr {
     var Finite: bool
     var TermLeft: Expression
-    var ProjectionFunctions: List<Boogie.Function>
+    var ProjectionFunctions: List<Function>
   }
 
   trait {:compile false} {:extern} LambdaExpr extends ComprehensionExpr {
@@ -1529,12 +1532,12 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var OrigUnresolved: MatchExpr
   }
 
-  trait {:compile false} {:extern} CasePattern<VT> {
+  trait {:compile false} {:extern} CasePattern<VT><VT> {
     var tok: IToken
     var Id: string
     var Ctor: DatatypeCtor
     var Var: VT
-    var Arguments: List<CasePattern<VT>>
+    var Arguments: List<CasePattern<VT><VT>>
     var Expr: Expression
   }
 
@@ -1674,7 +1677,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} ChainingExpression extends ConcreteSyntaxExpression {
     var Operands: List<Expression>
-    var Operators: List<BinaryExpr_BinOpcode>
+    var Operators: List<BinaryExpr__Opcode>
     var OperatorLocs: List<IToken>
     var PrefixLimits: List<Expression>
     var E: Expression
@@ -1699,7 +1702,7 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
     var Bindings: ActualBindings
   }
 
-  trait {:compile false} {:extern} Specification<T> {
+  trait {:compile false} {:extern} Specification<T><T> {
     var Expressions: List<T>
     var attributes: Attributes
   }
@@ -1707,6 +1710,6 @@ module {:extern "CSharpDafnyAST"} CSharpDafnyAST {
   trait {:compile false} {:extern} BottomUpVisitor {
   }
 
-  trait {:compile false} {:extern} TopDownVisitor<State> {
+  trait {:compile false} {:extern} TopDownVisitor<State><State> {
   }
 }

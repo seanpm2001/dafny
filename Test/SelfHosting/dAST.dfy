@@ -3,9 +3,13 @@ include "cAST.cs.dfy"
 include "Utils.dfy"
 
 module DafnyAST {
+  datatype BinOp =
+    | Add
+    | Sub
+
   datatype Expr =
     | Const(n: int)
-    | Add(e1: Expr, e2: Expr)
+    | Op(op: BinOp, e1: Expr, e2: Expr)
 
   datatype Stmt =
     | Skip
@@ -15,7 +19,8 @@ module DafnyAST {
   function method interpExpr(e: Expr): int {
     match e {
       case Const(n) => n
-      case Add(e1, e2) => interpExpr(e1) + interpExpr(e2)
+      case Op(Add, e1, e2) => interpExpr(e1) + interpExpr(e2)
+      case Op(Sub, e1, e2) => interpExpr(e1) - interpExpr(e2)
     }
   }
 
@@ -34,15 +39,21 @@ module Translator {
   import CSharpUtils
   import opened Global
 
+  function method {:verify false} translateOp(op: CSharpAST.Op__BinOp) : DafnyAST.BinOp {
+    if op.Equals(CSharpAST.Op__BinOp.Add) then DafnyAST.Add // FIXME: == gets miscompiled
+    else if op.Equals(CSharpAST.Op__BinOp.Sub) then DafnyAST.Sub
+    else unreachable<DafnyAST.BinOp>()
+  }
+
   function method {:verify false} translateExpr(c: CSharpAST.Expr) : DafnyAST.Expr
     // TODO: Isn't there a way to assume termination for a function?
     reads *
   {
     if c is CSharpAST.Const then
       DafnyAST.Const((c as CSharpAST.Const).n)
-    else if c is CSharpAST.Add then
-      var c := c as CSharpAST.Add;
-      DafnyAST.Add(translateExpr(c.e1), translateExpr(c.e2))
+    else if c is CSharpAST.Op then
+      var c := c as CSharpAST.Op;
+      DafnyAST.Op(translateOp(c.op), translateExpr(c.e1), translateExpr(c.e2))
     else
       // assume false;
       unreachable<DafnyAST.Expr>() /* TODO: How do I model this properly? */
@@ -91,13 +102,13 @@ module Rewriter {
 
   function method simplifyExpr(e: Expr) : Expr {
     match e {
-      case Const(n: int) => e
-      case Add(e1: Expr, e2: Expr) =>
-        match (simplifyExpr(e1), simplifyExpr(e2)) {
-          case (Const(0), Const(0)) => Const(0)
-          case (Const(0), e2) => e2
-          case (e1, Const(0)) => e1
-          case (e1, e2) => Add(e1, e2)
+      case Const(n) => e
+      case Op(op, e1, e2) =>
+        match (op, simplifyExpr(e1), simplifyExpr(e2)) {
+          case (_, Const(0), Const(0)) => Const(0)
+          case (Add, Const(0), e2) => e2
+          case (Add, e1, Const(0)) => e1
+          case (_, e1, e2) => Op(op, e1, e2)
         }
     }
   }
@@ -120,26 +131,30 @@ module StackMachine {
   import opened LinkedList
   import opened Global
 
-  datatype Op =
+  datatype Instr =
     | PushConst(n: int)
     | PopAdd
+    | PopSub
     | PopPrint
 
-  type Prog = List<Op>
+  type Prog = List<Instr>
   datatype State = State(stack: List<int>, output: seq<int>)
 
   const EmptyState := State(Nil, []);
 
-  function method interpOp(op: Op, st: State) : State {
-    match (op, st.stack) {
+  function method interpInstr(instr: Instr, st: State) : State {
+    match (instr, st.stack) {
       case (PushConst(n), tl) =>
         State(Cons(n, tl), st.output)
       case (PopAdd, Cons(n2, Cons(n1, tl))) =>
         State(Cons(n1 + n2, tl), st.output)
+      case (PopSub, Cons(n2, Cons(n1, tl))) =>
+        State(Cons(n1 - n2, tl), st.output)
       case (PopPrint, Cons(n, tl)) =>
         State(tl, st.output + [n])
       // Error cases
       case (PopAdd, _) => st
+      case (PopSub, _) => st
       case (PopPrint, _) => st
     }
   }
@@ -147,7 +162,7 @@ module StackMachine {
   function method interpProg'(p: Prog, st: State) : State {
     match p {
       case Nil => st
-      case Cons(op, p) => interpOp(op, interpProg'(p, st))
+      case Cons(instr, p) => interpInstr(instr, interpProg'(p, st))
     }
   }
 
@@ -187,12 +202,14 @@ module StackMachine {
     else unreachable<string>()
   }
 
-  function method prettyPrintOp(op: Op) : string {
-    match op {
+  function method prettyPrintInstr(instr: Instr) : string {
+    match instr {
       case PushConst(n) =>
         "PushConst(" + prettyPrintNum(n, "0") + ")"
       case PopAdd =>
         "PopAdd"
+      case PopSub =>
+        "PopSub"
       case Print =>
         "Print"
     }
@@ -201,7 +218,7 @@ module StackMachine {
   function method prettyPrint(p: Prog) : List<string> {
     match p {
       case Nil => Nil
-      case Cons(op, p) => Cons(prettyPrintOp(op), prettyPrint(p))
+      case Cons(instr, p) => Cons(prettyPrintInstr(instr), prettyPrint(p))
     }
   }
 }
@@ -215,7 +232,8 @@ module Compiler {
   function method compileExpr(e: DafnyAST.Expr): Prog {
     match e {
       case Const(n) => Singleton(PushConst(n))
-      case Add(e1, e2) => Cons(PopAdd, Concat(compileExpr(e2), compileExpr(e1)))
+      case Op(Add, e1, e2) => Cons(PopAdd, Concat(compileExpr(e2), compileExpr(e1)))
+      case Op(Sub, e1, e2) => Cons(PopSub, Concat(compileExpr(e2), compileExpr(e1)))
     }
   }
 
@@ -238,14 +256,27 @@ module Compiler {
   {
     match e {
       case Const(n) =>
-      case Add(e1, e2) =>
+      case Op(Add, e1, e2) =>
         calc {
           interpProg'(compileExpr(e), st);
           interpProg'(Cons(PopAdd, Concat(compileExpr(e2), compileExpr(e1))), st);
-          interpOp(PopAdd, interpProg'(Concat(compileExpr(e2), compileExpr(e1)), st));
+          interpInstr(PopAdd, interpProg'(Concat(compileExpr(e2), compileExpr(e1)), st));
           { interpProg'_Concat(compileExpr(e2), compileExpr(e1), st); }
-          interpOp(PopAdd, interpProg'(compileExpr(e2), interpProg'(compileExpr(e1), st)));
-          { compileExprCorrect'(e1, st); }
+          interpInstr(PopAdd, interpProg'(compileExpr(e2), interpProg'(compileExpr(e1), st)));
+          // { compileExprCorrect'(e1, st); }
+          // { compileExprCorrect'(e2, st); }
+          // interpInstr(PopAdd, State(Cons(DafnyAST.interpExpr(e2), Cons(DafnyAST.interpExpr(e1), st.stack)),
+          //   st.output));
+          // State(Cons(DafnyAST.interpExpr(e1) + DafnyAST.interpExpr(e2), st.stack),
+          //   st.output);
+        }
+      case Op(Sub, e1, e2) => // FIXME: Can this be made simpler?
+        calc {
+          interpProg'(compileExpr(e), st);
+          interpProg'(Cons(PopSub, Concat(compileExpr(e2), compileExpr(e1))), st);
+          interpInstr(PopSub, interpProg'(Concat(compileExpr(e2), compileExpr(e1)), st));
+          { interpProg'_Concat(compileExpr(e2), compileExpr(e1), st); }
+          interpInstr(PopSub, interpProg'(compileExpr(e2), interpProg'(compileExpr(e1), st)));
         }
     }
   }
@@ -261,9 +292,9 @@ module Compiler {
           interpProg'(compileStmt(s), st);
           interpProg'(compileStmt(DafnyAST.Print(e)), st);
           interpProg'(Cons(PopPrint, compileExpr(e)), st);
-          interpOp(PopPrint, interpProg'(compileExpr(e), st));
+          interpInstr(PopPrint, interpProg'(compileExpr(e), st));
           { compileExprCorrect'(e, st); }
-          interpOp(PopPrint, State(Cons(DafnyAST.interpExpr(e), st.stack), st.output));
+          interpInstr(PopPrint, State(Cons(DafnyAST.interpExpr(e), st.stack), st.output));
           State(st.stack, st.output + [DafnyAST.interpExpr(e)]);
         }
       case Seq(s1, s2) =>
