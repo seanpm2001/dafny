@@ -1,16 +1,16 @@
-module {:extern "System.Collections.Generic"} CSharpGenerics {
-  class {:extern} List<T> {}
-  class {:extern} ISet<T> {}
-  class {:extern} HashSet<T> {}
-  class {:extern} Dictionary<TKey, TValue> {}
-  class {:extern} Tuple2<T1, T2> {}
-  class {:extern} Tuple3<T1, T2, T3> {}
-}
-
-module {:extern "System"} CSharpSystem {
+module {:extern "System"} System {
   trait {:compile false} {:termination false} {:extern} IComparable {}
   class {:extern} Func<TArg, TRet>{}
   class {:extern} String {}
+
+  module {:extern "System.Collections.Generic"} Collections.Generic {
+    class {:extern} List<T> {}
+    class {:extern} ISet<T> {}
+    class {:extern} HashSet<T> {}
+    class {:extern} Dictionary<TKey, TValue> {}
+    class {:extern} Tuple2<T1, T2> {}
+    class {:extern} Tuple3<T1, T2, T3> {}
+  }
 }
 
 module {:extern "Microsoft.Dafny"} Dafny {
@@ -32,7 +32,7 @@ module {:extern "Microsoft.Boogie"} Boogie {
 }
 
 module {:extern "SelfHosting.CSharpUtils"} CSharpUtils {
-  import opened CSharpGenerics
+  import opened System.Collections.Generic
 
   class ListUtils {
     static function method {:extern} FoldR<A, B>(f: (A, B) -> B, b0: B, l: List<A>) : B

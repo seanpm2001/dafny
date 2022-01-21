@@ -40,7 +40,7 @@ module Translator {
   import opened Global
 
   function method {:verify false} translateOp(op: CSharpAST.Op__BinOp) : DafnyAST.BinOp {
-    if op.Equals(CSharpAST.Op__BinOp.Add) then DafnyAST.Add // FIXME: == gets miscompiled
+    if op.Equals(CSharpAST.Op__BinOp.Add) then DafnyAST.Add // FIXME: Equals because `==` gets miscompiled
     else if op.Equals(CSharpAST.Op__BinOp.Sub) then DafnyAST.Sub
     else unreachable<DafnyAST.BinOp>()
   }
@@ -323,12 +323,12 @@ module {:extern "SelfHosting"} Interop {
   import Translator
   import Rewriter
   import Compiler
-  import CSharpGenerics
   import CSharpUtils
+  import Generics = System.Collections.Generic
 
   class DafnyCompiler {
     static method CompileAndExport(cAST: CSharpAST.Prog)
-      returns (output: CSharpGenerics.List<string>)
+      returns (output: Generics.List<string>)
     {
       var translated: DafnyAST.Stmt := Translator.translateProg(cAST);
       var optimized: DafnyAST.Stmt := Rewriter.simplifyStmt(translated);
