@@ -1,267 +1,312 @@
-c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\minimal.cs(3,22): warning CS8618: Non-nullable field 'child' must contain a non-null value when exiting constructor. Consider declaring the field as nullable. [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
-c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\Program.cs(313,11): warning CS0219: The variable 'caretPosition' is assigned but its value is never used [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
-c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\minimal.cs(3,22): warning CS0169: The field 'MY_PARENT.child' is never used [c:\Users\cpitcla\git\dafny\compiler\Source\ASTExport\ASTExport.csproj]
 include "CSharpCompat.dfy"
 
-module {:extern} Microsoft.Dafny. {
-  import opened CSharpGenerics
-  import opened CSharpSystem
-  import opened Boogie
-  import opened Dafny
+module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
+  import System
+  import Microsoft
+  import CSharpUtils
+  import opened Microsoft.Dafny
 
-  datatype {:extern "Attributes.MatchingValueOption"} Attributes__MatchingValueOption =
-    | Empty
-    | Bool
-    | Int
-    | String
-    | Expression
+  class {:extern "Attributes.MatchingValueOption"} Attributes__MatchingValueOption {
+    static const {:extern} Empty: Attributes__MatchingValueOption
+    static const {:extern} Bool: Attributes__MatchingValueOption
+    static const {:extern} Int: Attributes__MatchingValueOption
+    static const {:extern} String: Attributes__MatchingValueOption
+    static const {:extern} Expression: Attributes__MatchingValueOption
+    function method {:extern} Equals(other: Attributes__MatchingValueOption): bool
+  }
 
-  datatype {:extern "Type.NumericPersuasion"} Type__NumericPersuasion =
-    | Int
-    | Real
+  class {:extern "Type.NumericPersuasion"} Type__NumericPersuasion {
+    static const {:extern} Int: Type__NumericPersuasion
+    static const {:extern} Real: Type__NumericPersuasion
+    function method {:extern} Equals(other: Type__NumericPersuasion): bool
+  }
 
-  datatype {:extern "Type.AutoInitInfo"} Type__AutoInitInfo =
-    | MaybeEmpty
-    | Nonempty
-    | CompilableValue
+  class {:extern "Type.AutoInitInfo"} Type__AutoInitInfo {
+    static const {:extern} MaybeEmpty: Type__AutoInitInfo
+    static const {:extern} Nonempty: Type__AutoInitInfo
+    static const {:extern} CompilableValue: Type__AutoInitInfo
+    function method {:extern} Equals(other: Type__AutoInitInfo): bool
+  }
 
-  datatype {:extern "TypeProxy.Family"} TypeProxy__Family =
-    | Unknown
-    | Bool
-    | Char
-    | IntLike
-    | RealLike
-    | Ordinal
-    | BitVector
-    | ValueType
-    | Ref
-    | Opaque
+  class {:extern "TypeProxy.Family"} TypeProxy__Family {
+    static const {:extern} Unknown: TypeProxy__Family
+    static const {:extern} Bool: TypeProxy__Family
+    static const {:extern} Char: TypeProxy__Family
+    static const {:extern} IntLike: TypeProxy__Family
+    static const {:extern} RealLike: TypeProxy__Family
+    static const {:extern} Ordinal: TypeProxy__Family
+    static const {:extern} BitVector: TypeProxy__Family
+    static const {:extern} ValueType: TypeProxy__Family
+    static const {:extern} Ref: TypeProxy__Family
+    static const {:extern} Opaque: TypeProxy__Family
+    function method {:extern} Equals(other: TypeProxy__Family): bool
+  }
 
-  datatype {:extern "TypeParameter.TPVarianceSyntax"} TypeParameter__TPVarianceSyntax =
-    | NonVariant_Strict
-    | NonVariant_Permissive
-    | Covariant_Strict
-    | Covariant_Permissive
-    | Contravariance
+  class {:extern "TypeParameter.TPVarianceSyntax"} TypeParameter__TPVarianceSyntax {
+    static const {:extern} NonVariant_Strict: TypeParameter__TPVarianceSyntax
+    static const {:extern} NonVariant_Permissive: TypeParameter__TPVarianceSyntax
+    static const {:extern} Covariant_Strict: TypeParameter__TPVarianceSyntax
+    static const {:extern} Covariant_Permissive: TypeParameter__TPVarianceSyntax
+    static const {:extern} Contravariance: TypeParameter__TPVarianceSyntax
+    function method {:extern} Equals(other: TypeParameter__TPVarianceSyntax): bool
+  }
 
-  datatype {:extern "TypeParameter.TPVariance"} TypeParameter__TPVariance =
-    | Co
-    | Non
-    | Contra
+  class {:extern "TypeParameter.TPVariance"} TypeParameter__TPVariance {
+    static const {:extern} Co: TypeParameter__TPVariance
+    static const {:extern} Non: TypeParameter__TPVariance
+    static const {:extern} Contra: TypeParameter__TPVariance
+    function method {:extern} Equals(other: TypeParameter__TPVariance): bool
+  }
 
-  datatype {:extern "TypeParameter.EqualitySupportValue"} TypeParameter__EqualitySupportValue =
-    | Required
-    | InferredRequired
-    | Unspecified
+  class {:extern "TypeParameter.EqualitySupportValue"} TypeParameter__EqualitySupportValue {
+    static const {:extern} Required: TypeParameter__EqualitySupportValue
+    static const {:extern} InferredRequired: TypeParameter__EqualitySupportValue
+    static const {:extern} Unspecified: TypeParameter__EqualitySupportValue
+    function method {:extern} Equals(other: TypeParameter__EqualitySupportValue): bool
+  }
 
-  datatype {:extern "IndDatatypeDecl.ES"} IndDatatypeDecl__ES =
-    | NotYetComputed
-    | Never
-    | ConsultTypeArguments
+  class {:extern "IndDatatypeDecl.ES"} IndDatatypeDecl__ES {
+    static const {:extern} NotYetComputed: IndDatatypeDecl__ES
+    static const {:extern} Never: IndDatatypeDecl__ES
+    static const {:extern} ConsultTypeArguments: IndDatatypeDecl__ES
+    function method {:extern} Equals(other: IndDatatypeDecl__ES): bool
+  }
 
-  datatype {:extern "SpecialField.ID"} SpecialField__ID =
-    | UseIdParam
-    | ArrayLength
-    | ArrayLengthInt
-    | Floor
-    | IsLimit
-    | IsSucc
-    | Offset
-    | IsNat
-    | Keys
-    | Values
-    | Items
-    | Reads
-    | Modifies
-    | New
+  class {:extern "SpecialField.ID"} SpecialField__ID {
+    static const {:extern} UseIdParam: SpecialField__ID
+    static const {:extern} ArrayLength: SpecialField__ID
+    static const {:extern} ArrayLengthInt: SpecialField__ID
+    static const {:extern} Floor: SpecialField__ID
+    static const {:extern "IsLimit"} CSharp_IsLimit: SpecialField__ID
+    static const {:extern "IsSucc"} CSharp_IsSucc: SpecialField__ID
+    static const {:extern "Offset"} CSharp_Offset: SpecialField__ID
+    static const {:extern "IsNat"} CSharp_IsNat: SpecialField__ID
+    static const {:extern "Keys"} CSharp_Keys: SpecialField__ID
+    static const {:extern "Values"} CSharp_Values: SpecialField__ID
+    static const {:extern "Items"} CSharp_Items: SpecialField__ID
+    static const {:extern} Reads: SpecialField__ID
+    static const {:extern} Modifies: SpecialField__ID
+    static const {:extern} New: SpecialField__ID
+    function method {:extern} Equals(other: SpecialField__ID): bool
+  }
 
-  datatype {:extern "NativeType.Selection"} NativeType__Selection =
-    | Byte
-    | SByte
-    | UShort
-    | Short
-    | UInt
-    | Int
-    | Number
-    | ULong
-    | Long
+  class {:extern "NativeType.Selection"} NativeType__Selection {
+    static const {:extern} Byte: NativeType__Selection
+    static const {:extern} SByte: NativeType__Selection
+    static const {:extern} UShort: NativeType__Selection
+    static const {:extern} Short: NativeType__Selection
+    static const {:extern} UInt: NativeType__Selection
+    static const {:extern} Int: NativeType__Selection
+    static const {:extern} Number: NativeType__Selection
+    static const {:extern} ULong: NativeType__Selection
+    static const {:extern} Long: NativeType__Selection
+    function method {:extern} Equals(other: NativeType__Selection): bool
+  }
 
-  datatype {:extern "SubsetTypeDecl.WKind"} SubsetTypeDecl__WKind =
-    | CompiledZero
-    | Compiled
-    | Ghost
-    | OptOut
-    | Special
+  class {:extern "SubsetTypeDecl.WKind"} SubsetTypeDecl__WKind {
+    static const {:extern} CompiledZero: SubsetTypeDecl__WKind
+    static const {:extern} Compiled: SubsetTypeDecl__WKind
+    static const {:extern} Ghost: SubsetTypeDecl__WKind
+    static const {:extern} OptOut: SubsetTypeDecl__WKind
+    static const {:extern} Special: SubsetTypeDecl__WKind
+    function method {:extern} Equals(other: SubsetTypeDecl__WKind): bool
+  }
 
-  datatype {:extern "Function.TailStatus"} Function__TailStatus =
-    | TriviallyTailRecursive
-    | TailRecursive
-    | NotTailRecursive
-    | Accumulate_Add
-    | AccumulateRight_Sub
-    | Accumulate_Mul
-    | Accumulate_SetUnion
-    | AccumulateRight_SetDifference
-    | Accumulate_MultiSetUnion
-    | AccumulateRight_MultiSetDifference
-    | AccumulateLeft_Concat
-    | AccumulateRight_Concat
+  class {:extern "Function.TailStatus"} Function__TailStatus {
+    static const {:extern} TriviallyTailRecursive: Function__TailStatus
+    static const {:extern} TailRecursive: Function__TailStatus
+    static const {:extern} NotTailRecursive: Function__TailStatus
+    static const {:extern} Accumulate_Add: Function__TailStatus
+    static const {:extern} AccumulateRight_Sub: Function__TailStatus
+    static const {:extern} Accumulate_Mul: Function__TailStatus
+    static const {:extern} Accumulate_SetUnion: Function__TailStatus
+    static const {:extern} AccumulateRight_SetDifference: Function__TailStatus
+    static const {:extern} Accumulate_MultiSetUnion: Function__TailStatus
+    static const {:extern} AccumulateRight_MultiSetDifference: Function__TailStatus
+    static const {:extern} AccumulateLeft_Concat: Function__TailStatus
+    static const {:extern} AccumulateRight_Concat: Function__TailStatus
+    function method {:extern} Equals(other: Function__TailStatus): bool
+  }
 
-  datatype {:extern "Function.CoCallClusterInvolvement"} Function__CoCallClusterInvolvement =
-    | None
-    | IsMutuallyRecursiveTarget
-    | CoRecursiveTargetAllTheWay
+  class {:extern "Function.CoCallClusterInvolvement"} Function__CoCallClusterInvolvement {
+    static const {:extern} None: Function__CoCallClusterInvolvement
+    static const {:extern} IsMutuallyRecursiveTarget: Function__CoCallClusterInvolvement
+    static const {:extern} CoRecursiveTargetAllTheWay: Function__CoCallClusterInvolvement
+    function method {:extern} Equals(other: Function__CoCallClusterInvolvement): bool
+  }
 
-  datatype {:extern "Predicate.BodyOriginKind"} Predicate__BodyOriginKind =
-    | OriginalOrInherited
-    | DelayedDefinition
-    | Extension
+  class {:extern "Predicate.BodyOriginKind"} Predicate__BodyOriginKind {
+    static const {:extern} OriginalOrInherited: Predicate__BodyOriginKind
+    static const {:extern} DelayedDefinition: Predicate__BodyOriginKind
+    static const {:extern} Extension: Predicate__BodyOriginKind
+    function method {:extern} Equals(other: Predicate__BodyOriginKind): bool
+  }
 
-  datatype {:extern "ExtremePredicate.KType"} ExtremePredicate__KType =
-    | Unspecified
-    | Nat
-    | {:extern "ORDINAL"} CSharp_ORDINAL
+  class {:extern "ExtremePredicate.KType"} ExtremePredicate__KType {
+    static const {:extern} Unspecified: ExtremePredicate__KType
+    static const {:extern} Nat: ExtremePredicate__KType
+    static const {:extern "ORDINAL"} CSharp_ORDINAL: ExtremePredicate__KType
+    function method {:extern} Equals(other: ExtremePredicate__KType): bool
+  }
 
-  datatype {:extern "AssignStmt.NonGhostKind"} AssignStmt__NonGhostKind =
-    | IsGhost
-    | Variable
-    | Field
-    | ArrayElement
+  class {:extern "AssignStmt.NonGhostKind"} AssignStmt__NonGhostKind {
+    static const {:extern} IsGhost: AssignStmt__NonGhostKind
+    static const {:extern} Variable: AssignStmt__NonGhostKind
+    static const {:extern} Field: AssignStmt__NonGhostKind
+    static const {:extern} ArrayElement: AssignStmt__NonGhostKind
+    function method {:extern} Equals(other: AssignStmt__NonGhostKind): bool
+  }
 
-  datatype {:extern "ForallStmt.BodyKind"} ForallStmt__BodyKind =
-    | Assign
-    | Call
-    | Proof
+  class {:extern "ForallStmt.BodyKind"} ForallStmt__BodyKind {
+    static const {:extern} Assign: ForallStmt__BodyKind
+    static const {:extern} Call: ForallStmt__BodyKind
+    static const {:extern} Proof: ForallStmt__BodyKind
+    function method {:extern} Equals(other: ForallStmt__BodyKind): bool
+  }
 
-  datatype {:extern "FunctionCallExpr.CoCallResolution"} FunctionCallExpr__CoCallResolution =
-    | No
-    | Yes
-    | NoBecauseFunctionHasSideEffects
-    | NoBecauseFunctionHasPostcondition
-    | NoBecauseRecursiveCallsAreNotAllowedInThisContext
-    | NoBecauseIsNotGuarded
-    | NoBecauseRecursiveCallsInDestructiveContext
+  class {:extern "FunctionCallExpr.CoCallResolution"} FunctionCallExpr__CoCallResolution {
+    static const {:extern} No: FunctionCallExpr__CoCallResolution
+    static const {:extern} Yes: FunctionCallExpr__CoCallResolution
+    static const {:extern} NoBecauseFunctionHasSideEffects: FunctionCallExpr__CoCallResolution
+    static const {:extern} NoBecauseFunctionHasPostcondition: FunctionCallExpr__CoCallResolution
+    static const {:extern} NoBecauseRecursiveCallsAreNotAllowedInThisContext: FunctionCallExpr__CoCallResolution
+    static const {:extern} NoBecauseIsNotGuarded: FunctionCallExpr__CoCallResolution
+    static const {:extern} NoBecauseRecursiveCallsInDestructiveContext: FunctionCallExpr__CoCallResolution
+    function method {:extern} Equals(other: FunctionCallExpr__CoCallResolution): bool
+  }
 
-  datatype {:extern "UnaryOpExpr.Opcode"} UnaryOpExpr__Opcode =
-    | Not
-    | Cardinality
-    | Fresh
-    | Allocated
-    | Lit
+  class {:extern "UnaryOpExpr.Opcode"} UnaryOpExpr__Opcode {
+    static const {:extern} Not: UnaryOpExpr__Opcode
+    static const {:extern} Cardinality: UnaryOpExpr__Opcode
+    static const {:extern} Fresh: UnaryOpExpr__Opcode
+    static const {:extern} Allocated: UnaryOpExpr__Opcode
+    static const {:extern} Lit: UnaryOpExpr__Opcode
+    function method {:extern} Equals(other: UnaryOpExpr__Opcode): bool
+  }
 
-  datatype {:extern "BinaryExpr.Opcode"} BinaryExpr__Opcode =
-    | Iff
-    | Imp
-    | Exp
-    | And
-    | Or
-    | Eq
-    | Neq
-    | Lt
-    | Le
-    | Ge
-    | Gt
-    | Disjoint
-    | In
-    | NotIn
-    | LeftShift
-    | RightShift
-    | Add
-    | Sub
-    | Mul
-    | Div
-    | Mod
-    | BitwiseAnd
-    | BitwiseOr
-    | BitwiseXor
+  class {:extern "BinaryExpr.Opcode"} BinaryExpr__Opcode {
+    static const {:extern} Iff: BinaryExpr__Opcode
+    static const {:extern} Imp: BinaryExpr__Opcode
+    static const {:extern} Exp: BinaryExpr__Opcode
+    static const {:extern} And: BinaryExpr__Opcode
+    static const {:extern} Or: BinaryExpr__Opcode
+    static const {:extern} Eq: BinaryExpr__Opcode
+    static const {:extern} Neq: BinaryExpr__Opcode
+    static const {:extern} Lt: BinaryExpr__Opcode
+    static const {:extern} Le: BinaryExpr__Opcode
+    static const {:extern} Ge: BinaryExpr__Opcode
+    static const {:extern} Gt: BinaryExpr__Opcode
+    static const {:extern} Disjoint: BinaryExpr__Opcode
+    static const {:extern} In: BinaryExpr__Opcode
+    static const {:extern} NotIn: BinaryExpr__Opcode
+    static const {:extern} LeftShift: BinaryExpr__Opcode
+    static const {:extern} RightShift: BinaryExpr__Opcode
+    static const {:extern} Add: BinaryExpr__Opcode
+    static const {:extern} Sub: BinaryExpr__Opcode
+    static const {:extern} Mul: BinaryExpr__Opcode
+    static const {:extern} Div: BinaryExpr__Opcode
+    static const {:extern} Mod: BinaryExpr__Opcode
+    static const {:extern} BitwiseAnd: BinaryExpr__Opcode
+    static const {:extern} BitwiseOr: BinaryExpr__Opcode
+    static const {:extern} BitwiseXor: BinaryExpr__Opcode
+    function method {:extern} Equals(other: BinaryExpr__Opcode): bool
+  }
 
-  datatype {:extern "BinaryExpr.ResolvedOpcode"} BinaryExpr__ResolvedOpcode =
-    | YetUndetermined
-    | Iff
-    | Imp
-    | And
-    | Or
-    | EqCommon
-    | NeqCommon
-    | Lt
-    | LessThanLimit
-    | Le
-    | Ge
-    | Gt
-    | Add
-    | Sub
-    | Mul
-    | Div
-    | Mod
-    | LeftShift
-    | RightShift
-    | BitwiseAnd
-    | BitwiseOr
-    | BitwiseXor
-    | LtChar
-    | LeChar
-    | GeChar
-    | GtChar
-    | SetEq
-    | SetNeq
-    | ProperSubset
-    | Subset
-    | Superset
-    | ProperSuperset
-    | Disjoint
-    | InSet
-    | NotInSet
-    | Union
-    | Intersection
-    | SetDifference
-    | MultiSetEq
-    | MultiSetNeq
-    | MultiSubset
-    | MultiSuperset
-    | ProperMultiSubset
-    | ProperMultiSuperset
-    | MultiSetDisjoint
-    | InMultiSet
-    | NotInMultiSet
-    | MultiSetUnion
-    | MultiSetIntersection
-    | MultiSetDifference
-    | SeqEq
-    | SeqNeq
-    | ProperPrefix
-    | Prefix
-    | Concat
-    | InSeq
-    | NotInSeq
-    | MapEq
-    | MapNeq
-    | InMap
-    | NotInMap
-    | MapMerge
-    | MapSubtraction
-    | RankLt
-    | RankGt
+  class {:extern "BinaryExpr.ResolvedOpcode"} BinaryExpr__ResolvedOpcode {
+    static const {:extern} YetUndetermined: BinaryExpr__ResolvedOpcode
+    static const {:extern} Iff: BinaryExpr__ResolvedOpcode
+    static const {:extern} Imp: BinaryExpr__ResolvedOpcode
+    static const {:extern} And: BinaryExpr__ResolvedOpcode
+    static const {:extern} Or: BinaryExpr__ResolvedOpcode
+    static const {:extern} EqCommon: BinaryExpr__ResolvedOpcode
+    static const {:extern} NeqCommon: BinaryExpr__ResolvedOpcode
+    static const {:extern} Lt: BinaryExpr__ResolvedOpcode
+    static const {:extern} LessThanLimit: BinaryExpr__ResolvedOpcode
+    static const {:extern} Le: BinaryExpr__ResolvedOpcode
+    static const {:extern} Ge: BinaryExpr__ResolvedOpcode
+    static const {:extern} Gt: BinaryExpr__ResolvedOpcode
+    static const {:extern} Add: BinaryExpr__ResolvedOpcode
+    static const {:extern} Sub: BinaryExpr__ResolvedOpcode
+    static const {:extern} Mul: BinaryExpr__ResolvedOpcode
+    static const {:extern} Div: BinaryExpr__ResolvedOpcode
+    static const {:extern} Mod: BinaryExpr__ResolvedOpcode
+    static const {:extern} LeftShift: BinaryExpr__ResolvedOpcode
+    static const {:extern} RightShift: BinaryExpr__ResolvedOpcode
+    static const {:extern} BitwiseAnd: BinaryExpr__ResolvedOpcode
+    static const {:extern} BitwiseOr: BinaryExpr__ResolvedOpcode
+    static const {:extern} BitwiseXor: BinaryExpr__ResolvedOpcode
+    static const {:extern} LtChar: BinaryExpr__ResolvedOpcode
+    static const {:extern} LeChar: BinaryExpr__ResolvedOpcode
+    static const {:extern} GeChar: BinaryExpr__ResolvedOpcode
+    static const {:extern} GtChar: BinaryExpr__ResolvedOpcode
+    static const {:extern} SetEq: BinaryExpr__ResolvedOpcode
+    static const {:extern} SetNeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} ProperSubset: BinaryExpr__ResolvedOpcode
+    static const {:extern} Subset: BinaryExpr__ResolvedOpcode
+    static const {:extern} Superset: BinaryExpr__ResolvedOpcode
+    static const {:extern} ProperSuperset: BinaryExpr__ResolvedOpcode
+    static const {:extern} Disjoint: BinaryExpr__ResolvedOpcode
+    static const {:extern} InSet: BinaryExpr__ResolvedOpcode
+    static const {:extern} NotInSet: BinaryExpr__ResolvedOpcode
+    static const {:extern} Union: BinaryExpr__ResolvedOpcode
+    static const {:extern} Intersection: BinaryExpr__ResolvedOpcode
+    static const {:extern} SetDifference: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetEq: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetNeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSubset: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSuperset: BinaryExpr__ResolvedOpcode
+    static const {:extern} ProperMultiSubset: BinaryExpr__ResolvedOpcode
+    static const {:extern} ProperMultiSuperset: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetDisjoint: BinaryExpr__ResolvedOpcode
+    static const {:extern} InMultiSet: BinaryExpr__ResolvedOpcode
+    static const {:extern} NotInMultiSet: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetUnion: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetIntersection: BinaryExpr__ResolvedOpcode
+    static const {:extern} MultiSetDifference: BinaryExpr__ResolvedOpcode
+    static const {:extern} SeqEq: BinaryExpr__ResolvedOpcode
+    static const {:extern} SeqNeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} ProperPrefix: BinaryExpr__ResolvedOpcode
+    static const {:extern} Prefix: BinaryExpr__ResolvedOpcode
+    static const {:extern} Concat: BinaryExpr__ResolvedOpcode
+    static const {:extern} InSeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} NotInSeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} MapEq: BinaryExpr__ResolvedOpcode
+    static const {:extern} MapNeq: BinaryExpr__ResolvedOpcode
+    static const {:extern} InMap: BinaryExpr__ResolvedOpcode
+    static const {:extern} NotInMap: BinaryExpr__ResolvedOpcode
+    static const {:extern} MapMerge: BinaryExpr__ResolvedOpcode
+    static const {:extern} MapSubtraction: BinaryExpr__ResolvedOpcode
+    static const {:extern} RankLt: BinaryExpr__ResolvedOpcode
+    static const {:extern} RankGt: BinaryExpr__ResolvedOpcode
+    function method {:extern} Equals(other: BinaryExpr__ResolvedOpcode): bool
+  }
 
-  datatype {:extern "BinaryExpr.AccumulationOperand"} BinaryExpr__AccumulationOperand =
-    | None
-    | Left
-    | Right
+  class {:extern "BinaryExpr.AccumulationOperand"} BinaryExpr__AccumulationOperand {
+    static const {:extern} None: BinaryExpr__AccumulationOperand
+    static const {:extern} Left: BinaryExpr__AccumulationOperand
+    static const {:extern} Right: BinaryExpr__AccumulationOperand
+    function method {:extern} Equals(other: BinaryExpr__AccumulationOperand): bool
+  }
 
-  datatype {:extern "TernaryExpr.Opcode"} TernaryExpr__Opcode =
-    | PrefixEqOp
-    | PrefixNeqOp
+  class {:extern "TernaryExpr.Opcode"} TernaryExpr__Opcode {
+    static const {:extern} PrefixEqOp: TernaryExpr__Opcode
+    static const {:extern} PrefixNeqOp: TernaryExpr__Opcode
+    function method {:extern} Equals(other: TernaryExpr__Opcode): bool
+  }
 
-  datatype {:extern "ComprehensionExpr.BoundedPool.PoolVirtues"} ComprehensionExpr__BoundedPool__PoolVirtues =
-    | None
-    | Finite
-    | Enumerable
-    | IndependentOfAlloc
-    | IndependentOfAlloc_or_ExplicitAlloc
+  class {:extern "ComprehensionExpr.BoundedPool.PoolVirtues"} ComprehensionExpr__BoundedPool__PoolVirtues {
+    static const {:extern} None: ComprehensionExpr__BoundedPool__PoolVirtues
+    static const {:extern} Finite: ComprehensionExpr__BoundedPool__PoolVirtues
+    static const {:extern} Enumerable: ComprehensionExpr__BoundedPool__PoolVirtues
+    static const {:extern} IndependentOfAlloc: ComprehensionExpr__BoundedPool__PoolVirtues
+    static const {:extern} IndependentOfAlloc_or_ExplicitAlloc: ComprehensionExpr__BoundedPool__PoolVirtues
+    function method {:extern} Equals(other: ComprehensionExpr__BoundedPool__PoolVirtues): bool
+  }
 
   trait {:compile false} {:extern} Program {
     var FullName: string
-    var ModuleSigs: Dictionary<ModuleDefinition, ModuleSignature>
-    var CompileModules: List<ModuleDefinition>
+    var ModuleSigs: System.Collections.Generic.Dictionary<ModuleDefinition, ModuleSignature>
+    var CompileModules: System.Collections.Generic.List<ModuleDefinition>
     var MainMethod: Method
     var DefaultModule: ModuleDecl
     var DefaultModuleDef: ModuleDefinition
@@ -269,8 +314,8 @@ module {:extern} Microsoft.Dafny. {
     var reporter: ErrorReporter
   }
 
-  trait {:compile false} {:extern} Include extends IComparable {
-    var tok: IToken
+  trait {:compile false} {:extern} Include extends System.IComparable {
+    var tok: Microsoft.Boogie.IToken
     var includerFilename: string
     var includedFilename: string
     var canonicalPath: string
@@ -279,12 +324,12 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} BuiltIns {
     var SystemModule: ModuleDefinition
-    var arrayTypeDecls: Dictionary<int, ClassDecl>
-    var ArrowTypeDecls: Dictionary<int, ArrowTypeDecl>
-    var PartialArrowTypeDecls: Dictionary<int, SubsetTypeDecl>
-    var TotalArrowTypeDecls: Dictionary<int, SubsetTypeDecl>
-    var tupleTypeDecls: Dictionary<List<bool>, TupleTypeDecl>
-    var Bitwidths: ISet<int>
+    var arrayTypeDecls: System.Collections.Generic.Dictionary<int, ClassDecl>
+    var ArrowTypeDecls: System.Collections.Generic.Dictionary<int, ArrowTypeDecl>
+    var PartialArrowTypeDecls: System.Collections.Generic.Dictionary<int, SubsetTypeDecl>
+    var TotalArrowTypeDecls: System.Collections.Generic.Dictionary<int, SubsetTypeDecl>
+    var tupleTypeDecls: System.Collections.Generic.Dictionary<System.Collections.Generic.List<bool>, TupleTypeDecl>
+    var Bitwidths: System.Collections.Generic.ISet<int>
     var ORDINAL_Offset: SpecialField
     var NatDecl: SubsetTypeDecl
     var ObjectDecl: TraitDecl
@@ -299,7 +344,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} Attributes {
     var Name: string
-    var Args: List<Expression>
+    var Args: System.Collections.Generic.List<Expression>
     var Prev: Attributes
   }
 
@@ -307,9 +352,9 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} UserSuppliedAttributes extends Attributes {
-    var tok: IToken
-    var OpenBrace: IToken
-    var CloseBrace: IToken
+    var tok: Microsoft.Boogie.IToken
+    var OpenBrace: Microsoft.Boogie.IToken
+    var CloseBrace: Microsoft.Boogie.IToken
     var Recognized: bool
   }
 
@@ -319,9 +364,9 @@ module {:extern} Microsoft.Dafny. {
     var Int: IntType
     var Real: RealType
     var BigOrdinal: BigOrdinalType
-    var scopes: List<VisibilityScope>
+    var scopes: System.Collections.Generic.List<VisibilityScope>
     var scopesEnabled: bool
-    var TypeArgs: List<Type>
+    var TypeArgs: System.Collections.Generic.List<Type>
   }
 
   trait {:compile false} {:extern} ArtificialType extends Type {
@@ -394,7 +439,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} UserDefinedType extends NonProxyType {
     var NamePath: Expression
-    var tok: IToken
+    var tok: Microsoft.Boogie.IToken
     var Name: string
     var compileName: string
     var ResolvedClass: TopLevelDecl
@@ -402,8 +447,8 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} TypeProxy extends Type {
     var T: Type
-    var SupertypeConstraints: List<Resolver__TypeConstraint>
-    var SubtypeConstraints: List<Resolver__TypeConstraint>
+    var SupertypeConstraints: System.Collections.Generic.List<Resolver__TypeConstraint>
+    var SubtypeConstraints: System.Collections.Generic.List<Resolver__TypeConstraint>
     var family: TypeProxy__Family
     var {:extern "_id"} CSharp__id: int
     var id: int
@@ -424,9 +469,9 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} Declaration extends INamedRegion, IAttributeBearingDeclaration {
-    var tok: IToken
-    var BodyStartTok: IToken
-    var BodyEndTok: IToken
+    var tok: Microsoft.Boogie.IToken
+    var BodyStartTok: Microsoft.Boogie.IToken
+    var BodyEndTok: Microsoft.Boogie.IToken
     var Name: string
     var IsRefining: bool
     var compileName: string
@@ -468,31 +513,31 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} AliasModuleDecl extends ModuleDecl {
     var TargetQId: ModuleQualifiedId
-    var Exports: List<IToken>
+    var Exports: System.Collections.Generic.List<Microsoft.Boogie.IToken>
     var ShadowsLiteralModule: bool
   }
 
   trait {:compile false} {:extern} AbstractModuleDecl extends ModuleDecl {
     var QId: ModuleQualifiedId
-    var Exports: List<IToken>
+    var Exports: System.Collections.Generic.List<Microsoft.Boogie.IToken>
     var CompileRoot: ModuleDecl
     var OriginalSignature: ModuleSignature
   }
 
   trait {:compile false} {:extern} ModuleExportDecl extends ModuleDecl {
     var IsDefault: bool
-    var Exports: List<ExportSignature>
-    var Extends: List<IToken>
-    var ExtendDecls: List<ModuleExportDecl>
-    var ExportDecls: HashSet<Tuple2<Declaration, bool>>
+    var Exports: System.Collections.Generic.List<ExportSignature>
+    var Extends: System.Collections.Generic.List<Microsoft.Boogie.IToken>
+    var ExtendDecls: System.Collections.Generic.List<ModuleExportDecl>
+    var ExportDecls: System.Collections.Generic.HashSet<CSharpUtils.Tuple2<Declaration, bool>>
     var RevealAll: bool
     var ProvideAll: bool
     var ThisScope: VisibilityScope
   }
 
   trait {:compile false} {:extern} ExportSignature {
-    var Tok: IToken
-    var ClassIdTok: IToken
+    var Tok: Microsoft.Boogie.IToken
+    var ClassIdTok: Microsoft.Boogie.IToken
     var Opaque: bool
     var ClassId: string
     var Id: string
@@ -501,10 +546,10 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} ModuleSignature {
     var VisibilityScope: VisibilityScope
-    var TopLevels: Dictionary<string, TopLevelDecl>
-    var ExportSets: Dictionary<string, ModuleExportDecl>
-    var Ctors: Dictionary<string, Tuple2<DatatypeCtor, bool>>
-    var StaticMembers: Dictionary<string, MemberDecl>
+    var TopLevels: System.Collections.Generic.Dictionary<string, TopLevelDecl>
+    var ExportSets: System.Collections.Generic.Dictionary<string, ModuleExportDecl>
+    var Ctors: System.Collections.Generic.Dictionary<string, CSharpUtils.Tuple2<DatatypeCtor, bool>>
+    var StaticMembers: System.Collections.Generic.Dictionary<string, MemberDecl>
     var ModuleDef: ModuleDefinition
     var CompileSignature: ModuleSignature
     var Refines: ModuleSignature
@@ -512,7 +557,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} ModuleQualifiedId {
-    var Path: List<IToken>
+    var Path: System.Collections.Generic.List<Microsoft.Boogie.IToken>
     var Root: ModuleDecl
     var Decl: ModuleDecl
     var Def: ModuleDefinition
@@ -520,20 +565,20 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} ModuleDefinition extends INamedRegion, IAttributeBearingDeclaration {
-    var tok: IToken
-    var BodyStartTok: IToken
-    var BodyEndTok: IToken
+    var tok: Microsoft.Boogie.IToken
+    var BodyStartTok: Microsoft.Boogie.IToken
+    var BodyEndTok: Microsoft.Boogie.IToken
     var DafnyName: string
     var Name: string
-    var PrefixIds: List<IToken>
+    var PrefixIds: System.Collections.Generic.List<Microsoft.Boogie.IToken>
     var EnclosingModule: ModuleDefinition
     var Attributes: Attributes
     var RefinementQId: ModuleQualifiedId
     var SuccessfullyResolved: bool
-    var Includes: List<Include>
-    var TopLevelDecls: List<TopLevelDecl>
-    var PrefixNamedModules: List<Tuple2<List<IToken>, LiteralModuleDecl>>
-    var CallGraph: Graph<Microsoft__Dafny__ICallable><ICallable>
+    var Includes: System.Collections.Generic.List<Include>
+    var TopLevelDecls: System.Collections.Generic.List<TopLevelDecl>
+    var PrefixNamedModules: System.Collections.Generic.List<CSharpUtils.Tuple2<System.Collections.Generic.List<Microsoft.Boogie.IToken>, LiteralModuleDecl>>
+    var CallGraph: Graph<ICallable>
     var Height: int
     var IsAbstract: bool
     var IsFacade: bool
@@ -549,20 +594,20 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} TopLevelDecl extends Declaration, TypeParameter__ParentType {
     var EnclosingModuleDefinition: ModuleDefinition
-    var TypeArgs: List<TypeParameter>
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
   }
 
   trait {:compile false} {:extern} TopLevelDeclWithMembers extends TopLevelDecl {
-    var Members: List<MemberDecl>
-    var InheritedMembers: List<MemberDecl>
-    var ParentTraits: List<Type>
-    var ParentFormalTypeParametersToActuals: Dictionary<TypeParameter, Type>
-    var ParentTraitHeads: List<TraitDecl>
+    var Members: System.Collections.Generic.List<MemberDecl>
+    var InheritedMembers: System.Collections.Generic.List<MemberDecl>
+    var ParentTraits: System.Collections.Generic.List<Type>
+    var ParentFormalTypeParametersToActuals: System.Collections.Generic.Dictionary<TypeParameter, Type>
+    var ParentTraitHeads: System.Collections.Generic.List<TraitDecl>
     var ParentTypeInformation: TopLevelDeclWithMembers__InheritanceInformationClass
   }
 
   trait {:compile false} {:extern "TopLevelDeclWithMembers.InheritanceInformationClass"} TopLevelDeclWithMembers__InheritanceInformationClass {
-    var info: Dictionary<TraitDecl, List<ValueTuple>>
+    var info: System.Collections.Generic.Dictionary<TraitDecl, System.Collections.Generic.List<System.ValueTuple>>
   }
 
   trait {:compile false} {:extern} TraitDecl extends ClassDecl {
@@ -587,7 +632,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} DatatypeDecl extends TopLevelDeclWithMembers, RevealableTypeDecl, ICallable {
-    var Ctors: List<DatatypeCtor>
+    var Ctors: System.Collections.Generic.List<DatatypeCtor>
   }
 
   trait {:compile false} {:extern} IndDatatypeDecl extends DatatypeDecl, RevealableTypeDecl {
@@ -597,7 +642,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} TupleTypeDecl extends IndDatatypeDecl {
-    var ArgumentGhostness: List<bool>
+    var ArgumentGhostness: System.Collections.Generic.List<bool>
   }
 
   trait {:compile false} {:extern} CoDatatypeDecl extends DatatypeDecl {
@@ -605,16 +650,16 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} ValuetypeDecl extends TopLevelDecl {
-    var Members: Dictionary<string, MemberDecl>
-    var typeTester: Func<Type, bool>
-    var typeCreator: Func<List<Type>, Type>
+    var Members: System.Collections.Generic.Dictionary<string, MemberDecl>
+    var typeTester: System.Func<Type, bool>
+    var typeCreator: System.Func<System.Collections.Generic.List<Type>, Type>
   }
 
   trait {:compile false} {:extern} DatatypeCtor extends Declaration, TypeParameter__ParentType {
-    var Formals: List<Formal>
+    var Formals: System.Collections.Generic.List<Formal>
     var EnclosingDatatype: DatatypeDecl
     var QueryField: SpecialField
-    var Destructors: List<DatatypeDestructor>
+    var Destructors: System.Collections.Generic.List<DatatypeDestructor>
   }
 
   trait {:compile false} {:extern} ICodeContext {
@@ -642,20 +687,20 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} IteratorDecl extends ClassDecl, IMethodCodeContext {
-    var Ins: List<Formal>
-    var Outs: List<Formal>
-    var Reads: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
-    var Modifies: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
-    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
-    var Requires: List<AttributedExpression>
-    var Ensures: List<AttributedExpression>
-    var YieldRequires: List<AttributedExpression>
-    var YieldEnsures: List<AttributedExpression>
+    var Ins: System.Collections.Generic.List<Formal>
+    var Outs: System.Collections.Generic.List<Formal>
+    var Reads: Specification<FrameExpression>
+    var Modifies: Specification<FrameExpression>
+    var Decreases: Specification<Expression>
+    var Requires: System.Collections.Generic.List<AttributedExpression>
+    var Ensures: System.Collections.Generic.List<AttributedExpression>
+    var YieldRequires: System.Collections.Generic.List<AttributedExpression>
+    var YieldEnsures: System.Collections.Generic.List<AttributedExpression>
     var Body: BlockStmt
-    var SignatureEllipsis: IToken
-    var OutsFields: List<Field>
-    var OutsHistoryFields: List<Field>
-    var DecreasesFields: List<Field>
+    var SignatureEllipsis: Microsoft.Boogie.IToken
+    var OutsFields: System.Collections.Generic.List<Field>
+    var OutsHistoryFields: System.Collections.Generic.List<Field>
+    var DecreasesFields: System.Collections.Generic.List<Field>
     var Member_Modifies: SpecialField
     var Member_Reads: SpecialField
     var Member_New: SpecialField
@@ -693,8 +738,8 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} DatatypeDestructor extends SpecialField {
-    var EnclosingCtors: List<DatatypeCtor>
-    var CorrespondingFormals: List<Formal>
+    var EnclosingCtors: System.Collections.Generic.List<DatatypeCtor>
+    var CorrespondingFormals: System.Collections.Generic.List<Formal>
   }
 
   trait {:compile false} {:extern} ConstantField extends SpecialField, ICallable {
@@ -717,7 +762,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} RevealableTypeDeclHelper {
-    var tsdMap: Dictionary<TopLevelDecl, InternalTypeSynonymDecl>
+    var tsdMap: System.Collections.Generic.Dictionary<TopLevelDecl, InternalTypeSynonymDecl>
   }
 
   trait {:compile false} {:extern} RevealableTypeDecl {
@@ -764,7 +809,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} NonglobalVariable extends IVariable {
-    var tok: IToken
+    var tok: Microsoft.Boogie.IToken
     var name: string
     var uniqueName: string
     var specialChars: array<char>
@@ -791,36 +836,36 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} ActualBinding {
-    var FormalParameterName: IToken
+    var FormalParameterName: Microsoft.Boogie.IToken
     var Actual: Expression
     var IsGhost: bool
   }
 
   trait {:compile false} {:extern} ActualBindings {
-    var ArgumentBindings: List<ActualBinding>
-    var arguments: List<Expression>
+    var ArgumentBindings: System.Collections.Generic.List<ActualBinding>
+    var arguments: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} Function extends MemberDecl, TypeParameter__ParentType, ICallable {
     var IsRecursive: bool
     var TailRecursion: Function__TailStatus
     var IsFueled: bool
-    var TypeArgs: List<TypeParameter>
-    var Formals: List<Formal>
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var Formals: System.Collections.Generic.List<Formal>
     var Result: Formal
     var ResultType: Type
-    var Req: List<AttributedExpression>
-    var Reads: List<FrameExpression>
-    var Ens: List<AttributedExpression>
-    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
+    var Req: System.Collections.Generic.List<AttributedExpression>
+    var Reads: System.Collections.Generic.List<FrameExpression>
+    var Ens: System.Collections.Generic.List<AttributedExpression>
+    var Decreases: Specification<Expression>
     var Body: Expression
-    var ByMethodTok: IToken
+    var ByMethodTok: Microsoft.Boogie.IToken
     var ByMethodBody: BlockStmt
     var ByMethodDecl: Method
-    var SignatureEllipsis: IToken
+    var SignatureEllipsis: Microsoft.Boogie.IToken
     var OverriddenFunction: Function
     var containsQuantifier: bool
-    var AllCalls: List<FunctionCallExpr>
+    var AllCalls: System.Collections.Generic.List<FunctionCallExpr>
     var CoClusterTarget: Function__CoCallClusterInvolvement
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
   }
@@ -836,7 +881,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} ExtremePredicate extends Function {
     var TypeOfK: ExtremePredicate__KType
-    var Uses: List<FunctionCallExpr>
+    var Uses: System.Collections.Generic.List<FunctionCallExpr>
     var PrefixPredicate: PrefixPredicate
   }
 
@@ -853,21 +898,21 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} Method extends MemberDecl, TypeParameter__ParentType, IMethodCodeContext {
-    var SignatureEllipsis: IToken
+    var SignatureEllipsis: Microsoft.Boogie.IToken
     var IsByMethod: bool
     var MustReverify: bool
     var IsEntryPoint: bool
-    var TypeArgs: List<TypeParameter>
-    var Ins: List<Formal>
-    var Outs: List<Formal>
-    var Req: List<AttributedExpression>
-    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
-    var Ens: List<AttributedExpression>
-    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var Ins: System.Collections.Generic.List<Formal>
+    var Outs: System.Collections.Generic.List<Formal>
+    var Req: System.Collections.Generic.List<AttributedExpression>
+    var Mod: Specification<FrameExpression>
+    var Ens: System.Collections.Generic.List<AttributedExpression>
+    var Decreases: Specification<Expression>
     var methodBody: BlockStmt
     var IsRecursive: bool
     var IsTailRecursive: bool
-    var AssignedAssumptionVariables: ISet<IVariable>
+    var AssignedAssumptionVariables: System.Collections.Generic.ISet<IVariable>
     var OverriddenMethod: Method
     var emptyBody: BlockStmt
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
@@ -899,27 +944,27 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} Statement extends IAttributeBearingDeclaration {
-    var Tok: IToken
-    var EndTok: IToken
-    var Labels: LList<Microsoft__Dafny__Label><Label>
+    var Tok: Microsoft.Boogie.IToken
+    var EndTok: Microsoft.Boogie.IToken
+    var Labels: LList<Label>
     var attributes: Attributes
     var IsGhost: bool
   }
 
-  trait {:compile false} {:extern} LList<T><T> {
+  trait {:compile false} {:extern} LList<T> {
     var Data: T
-    var Next: LList<T><T>
-    var Empty: LList<T><T>
+    var Next: LList<T>
+    var Empty: LList<T>
   }
 
   trait {:compile false} {:extern} Label {
-    var Tok: IToken
+    var Tok: Microsoft.Boogie.IToken
     var Name: string
     var uniqueId: string
   }
 
   trait {:compile false} {:extern} AssertLabel extends Label {
-    var E: Expr
+    var E: Microsoft.Boogie.Expr
   }
 
   trait {:compile false} {:extern} PredicateStmt extends Statement {
@@ -939,23 +984,23 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} PrintStmt extends Statement {
-    var Args: List<Expression>
+    var Args: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} RevealStmt extends Statement {
-    var Exprs: List<Expression>
-    var LabeledAsserts: List<AssertLabel>
-    var ResolvedStatements: List<Statement>
+    var Exprs: System.Collections.Generic.List<Expression>
+    var LabeledAsserts: System.Collections.Generic.List<AssertLabel>
+    var ResolvedStatements: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} BreakStmt extends Statement {
-    var TargetLabel: IToken
+    var TargetLabel: Microsoft.Boogie.IToken
     var BreakCount: int
     var TargetStmt: Statement
   }
 
   trait {:compile false} {:extern} ProduceStmt extends Statement {
-    var rhss: List<AssignmentRhs>
+    var rhss: System.Collections.Generic.List<AssignmentRhs>
     var hiddenUpdate: UpdateStmt
   }
 
@@ -967,7 +1012,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} AssignmentRhs {
-    var Tok: IToken
+    var Tok: Microsoft.Boogie.IToken
     var attributes: Attributes
   }
 
@@ -977,9 +1022,9 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} TypeRhs extends AssignmentRhs {
     var EType: Type
-    var ArrayDimensions: List<Expression>
+    var ArrayDimensions: System.Collections.Generic.List<Expression>
     var ElementInit: Expression
-    var InitDisplay: List<Expression>
+    var InitDisplay: System.Collections.Generic.List<Expression>
     var Bindings: ActualBindings
     var Path: Type
     var InitCall: CallStmt
@@ -990,42 +1035,42 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} VarDeclStmt extends Statement {
-    var Locals: List<LocalVariable>
+    var Locals: System.Collections.Generic.List<LocalVariable>
     var Update: ConcreteUpdateStatement
   }
 
   trait {:compile false} {:extern} VarDeclPattern extends Statement {
-    var LHS: CasePattern<Microsoft__Dafny__LocalVariable><LocalVariable>
+    var LHS: CasePattern<LocalVariable>
     var RHS: Expression
     var HasGhostModifier: bool
   }
 
   trait {:compile false} {:extern} ConcreteUpdateStatement extends Statement {
-    var Lhss: List<Expression>
+    var Lhss: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} AssignSuchThatStmt extends ConcreteUpdateStatement {
     var Expr: Expression
-    var AssumeToken: IToken
-    var Bounds: List<ComprehensionExpr__BoundedPool>
-    var MissingBounds: List<IVariable>
+    var AssumeToken: Microsoft.Boogie.IToken
+    var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
+    var MissingBounds: System.Collections.Generic.List<IVariable>
   }
 
   trait {:compile false} {:extern "AssignSuchThatStmt.WiggleWaggleBound"} AssignSuchThatStmt__WiggleWaggleBound extends ComprehensionExpr__BoundedPool {
   }
 
   trait {:compile false} {:extern} UpdateStmt extends ConcreteUpdateStatement {
-    var Rhss: List<AssignmentRhs>
+    var Rhss: System.Collections.Generic.List<AssignmentRhs>
     var CanMutateKnownState: bool
     var OriginalInitialLhs: Expression
-    var ResolvedStatements: List<Statement>
+    var ResolvedStatements: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} AssignOrReturnStmt extends ConcreteUpdateStatement {
     var Rhs: Expression
-    var Rhss: List<AssignmentRhs>
-    var KeywordToken: IToken
-    var ResolvedStatements: List<Statement>
+    var Rhss: System.Collections.Generic.List<AssignmentRhs>
+    var KeywordToken: Microsoft.Boogie.IToken
+    var ResolvedStatements: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} AssignStmt extends Statement {
@@ -1034,8 +1079,8 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} LocalVariable extends IVariable, IAttributeBearingDeclaration {
-    var Tok: IToken
-    var EndTok: IToken
+    var Tok: Microsoft.Boogie.IToken
+    var EndTok: Microsoft.Boogie.IToken
     var name: string
     var Attributes: Attributes
     var IsGhost: bool
@@ -1046,20 +1091,20 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} CallStmt extends Statement {
-    var Lhs: List<Expression>
+    var Lhs: System.Collections.Generic.List<Expression>
     var MethodSelect: MemberSelectExpr
     var Bindings: ActualBindings
     var OriginalInitialLhs: Expression
   }
 
   trait {:compile false} {:extern} BlockStmt extends Statement, IRegion {
-    var Body: List<Statement>
+    var Body: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} DividedBlockStmt extends BlockStmt {
-    var BodyInit: List<Statement>
-    var SeparatorTok: IToken
-    var BodyProper: List<Statement>
+    var BodyInit: System.Collections.Generic.List<Statement>
+    var SeparatorTok: Microsoft.Boogie.IToken
+    var BodyProper: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} IfStmt extends Statement {
@@ -1070,23 +1115,23 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} GuardedAlternative {
-    var Tok: IToken
+    var Tok: Microsoft.Boogie.IToken
     var IsBindingGuard: bool
     var Guard: Expression
-    var Body: List<Statement>
+    var Body: System.Collections.Generic.List<Statement>
     var Attributes: Attributes
   }
 
   trait {:compile false} {:extern} AlternativeStmt extends Statement {
     var UsesOptionalBraces: bool
-    var Alternatives: List<GuardedAlternative>
+    var Alternatives: System.Collections.Generic.List<GuardedAlternative>
   }
 
   trait {:compile false} {:extern} LoopStmt extends Statement {
-    var Invariants: List<AttributedExpression>
-    var Decreases: Specification<Microsoft__Dafny__Expression><Expression>
+    var Invariants: System.Collections.Generic.List<AttributedExpression>
+    var Decreases: Specification<Expression>
     var InferredDecreases: bool
-    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
+    var Mod: Specification<FrameExpression>
   }
 
   trait {:compile false} {:extern} OneBodyLoopStmt extends LoopStmt {
@@ -1099,7 +1144,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern "WhileStmt.LoopBodySurrogate"} WhileStmt__LoopBodySurrogate {
-    var LocalLoopTargets: List<IVariable>
+    var LocalLoopTargets: System.Collections.Generic.List<IVariable>
     var UsesHeap: bool
   }
 
@@ -1115,32 +1160,32 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} AlternativeLoopStmt extends LoopStmt {
     var UsesOptionalBraces: bool
-    var Alternatives: List<GuardedAlternative>
+    var Alternatives: System.Collections.Generic.List<GuardedAlternative>
   }
 
   trait {:compile false} {:extern} ForallStmt extends Statement {
-    var BoundVars: List<BoundVar>
+    var BoundVars: System.Collections.Generic.List<BoundVar>
     var Range: Expression
-    var Ens: List<AttributedExpression>
+    var Ens: System.Collections.Generic.List<AttributedExpression>
     var Body: Statement
-    var ForallExpressions: List<Expression>
+    var ForallExpressions: System.Collections.Generic.List<Expression>
     var CanConvert: bool
-    var Bounds: List<ComprehensionExpr__BoundedPool>
+    var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
     var Kind: ForallStmt__BodyKind
   }
 
   trait {:compile false} {:extern} ModifyStmt extends Statement {
-    var Mod: Specification<Microsoft__Dafny__FrameExpression><FrameExpression>
+    var Mod: Specification<FrameExpression>
     var Body: BlockStmt
   }
 
   trait {:compile false} {:extern} CalcStmt extends Statement {
-    var Lines: List<Expression>
-    var Hints: List<BlockStmt>
+    var Lines: System.Collections.Generic.List<Expression>
+    var Hints: System.Collections.Generic.List<BlockStmt>
     var UserSuppliedOp: CalcStmt__CalcOp
     var Op: CalcStmt__CalcOp
-    var StepOps: List<CalcStmt__CalcOp>
-    var Steps: List<Expression>
+    var StepOps: System.Collections.Generic.List<CalcStmt__CalcOp>
+    var Steps: System.Collections.Generic.List<Expression>
     var Result: Expression
     var DefaultOp: CalcStmt__CalcOp
   }
@@ -1158,30 +1203,30 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} MatchStmt extends Statement {
     var source: Expression
-    var cases: List<MatchCaseStmt>
+    var cases: System.Collections.Generic.List<MatchCaseStmt>
     var Context: MatchingContext
-    var MissingCases: List<DatatypeCtor>
+    var MissingCases: System.Collections.Generic.List<DatatypeCtor>
     var UsesOptionalBraces: bool
     var OrigUnresolved: MatchStmt
   }
 
   trait {:compile false} {:extern} MatchCaseStmt extends MatchCase {
-    var body: List<Statement>
+    var body: System.Collections.Generic.List<Statement>
     var Attributes: Attributes
   }
 
   trait {:compile false} {:extern} SkeletonStatement extends Statement {
     var S: Statement
-    var ConditionEllipsis: IToken
-    var BodyEllipsis: IToken
+    var ConditionEllipsis: Microsoft.Boogie.IToken
+    var BodyEllipsis: Microsoft.Boogie.IToken
   }
 
-  trait {:compile false} {:extern} TokenWrapper extends IToken {
-    var WrappedToken: IToken
+  trait {:compile false} {:extern} TokenWrapper extends Microsoft.Boogie.IToken {
+    var WrappedToken: Microsoft.Boogie.IToken
   }
 
   trait {:compile false} {:extern} NestedToken extends TokenWrapper {
-    var Inner: IToken
+    var Inner: Microsoft.Boogie.IToken
     var Message: string
   }
 
@@ -1190,7 +1235,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} Expression {
-    var tok: IToken
+    var tok: Microsoft.Boogie.IToken
     var {:extern "type"} CSharp_type: Type
   }
 
@@ -1216,7 +1261,7 @@ module {:extern} Microsoft.Dafny. {
     var MemberName: string
     var Bindings: ActualBindings
     var Ctor: DatatypeCtor
-    var InferredTypeArgs: List<Type>
+    var InferredTypeArgs: System.Collections.Generic.List<Type>
     var IsCoCall: bool
   }
 
@@ -1244,7 +1289,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} Resolver_IdentifierExpr extends Expression {
     var Decl: TopLevelDecl
-    var TypeArgs: List<Type>
+    var TypeArgs: System.Collections.Generic.List<Type>
   }
 
   trait {:compile false} {:extern "Resolver_IdentifierExpr.ResolverType"} Resolver_IdentifierExpr__ResolverType extends Type {
@@ -1257,7 +1302,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} DisplayExpression extends Expression {
-    var Elements: List<Expression>
+    var Elements: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} SetDisplayExpr extends DisplayExpression {
@@ -1269,7 +1314,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} MapDisplayExpr extends Expression {
     var Finite: bool
-    var Elements: List<ExpressionPair>
+    var Elements: System.Collections.Generic.List<ExpressionPair>
   }
 
   trait {:compile false} {:extern} SeqDisplayExpr extends DisplayExpression {
@@ -1280,9 +1325,9 @@ module {:extern} Microsoft.Dafny. {
     var MemberName: string
     var Member: MemberDecl
     var AtLabel: Label
-    var TypeApplication_AtEnclosingClass: List<Type>
-    var TypeApplication_JustMember: List<Type>
-    var ResolvedOutparameterTypes: List<Type>
+    var TypeApplication_AtEnclosingClass: System.Collections.Generic.List<Type>
+    var TypeApplication_JustMember: System.Collections.Generic.List<Type>
+    var ResolvedOutparameterTypes: System.Collections.Generic.List<Type>
   }
 
   trait {:compile false} {:extern} SeqSelectExpr extends Expression {
@@ -1294,7 +1339,7 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} MultiSelectExpr extends Expression {
     var Array: Expression
-    var Indices: List<Expression>
+    var Indices: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} SeqUpdateExpr extends Expression {
@@ -1306,17 +1351,17 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} ApplyExpr extends Expression {
     var Function: Expression
-    var Args: List<Expression>
+    var Args: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} FunctionCallExpr extends Expression {
     var Name: string
     var Receiver: Expression
-    var OpenParen: IToken
+    var OpenParen: Microsoft.Boogie.IToken
     var AtLabel: Label
     var Bindings: ActualBindings
-    var TypeApplication_AtEnclosingClass: List<Type>
-    var TypeApplication_JustFunction: List<Type>
+    var TypeApplication_AtEnclosingClass: System.Collections.Generic.List<Type>
+    var TypeApplication_JustFunction: System.Collections.Generic.List<Type>
     var IsByMethodCall: bool
     var CoCall: FunctionCallExpr__CoCallResolution
     var CoCallHint: string
@@ -1340,7 +1385,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} UnchangedExpr extends Expression {
-    var Frame: List<FrameExpression>
+    var Frame: System.Collections.Generic.List<FrameExpression>
     var At: string
     var AtLabel: Label
   }
@@ -1385,32 +1430,32 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} LetExpr extends Expression, IAttributeBearingDeclaration, IBoundVarsBearingExpression {
-    var LHSs: List<CasePattern<Microsoft__Dafny__BoundVar><BoundVar>>
-    var RHSs: List<Expression>
+    var LHSs: System.Collections.Generic.List<CasePattern<BoundVar>>
+    var RHSs: System.Collections.Generic.List<Expression>
     var Body: Expression
     var Exact: bool
     var Attributes: Attributes
-    var Constraint_Bounds: List<ComprehensionExpr__BoundedPool>
+    var Constraint_Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
     var translationDesugaring: Expression
     var lastTranslatorUsed: Translator
-    var BodyStartTok: IToken
-    var BodyEndTok: IToken
+    var BodyStartTok: Microsoft.Boogie.IToken
+    var BodyEndTok: Microsoft.Boogie.IToken
   }
 
   trait {:compile false} {:extern} LetOrFailExpr extends ConcreteSyntaxExpression {
-    var Lhs: CasePattern<Microsoft__Dafny__BoundVar><BoundVar>
+    var Lhs: CasePattern<BoundVar>
     var Rhs: Expression
     var Body: Expression
   }
 
   trait {:compile false} {:extern} ComprehensionExpr extends Expression, IAttributeBearingDeclaration, IBoundVarsBearingExpression {
-    var BoundVars: List<BoundVar>
+    var BoundVars: System.Collections.Generic.List<BoundVar>
     var Range: Expression
     var term: Expression
-    var BodyStartTok: IToken
-    var BodyEndTok: IToken
+    var BodyStartTok: Microsoft.Boogie.IToken
+    var BodyEndTok: Microsoft.Boogie.IToken
     var Attributes: Attributes
-    var Bounds: List<ComprehensionExpr__BoundedPool>
+    var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.BoundedPool"} ComprehensionExpr__BoundedPool {
@@ -1482,9 +1527,9 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} QuantifierExpr extends ComprehensionExpr, TypeParameter__ParentType {
     var UniqueId: int
-    var TypeArgs: List<TypeParameter>
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
     var currentQuantId: int
-    var {:extern "_SplitQuantifier"} CSharp__SplitQuantifier: List<Expression>
+    var {:extern "_SplitQuantifier"} CSharp__SplitQuantifier: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} ForallExpr extends QuantifierExpr {
@@ -1501,11 +1546,11 @@ module {:extern} Microsoft.Dafny. {
   trait {:compile false} {:extern} MapComprehension extends ComprehensionExpr {
     var Finite: bool
     var TermLeft: Expression
-    var ProjectionFunctions: List<Function>
+    var ProjectionFunctions: System.Collections.Generic.List<Microsoft.Boogie.Function>
   }
 
   trait {:compile false} {:extern} LambdaExpr extends ComprehensionExpr {
-    var Reads: List<FrameExpression>
+    var Reads: System.Collections.Generic.List<FrameExpression>
   }
 
   trait {:compile false} {:extern} WildcardExpr extends Expression {
@@ -1525,26 +1570,26 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} MatchExpr extends Expression {
     var source: Expression
-    var cases: List<MatchCaseExpr>
+    var cases: System.Collections.Generic.List<MatchCaseExpr>
     var Context: MatchingContext
-    var MissingCases: List<DatatypeCtor>
+    var MissingCases: System.Collections.Generic.List<DatatypeCtor>
     var UsesOptionalBraces: bool
     var OrigUnresolved: MatchExpr
   }
 
-  trait {:compile false} {:extern} CasePattern<VT><VT> {
-    var tok: IToken
+  trait {:compile false} {:extern} CasePattern<VT> {
+    var tok: Microsoft.Boogie.IToken
     var Id: string
     var Ctor: DatatypeCtor
     var Var: VT
-    var Arguments: List<CasePattern<VT><VT>>
+    var Arguments: System.Collections.Generic.List<CasePattern<VT>>
     var Expr: Expression
   }
 
   trait {:compile false} {:extern} MatchCase {
-    var tok: IToken
+    var tok: Microsoft.Boogie.IToken
     var Ctor: DatatypeCtor
-    var Arguments: List<BoundVar>
+    var Arguments: System.Collections.Generic.List<BoundVar>
   }
 
   trait {:compile false} {:extern} MatchCaseExpr extends MatchCase {
@@ -1566,12 +1611,12 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} IdCtx extends MatchingContext {
-    var Id: String
-    var Arguments: List<MatchingContext>
+    var Id: System.String
+    var Arguments: System.Collections.Generic.List<MatchingContext>
   }
 
   trait {:compile false} {:extern} ExtendedPattern {
-    var Tok: IToken
+    var Tok: Microsoft.Boogie.IToken
     var IsGhost: bool
   }
 
@@ -1580,14 +1625,14 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} IdPattern extends ExtendedPattern {
-    var Id: String
+    var Id: System.String
     var Type: Type
-    var Arguments: List<ExtendedPattern>
+    var Arguments: System.Collections.Generic.List<ExtendedPattern>
     var ResolvedLit: LiteralExpr
   }
 
   trait {:compile false} {:extern} NestedMatchCase {
-    var Tok: IToken
+    var Tok: Microsoft.Boogie.IToken
     var Pat: ExtendedPattern
   }
 
@@ -1597,19 +1642,19 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} NestedMatchCaseStmt extends NestedMatchCase {
-    var Body: List<Statement>
+    var Body: System.Collections.Generic.List<Statement>
     var Attributes: Attributes
   }
 
   trait {:compile false} {:extern} NestedMatchStmt extends ConcreteSyntaxStatement {
     var Source: Expression
-    var Cases: List<NestedMatchCaseStmt>
+    var Cases: System.Collections.Generic.List<NestedMatchCaseStmt>
     var UsesOptionalBraces: bool
   }
 
   trait {:compile false} {:extern} NestedMatchExpr extends ConcreteSyntaxExpression {
     var Source: Expression
-    var Cases: List<NestedMatchCaseExpr>
+    var Cases: System.Collections.Generic.List<NestedMatchCaseExpr>
     var UsesOptionalBraces: bool
     var Attributes: Attributes
   }
@@ -1633,7 +1678,7 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} FrameExpression {
-    var tok: IToken
+    var tok: Microsoft.Boogie.IToken
     var E: Expression
     var FieldName: string
     var Field: Field
@@ -1657,8 +1702,8 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} DatatypeUpdateExpr extends ConcreteSyntaxExpression {
     var Root: Expression
-    var Updates: List<Tuple3<IToken, string, Expression>>
-    var LegalSourceConstructors: List<DatatypeCtor>
+    var Updates: System.Collections.Generic.List<CSharpUtils.Tuple3<Microsoft.Boogie.IToken, string, Expression>>
+    var LegalSourceConstructors: System.Collections.Generic.List<DatatypeCtor>
   }
 
   trait {:compile false} {:extern} AutoGeneratedExpression extends ParensExpression {
@@ -1667,8 +1712,8 @@ module {:extern} Microsoft.Dafny. {
   trait {:compile false} {:extern} DefaultValueExpression extends ConcreteSyntaxExpression {
     var Formal: Formal
     var Receiver: Expression
-    var SubstMap: Dictionary<IVariable, Expression>
-    var TypeMap: Dictionary<TypeParameter, Type>
+    var SubstMap: System.Collections.Generic.Dictionary<IVariable, Expression>
+    var TypeMap: System.Collections.Generic.Dictionary<TypeParameter, Type>
   }
 
   trait {:compile false} {:extern} NegationExpression extends ConcreteSyntaxExpression {
@@ -1676,10 +1721,10 @@ module {:extern} Microsoft.Dafny. {
   }
 
   trait {:compile false} {:extern} ChainingExpression extends ConcreteSyntaxExpression {
-    var Operands: List<Expression>
-    var Operators: List<BinaryExpr__Opcode>
-    var OperatorLocs: List<IToken>
-    var PrefixLimits: List<Expression>
+    var Operands: System.Collections.Generic.List<Expression>
+    var Operators: System.Collections.Generic.List<BinaryExpr__Opcode>
+    var OperatorLocs: System.Collections.Generic.List<Microsoft.Boogie.IToken>
+    var PrefixLimits: System.Collections.Generic.List<Expression>
     var E: Expression
   }
 
@@ -1689,27 +1734,27 @@ module {:extern} Microsoft.Dafny. {
 
   trait {:compile false} {:extern} NameSegment extends ConcreteSyntaxExpression {
     var Name: string
-    var OptTypeArguments: List<Type>
+    var OptTypeArguments: System.Collections.Generic.List<Type>
   }
 
   trait {:compile false} {:extern} ExprDotName extends SuffixExpr {
     var SuffixName: string
-    var OptTypeArguments: List<Type>
+    var OptTypeArguments: System.Collections.Generic.List<Type>
   }
 
   trait {:compile false} {:extern} ApplySuffix extends SuffixExpr {
-    var AtTok: IToken
+    var AtTok: Microsoft.Boogie.IToken
     var Bindings: ActualBindings
   }
 
-  trait {:compile false} {:extern} Specification<T><T> {
-    var Expressions: List<T>
+  trait {:compile false} {:extern} Specification<T> {
+    var Expressions: System.Collections.Generic.List<T>
     var attributes: Attributes
   }
 
   trait {:compile false} {:extern} BottomUpVisitor {
   }
 
-  trait {:compile false} {:extern} TopDownVisitor<State><State> {
+  trait {:compile false} {:extern} TopDownVisitor<State> {
   }
 }

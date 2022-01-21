@@ -1,3 +1,5 @@
 !*.cs
 dAST.cs
 cAST.cs.dfy
+CSharpUtils.cs
+CSharpCompat.dfy
