@@ -18,9 +18,33 @@ namespace CSharpUtils {
       return b0;
     }
   }
+
   public partial class StringUtils {
-    public static string OfString(object o) {
-      return o.ToString() ?? "null";
+    public static string ToCString(DafnyRuntime.ISequence<char> s) {
+      return s.ToString() ?? "null";
     }
+
+    public static DafnyRuntime.Sequence<char> OfCString(string s) {
+      return DafnyRuntime.Sequence<char>.FromString(s);
+    }
+  }
+
+  public partial class TypeConv {
+    public static bool AsBool(bool o) => o;
+
+    public static System.Numerics.BigInteger AsInt(System.Numerics.BigInteger o) => o;
+
+    public static DafnyRuntime.BigRational AsReal(Microsoft.BaseTypes.BigDec o) {
+      if (o.Exponent >= 0) {
+        return new DafnyRuntime.BigRational(o.Mantissa * BigInteger(10).Pow(o.Exponent));
+      } else {
+        return new DafnyRuntime.BigRational(o.Mantissa, BigInteger(10).Pow(o.Exponent));
+      }
+    }
+
+    public static string AsString(System.String o) => StringUtils.ToCString(o);
+
+    public static BigInteger Numerator(DafnyRuntime.BigRational r) => r.num;
+    public static BigInteger Denominator(DafnyRuntime.BigRational r) => r.den;
   }
 }
