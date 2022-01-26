@@ -12,7 +12,7 @@ CSharpCompat.dfy: ../../Source/DafnyCompilers/CSharpCompat.dfy
 CSharpUtils.cs: ../../Source/DafnyCompilers/CSharpUtils.cs
 	cp "$<" "$@"
 
-dAST.cs: dAST.dfy CSharpCompat.dfy cAST.cs.dfy
+dAST.cs: dAST.dfy CSharpCompat.dfy DafnyCompat.dfy cAST.cs.dfy
 	dotnet run --project $(DafnyDriver).csproj -- \
 		/spillTargetCode:3 /compile:0 /noVerify $<
 	sed -i 's/__AUTOGEN__//g' "$@"

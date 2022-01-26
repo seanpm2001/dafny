@@ -108,6 +108,7 @@ module Rewriter {
           case (_, Const(0), Const(0)) => Const(0)
           case (Add, Const(0), e2) => e2
           case (Add, e1, Const(0)) => e1
+          case (Sub, e1, Const(0)) => e1
           case (_, e1, e2) => Op(op, e1, e2)
         }
     }
@@ -123,6 +124,20 @@ module Rewriter {
           case (Skip, s2) => s2
           case (s1, s2) => Seq(s1, s2)
         }
+    }
+  }
+
+  lemma simplifyExpr_Correct(e: Expr)
+    ensures DafnyAST.interpExpr(simplifyExpr(e)) == DafnyAST.interpExpr(e)
+  {}
+
+  lemma simplifyStmt_Correct(s: Stmt)
+    ensures DafnyAST.interpStmt(simplifyStmt(s)) == DafnyAST.interpStmt(s)
+  {
+    match s {
+      case Skip =>
+      case Print(e) => simplifyExpr_Correct(e);
+      case Seq(s1, s2) =>
     }
   }
 }
