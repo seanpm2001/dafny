@@ -34,7 +34,7 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
 
     type BlockStmt = seq<Stmt>
 
-    datatype Method = Method(methodBody: BlockStmt)
+    datatype Method = Method(CompileName: string, methodBody: BlockStmt)
 
     datatype Program = Program(mainMethod: Method)
   }
@@ -91,7 +91,7 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
       if c is C.LiteralExpr then
         var l: C.LiteralExpr := c as C.LiteralExpr;
 
-        if l.Value is Bool then
+        if l.Value is Boolean then
           D.LiteralExpr(D.LitBool(TypeConv.AsBool(l.Value)))
         else if l.Value is Numerics.BigInteger then
           D.LiteralExpr(D.LitInt(TypeConv.AsInt(l.Value)))
@@ -121,7 +121,8 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
     }
 
     function method TranslateMethod(m: C.Method) : D.Method reads * {
-      D.Method(TranslateBlock(m.methodBody))
+      // var compileName := m.CompileName;
+      D.Method("Main", TranslateBlock(m.methodBody)) // FIXME “Main”
     }
 
     function method TranslateProgram(p: C.Program) : D.Program reads * {
@@ -200,7 +201,7 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
 
     function method CompileMethod(m: Method) : StrTree {
       match m {
-        case Method(methodBody) => Concat("\n", Lib.Seq.Map(CompileStmt, methodBody))
+        case Method(nm, methodBody) => Concat("\n", Lib.Seq.Map(CompileStmt, methodBody))
       }
     }
 
@@ -211,18 +212,16 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
     }
   }
 
-  method WriteAST(output: ConcreteSyntaxTree, ast: Target.StrTree) {
+  method WriteAST(wr: SyntaxTreeAdapter, ast: Target.StrTree) {
     match ast {
       case Str(s) =>
-        output.Write(StringUtils.ToCString(s));
+        wr.Write(s);
       case SepSeq(sep, asts) =>
-        var i := 0;
-        while i < |asts| {
+        for i := 0 to |asts| {
           if i != 0 && sep.Some? {
-            output.Write(StringUtils.ToCString(sep.t));
+            wr.Write(sep.t);
           }
-          WriteAST(output, asts[i]);
-          i := i + 1;
+          WriteAST(wr, asts[i]);
         }
       case Invalid =>
     }
@@ -233,15 +232,20 @@ module {:extern "Microsoft.Dafny.Compilers.SelfHosting.CSharp"} CSharpDafnyCompi
     }
 
     method Compile(dafnyProgram: CSharpDafnyAST.Program,
-                   output: ConcreteSyntaxTree) {
+                   wr: ConcreteSyntaxTree) {
+      var st := new SyntaxTreeAdapter(wr);
       var translated := Translator.TranslateProgram(dafnyProgram);
       var compiled := Compiler.CompileProgram(translated);
-      WriteAST(output, compiled);
+      WriteAST(st, compiled);
     }
 
     method EmitCallToMain(mainMethod: CSharpDafnyAST.Method,
                           baseName: System.String,
-                          output: ConcreteSyntaxTree) {
+                          wr: ConcreteSyntaxTree) {
+      // var st := new SyntaxTreeAdapter(wr);
+      // var sClass := st.NewBlock("class __CallToMain");
+      // var sBody := sClass.NewBlock("public static void Main(string[] args)");
+      // sBody.WriteLine("DafnyRuntime.Helpers.WithHaltHandling(_module.Main);");
     }
   }
 }

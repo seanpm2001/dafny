@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace CSharpUtils {
   public partial class ListUtils {
     public static List<T> Mk<T>() => new List<T>();
@@ -36,13 +38,14 @@ namespace CSharpUtils {
 
     public static DafnyRuntime.BigRational AsReal(Microsoft.BaseTypes.BigDec o) {
       if (o.Exponent >= 0) {
-        return new DafnyRuntime.BigRational(o.Mantissa * BigInteger(10).Pow(o.Exponent));
+        return new DafnyRuntime.BigRational(o.Mantissa * new BigInteger(10).Pow(o.Exponent));
       } else {
-        return new DafnyRuntime.BigRational(o.Mantissa, BigInteger(10).Pow(o.Exponent));
+        return new DafnyRuntime.BigRational(o.Mantissa, new BigInteger(10).Pow(o.Exponent));
       }
     }
 
-    public static string AsString(System.String o) => StringUtils.ToCString(o);
+    public static DafnyRuntime.Sequence<char> AsString(System.String o) =>
+      StringUtils.OfCString(o);
 
     public static BigInteger Numerator(DafnyRuntime.BigRational r) => r.num;
     public static BigInteger Denominator(DafnyRuntime.BigRational r) => r.den;
