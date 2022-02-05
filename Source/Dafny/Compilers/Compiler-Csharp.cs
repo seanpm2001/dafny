@@ -2718,6 +2718,7 @@ namespace Microsoft.Dafny.Compilers.Csharp {
         case BinaryExpr.ResolvedOpcode.InSet:
         case BinaryExpr.ResolvedOpcode.InMultiSet:
         case BinaryExpr.ResolvedOpcode.InMap:
+        case BinaryExpr.ResolvedOpcode.InSeq:
           callString = "Contains"; reverseArguments = true; break;
 
         case BinaryExpr.ResolvedOpcode.Union:
@@ -2741,8 +2742,6 @@ namespace Microsoft.Dafny.Compilers.Csharp {
           staticCallString = TypeHelperName(e0.Type, errorWr, e0.tok) + ".IsPrefixOf"; break;
         case BinaryExpr.ResolvedOpcode.Concat:
           staticCallString = TypeHelperName(e0.Type, errorWr, e0.tok) + ".Concat"; break;
-        case BinaryExpr.ResolvedOpcode.InSeq:
-          callString = "Contains"; reverseArguments = true; break;
 
         default:
           base.CompileBinOp(op, e0, e1, tok, resultType,
