@@ -1,0 +1,1 @@
+module {:extern "Microsoft"} Microsoft {}
