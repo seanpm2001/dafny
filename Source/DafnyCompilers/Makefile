@@ -10,17 +10,17 @@ CSharpDafnyAST.dfy: $(DafnyPipeline).csproj $(DafnyAST).cs $(ASTExport)/Program.
 	dotnet run --project $(ASTExport)/ASTExport.csproj -- \
 		$(DafnyPipeline).csproj $(DafnyAST).cs "Microsoft.Dafny" "CSharpDafnyAST" > "$@"
 
-%.cs: %.dfy CSharpCompat.dfy CSharpDafnyAST.dfy $(DafnyRuntime)
+%.cs: %.dfy CSharpCompat.dfy DafnyCompat.dfy CSharpDafnyAST.dfy $(DafnyRuntime)
 	dotnet run --project $(DafnyDriver).csproj -- \
 		/spillTargetCode:3 /compile:0 /noVerify $<
 	sed -i 's/__AUTOGEN__//g' "$@"
 
-CSharp/CSharpUtils.cs: CSharpUtils.cs
+CSharp/%.cs: %.cs
 	cp $< $@
 
 dll := CSharp/bin/Debug/net6.0/CSharpCompiler.dll
 
-$(dll): CSharp/Compiler.cs CSharp/CSharpUtils.cs $(DafnyRuntime)
+$(dll): CSharp/Compiler.cs CSharp/CSharpUtils.cs CSharp/DafnyUtils.cs $(DafnyRuntime)
 	dotnet build CSharp/CSharpCompiler.csproj
 
 build: $(dll)

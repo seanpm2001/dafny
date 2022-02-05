@@ -26,25 +26,20 @@ namespace CSharpUtils {
       return s.ToString() ?? "null";
     }
 
-    public static DafnyRuntime.Sequence<char> OfCString(string s) {
+    public static DafnyRuntime.ISequence<char> OfCString(string s) {
       return DafnyRuntime.Sequence<char>.FromString(s);
     }
   }
 
   public partial class TypeConv {
+    public static readonly BigInteger ONE = new BigInteger(1);
+    public static readonly BigInteger TEN = new BigInteger(10);
+
     public static bool AsBool(bool o) => o;
 
     public static System.Numerics.BigInteger AsInt(System.Numerics.BigInteger o) => o;
 
-    public static DafnyRuntime.BigRational AsReal(Microsoft.BaseTypes.BigDec o) {
-      if (o.Exponent >= 0) {
-        return new DafnyRuntime.BigRational(o.Mantissa * new BigInteger(10).Pow(o.Exponent));
-      } else {
-        return new DafnyRuntime.BigRational(o.Mantissa, new BigInteger(10).Pow(o.Exponent));
-      }
-    }
-
-    public static DafnyRuntime.Sequence<char> AsString(System.String o) =>
+    public static DafnyRuntime.ISequence<char> AsString(System.String o) =>
       StringUtils.OfCString(o);
 
     public static BigInteger Numerator(DafnyRuntime.BigRational r) => r.num;

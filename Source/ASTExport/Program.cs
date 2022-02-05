@@ -153,6 +153,7 @@ class AST : PrettyPrintable {
 
   public override void Pp(TextWriter wr, string indent) {
     wr.WriteLine("include \"CSharpCompat.dfy\"");
+    wr.WriteLine("include \"DafnyCompat.dfy\"");
     wr.WriteLine();
 
     // Adding __AUTOGEN__ prevents Dafny from complaining about module name collisions

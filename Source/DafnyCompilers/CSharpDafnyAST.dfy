@@ -1,4 +1,5 @@
 include "CSharpCompat.dfy"
+include "DafnyCompat.dfy"
 
 module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   import System
