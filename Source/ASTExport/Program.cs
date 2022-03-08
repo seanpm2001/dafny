@@ -153,11 +153,11 @@ class AST : PrettyPrintable {
 
   public override void Pp(TextWriter wr, string indent) {
     wr.WriteLine("include \"CSharpCompat.dfy\"");
-    wr.WriteLine("include \"DafnyCompat.dfy\"");
+    wr.WriteLine("include \"DafnyCompat.dfy\""); // FIXME
     wr.WriteLine();
 
     // Adding __AUTOGEN__ prevents Dafny from complaining about module name collisions
-    PpBlockOpen(wr, indent, "module", new Name("__AUTOGEN__" + cSharpRootNS, dafnyRootModule),
+    PpBlockOpen(wr, indent, "module", new Name("__AUTOGEN__" + cSharpRootNS, dafnyRootModule), // TODO: Discuss
       null, null, null);
 
     PpChild(wr, indent, "import System");
@@ -331,9 +331,6 @@ internal class Name {
     return model.GetName(node);
   }
 
-  //this.id =
-  //model.GetDeclaredSymbol()
-
   public string AsDecl(bool forceExtern = false) {
     var attr = CSharpID != DafnyId ? $"{{:extern \"{CSharpID}\"}} " : forceExtern ? "{:extern} " : "";
     return $"{attr}{DafnyId}";
@@ -341,25 +338,9 @@ internal class Name {
 }
 
 public static class Program {
-  public static void minimal() {
-    // https://stackoverflow.com/questions/37542434/how-to-get-full-name-path-for-method-call-class-declaration-using-roslyn
-      var syntaxTree = CSharpSyntaxTree.ParseText(File.ReadAllText("minimal.cs"));
-      var syntaxTrees = new[] { syntaxTree }; // Add SyntaxTree array from project files.
-      var compilation = CSharpCompilation.Create("tempAssembly", syntaxTrees);
-      var semanticModel = compilation.GetSemanticModel(syntaxTree);
-
-      //var caretPosition = 50;
-      //var symbol = SymbolFinder.FindSymbolAtPositionAsync(semanticModel, caretPosition, new AdhocWorkspace()).Result;
-      //var location = symbol.Locations.First();
-      //var node = location.SourceTree?.GetRoot()?.FindNode(location.SourceSpan);
-      //var fullName = symbol.ToString(); // fullName is "TestNamespace.Test"
-      //Console.WriteLine(fullName);
-
-      new AST("RootNS", "RootMod", syntaxTree, new SemanticModel("RootNS", semanticModel)).Pp(Console.Out, "");
-  }
   public static void Main(string[] args) {
-    //AST.FromFile(args[0], args[1], args[2]).Pp(Console.Out, "");
-    //return;
+    // TODO: CLI
+    // TODO: Test
     var ast = AST.FromFile(args[0], args[1], args[2], args[3]);
     ast.Pp(Console.Out, "");
   }
