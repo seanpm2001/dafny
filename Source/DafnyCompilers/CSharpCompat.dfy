@@ -3,10 +3,12 @@ module {:extern "System"} {:compile false} System {
   class {:extern} {:compile false} Func<TArg, TRet>{}
   class {:extern} {:compile false} String {}
   class {:extern} {:compile false} Boolean {}
+  class {:extern} {:compile false} Nullable {}
   class {:extern} {:compile false} ValueTuple {}
 
   module {:extern "System.Collections.Generic"} {:compile false} Collections.Generic {
     class {:extern} {:compile false} List<T> {}
+    class {:extern} {:compile false} IEnumerable<T> {}
     class {:extern} {:compile false} ISet<T> {}
     class {:extern} {:compile false} HashSet<T> {}
     class {:extern} {:compile false} Dictionary<TKey, TValue> {}

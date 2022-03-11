@@ -313,6 +313,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var DefaultModuleDef: ModuleDefinition
     var BuiltIns: BuiltIns
     var reporter: ErrorReporter
+    var Name: string
   }
 
   trait {:compile false} {:extern} Include extends System.IComparable {
@@ -338,6 +339,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} IBoundVarsBearingExpression extends IRegion {
+    var {:extern "AllBoundVars"} Interface_AllBoundVars: System.Collections.Generic.IEnumerable<BoundVar> // interface property
   }
 
   trait {:compile false} {:extern} IAttributeBearingDeclaration {
@@ -368,6 +370,64 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var scopes: System.Collections.Generic.List<VisibilityScope>
     var scopesEnabled: bool
     var TypeArgs: System.Collections.Generic.List<Type>
+    var IsBoolType: bool
+    var IsCharType: bool
+    var IsIntegerType: bool
+    var IsRealType: bool
+    var IsBigOrdinalType: bool
+    var IsBitVectorType: bool
+    var AsBitVectorType: BitvectorType
+    var IsNonempty: bool
+    var HasCompilableValue: bool
+    var HasFinitePossibleValues: bool
+    var IsAllocFree: bool
+    var AsCollectionType: CollectionType
+    var AsSetType: SetType
+    var AsMultiSetType: MultiSetType
+    var AsSeqType: SeqType
+    var AsMapType: MapType
+    var IsRefType: bool
+    var IsTopLevelTypeWithMembers: bool
+    var AsTopLevelTypeWithMembers: TopLevelDeclWithMembers
+    var AsTopLevelTypeWithMembersBypassInternalSynonym: TopLevelDeclWithMembers
+    var IsObjectQ: bool
+    var IsObject: bool
+    var IsNonNullRefType: bool
+    var AsNonNullRefType: UserDefinedType
+    var IsTraitType: bool
+    var AsTraitType: TraitDecl
+    var AsSubsetType: SubsetTypeDecl
+    var IsArrayType: bool
+    var AsArrayType: ArrayClassDecl
+    var IsBuiltinArrowType: bool
+    var IsArrowTypeWithoutReadEffects: bool
+    var IsArrowTypeWithoutPreconditions: bool
+    var IsArrowType: bool
+    var AsArrowType: ArrowType
+    var IsMapType: bool
+    var IsIMapType: bool
+    var IsISetType: bool
+    var AsNewtype: NewtypeDecl
+    var AsTypeSynonym: TypeSynonymDecl
+    var AsInternalTypeSynonym: InternalTypeSynonymDecl
+    var AsRedirectingType: RedirectingTypeDecl
+    var AsRevealableType: RevealableTypeDecl
+    var IsRevealableType: bool
+    var IsDatatype: bool
+    var AsDatatype: DatatypeDecl
+    var IsIndDatatype: bool
+    var AsIndDatatype: IndDatatypeDecl
+    var IsCoDatatype: bool
+    var AsCoDatatype: CoDatatypeDecl
+    var InvolvesCoDatatype: bool
+    var IsTypeParameter: bool
+    var IsInternalTypeSynonym: bool
+    var AsTypeParameter: TypeParameter
+    var IsOpaqueType: bool
+    var AsOpaqueType: OpaqueTypeDecl
+    var SupportsEquality: bool
+    var MayInvolveReferences: bool
+    var IsOrdered: bool
   }
 
   trait {:compile false} {:extern} ArtificialType extends Type {
@@ -417,25 +477,45 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var ANY_ARROW: string
     var PARTIAL_ARROW: string
     var TOTAL_ARROW: string
+    var Args: System.Collections.Generic.List<Type>
+    var Result: Type
+    var Arity: int
+    // var SupportsEquality: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} CollectionType extends NonProxyType {
     var arg: Type
+    var CollectionTypeName: string
+    var Arg: Type
+    // var MayInvolveReferences: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} SetType extends CollectionType {
     var finite: bool
+    var Finite: bool
+    // var CollectionTypeName: string // exists in ancestor
+    // var SupportsEquality: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} MultiSetType extends CollectionType {
+    // var CollectionTypeName: string // exists in ancestor
+    // var SupportsEquality: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} SeqType extends CollectionType {
+    // var CollectionTypeName: string // exists in ancestor
+    // var SupportsEquality: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} MapType extends CollectionType {
     var finite: bool
     var range: Type
+    var Finite: bool
+    var Range: Type
+    var Domain: Type
+    // var CollectionTypeName: string // exists in ancestor
+    // var SupportsEquality: bool // exists in ancestor
+    // var MayInvolveReferences: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} UserDefinedType extends NonProxyType {
@@ -444,6 +524,11 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Name: string
     var compileName: string
     var ResolvedClass: TopLevelDecl
+    var FullName: string
+    var CompileName: string
+    var FullCompanionCompileName: string
+    // var SupportsEquality: bool // exists in ancestor
+    // var MayInvolveReferences: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} TypeProxy extends Type {
@@ -453,6 +538,12 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var family: TypeProxy__Family
     var {:extern "_id"} CSharp__id: int
     var id: int
+    var Supertypes: System.Collections.Generic.IEnumerable<Type>
+    var SupertypesKeepConstraints: System.Collections.Generic.IEnumerable<Type>
+    var Subtypes: System.Collections.Generic.IEnumerable<Type>
+    var SubtypesKeepConstraints: System.Collections.Generic.IEnumerable<Type>
+    // var SupportsEquality: bool // exists in ancestor
+    // var MayInvolveReferences: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} InferredTypeProxy extends TypeProxy {
@@ -464,9 +555,12 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} IRegion {
+    var {:extern "BodyStartTok"} Interface_BodyStartTok: Microsoft.Boogie.IToken // interface property
+    var {:extern "BodyEndTok"} Interface_BodyEndTok: Microsoft.Boogie.IToken // interface property
   }
 
   trait {:compile false} {:extern} INamedRegion extends IRegion {
+    var {:extern "RegionName"} Interface_RegionName: string // interface property
   }
 
   trait {:compile false} {:extern} Declaration extends INamedRegion, IAttributeBearingDeclaration {
@@ -481,6 +575,11 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var scopeIsInherited: bool
     var Attributes: Attributes
     var IdGenerator: FreshIdGenerator
+    // var BodyStartTok: Microsoft.Boogie.IToken // explicit interface
+    // var BodyEndTok: Microsoft.Boogie.IToken // explicit interface
+    // var RegionName: string // explicit interface
+    var ScopeIsInherited: bool
+    var CompileName: string
   }
 
   trait {:compile false} {:extern} TypeParameter extends TopLevelDecl {
@@ -489,21 +588,34 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Characteristics: TypeParameter__TypeParameterCharacteristics
     var NecessaryForEqualitySupportOfSurroundingInductiveDatatype: bool
     var PositionalIndex: int
+    // var WhatKind: string // exists in ancestor
+    var Parent: TypeParameter__ParentType
+    // var CompileName: string // exists in ancestor
+    var Variance: TypeParameter__TPVariance
+    var StrictVariance: bool
+    var SupportsEquality: bool
+    var IsToplevelScope: bool
+    // var FullName: string // exists in ancestor
   }
 
   trait {:compile false} {:extern "TypeParameter.ParentType"} TypeParameter__ParentType {
+    var {:extern "FullName"} Interface_FullName: string // interface property
   }
 
   trait {:compile false} {:extern "TypeParameter.TypeParameterCharacteristics"} TypeParameter__TypeParameterCharacteristics {
     var EqualitySupport: TypeParameter__EqualitySupportValue
     var AutoInit: Type__AutoInitInfo
     var ContainsNoReferenceTypes: bool
+    var HasCompiledValue: bool
+    var IsNonempty: bool
   }
 
   trait {:compile false} {:extern} ModuleDecl extends TopLevelDecl {
     var Signature: ModuleSignature
     var Height: int
     var Opened: bool
+    // var WhatKind: string // exists in ancestor
+    var ResolvedHash: System.Nullable
   }
 
   trait {:compile false} {:extern} LiteralModuleDecl extends ModuleDecl {
@@ -555,6 +667,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var CompileSignature: ModuleSignature
     var Refines: ModuleSignature
     var IsAbstract: bool
+    var ResolvedHash: System.Nullable
   }
 
   trait {:compile false} {:extern} ModuleQualifiedId {
@@ -588,14 +701,33 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var IsToBeCompiled: bool
     var visibilityScope: VisibilityScope
     var compileName: string
+    var FullDafnyName: string
+    var FullName: string
+    // var BodyStartTok: Microsoft.Boogie.IToken // explicit interface
+    // var BodyEndTok: Microsoft.Boogie.IToken // explicit interface
+    // var RegionName: string // explicit interface
+    var ResolvedHash: System.Nullable
+    var VisibilityScope: VisibilityScope
+    var IsDefaultModule: bool
+    var CompileName: string
+    var RefinementCompileName: string
   }
 
   trait {:compile false} {:extern} DefaultModuleDecl extends ModuleDefinition {
+    // var IsDefaultModule: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} TopLevelDecl extends Declaration, TypeParameter__ParentType {
     var EnclosingModuleDefinition: ModuleDefinition
     var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var WhatKind: string
+    var FullDafnyName: string
+    var FullName: string
+    var FullSanitizedName: string
+    var FullSanitizedRefinementName: string
+    var FullCompileName: string
+    var ViewAsClass: TopLevelDecl
+    var AllowsAllocation: bool
   }
 
   trait {:compile false} {:extern} TopLevelDeclWithMembers extends TopLevelDecl {
@@ -612,48 +744,76 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} TraitDecl extends ClassDecl {
+    // var WhatKind: string // exists in ancestor
+    var IsParent: bool
   }
 
   trait {:compile false} {:extern} ClassDecl extends TopLevelDeclWithMembers, RevealableTypeDecl {
     var HasConstructor: bool
     var NonNullTypeDecl: NonNullTypeDecl
+    // var WhatKind: string // exists in ancestor
+    var IsDefaultClass: bool
+    var IsObjectTrait: bool
+    // var AsTopLevelDecl: TopLevelDecl // explicit interface
   }
 
   trait {:compile false} {:extern} DefaultClassDecl extends ClassDecl {
+    // var IsDefaultClass: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} ArrayClassDecl extends ClassDecl {
     var Dims: int
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} ArrowTypeDecl extends ClassDecl {
     var Arity: int
     var Requires: Function
     var Reads: Function
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} DatatypeDecl extends TopLevelDeclWithMembers, RevealableTypeDecl, ICallable {
     var Ctors: System.Collections.Generic.List<DatatypeCtor>
+    var HasFinitePossibleValues: bool
+    var IsRecordType: bool
+    // var AsTopLevelDecl: TopLevelDecl // explicit interface
+    // var IsGhost: bool // explicit interface
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // exists in ancestor
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    // var AllowsNontermination: bool // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
   }
 
   trait {:compile false} {:extern} IndDatatypeDecl extends DatatypeDecl, RevealableTypeDecl {
     var GroundingCtor: DatatypeCtor
     var TypeParametersUsedInConstructionByGroundingCtor: array<bool>
     var EqualitySupport: IndDatatypeDecl__ES
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} TupleTypeDecl extends IndDatatypeDecl {
     var ArgumentGhostness: System.Collections.Generic.List<bool>
+    var Dims: int
+    var NonGhostDims: int
+    // var CompileName: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} CoDatatypeDecl extends DatatypeDecl {
     var SscRepr: CoDatatypeDecl
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} ValuetypeDecl extends TopLevelDecl {
     var Members: System.Collections.Generic.Dictionary<string, MemberDecl>
     var typeTester: System.Func<Type, bool>
     var typeCreator: System.Func<System.Collections.Generic.List<Type>, Type>
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} DatatypeCtor extends Declaration, TypeParameter__ParentType {
@@ -661,30 +821,82 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var EnclosingDatatype: DatatypeDecl
     var QueryField: SpecialField
     var Destructors: System.Collections.Generic.List<DatatypeDestructor>
+    var FullName: string
   }
 
   trait {:compile false} {:extern} ICodeContext {
+    var {:extern "IsGhost"} Interface_IsGhost: bool // interface property
+    var {:extern "TypeArgs"} Interface_TypeArgs: System.Collections.Generic.List<TypeParameter> // interface property
+    var {:extern "Ins"} Interface_Ins: System.Collections.Generic.List<Formal> // interface property
+    var {:extern "EnclosingModule"} Interface_EnclosingModule: ModuleDefinition // interface property
+    var {:extern "MustReverify"} Interface_MustReverify: bool // interface property
+    var {:extern "FullSanitizedName"} Interface_FullSanitizedName: string // interface property
+    var {:extern "AllowsNontermination"} Interface_AllowsNontermination: bool // interface property
   }
 
   trait {:compile false} {:extern} CodeContextWrapper extends ICodeContext {
     var inner: ICodeContext
     var isGhostContext: bool
+    var IsGhost: bool
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var Ins: System.Collections.Generic.List<Formal>
+    var EnclosingModule: ModuleDefinition
+    var MustReverify: bool
+    var FullSanitizedName: string
+    var AllowsNontermination: bool
   }
 
   trait {:compile false} {:extern} ICallable extends ICodeContext {
+    var {:extern "Tok"} Interface_Tok: Microsoft.Boogie.IToken // interface property
+    var {:extern "WhatKind"} Interface_WhatKind: string // interface property
+    var {:extern "NameRelativeToModule"} Interface_NameRelativeToModule: string // interface property
+    var {:extern "Decreases"} Interface_Decreases: Specification<Expression> // interface property
+    var {:extern "InferredDecreases"} Interface_InferredDecreases: bool // interface property
+    var {:extern "AllowsAllocation"} Interface_AllowsAllocation: bool // interface property
   }
 
   trait {:compile false} {:extern} CallableWrapper extends CodeContextWrapper, ICallable {
+    var cwInner: ICallable
+    var Tok: Microsoft.Boogie.IToken
+    var WhatKind: string
+    var NameRelativeToModule: string
+    var Decreases: Specification<Expression>
+    var InferredDecreases: bool
+    var AllowsAllocation: bool
   }
 
   trait {:compile false} {:extern} DontUseICallable extends ICallable {
+    var WhatKind: string
+    var IsGhost: bool
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var Ins: System.Collections.Generic.List<Formal>
+    var EnclosingModule: ModuleDefinition
+    var MustReverify: bool
+    var FullSanitizedName: string
+    var AllowsNontermination: bool
+    var Tok: Microsoft.Boogie.IToken
+    var NameRelativeToModule: string
+    var Decreases: Specification<Expression>
+    var InferredDecreases: bool
+    var AllowsAllocation: bool
   }
 
   trait {:compile false} {:extern} IMethodCodeContext extends ICallable {
+    var {:extern "Outs"} Interface_Outs: System.Collections.Generic.List<Formal> // interface property
+    var {:extern "Modifies"} Interface_Modifies: Specification<FrameExpression> // interface property
   }
 
   trait {:compile false} {:extern} NoContext extends ICodeContext {
     var Module: ModuleDefinition
+    // var IsGhost: bool // explicit interface
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // explicit interface
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    var Decreases: Specification<Expression>
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    var FullSanitizedName: string
+    var AllowsNontermination: bool
+    var AllowsAllocation: bool
   }
 
   trait {:compile false} {:extern} IteratorDecl extends ClassDecl, IMethodCodeContext {
@@ -710,6 +922,21 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Member_MoveNext: Method
     var YieldCountVariable: LocalVariable
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
+    // var WhatKind: string // exists in ancestor
+    var SignatureIsOmitted: bool
+    var SubExpressions: System.Collections.Generic.IEnumerable<Expression>
+    // var IsGhost: bool // explicit interface
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // exists in ancestor
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var Outs: System.Collections.Generic.List<Formal> // explicit interface
+    // var Modifies: Specification<FrameExpression> // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    var AllowsNontermination: bool
   }
 
   trait {:compile false} {:extern "IteratorDecl.EverIncreasingType"} IteratorDecl__EverIncreasingType extends BasicType {
@@ -721,21 +948,41 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var EnclosingClass: TopLevelDecl
     var RefinementBase: MemberDecl
     var OverriddenMember: MemberDecl
+    var WhatKind: string
+    var IsStatic: bool
+    var IsGhost: bool
+    var IsInstanceIndependentConstant: bool
+    var IsOverrideThatAddsBody: bool
+    var FullDafnyName: string
+    var FullName: string
+    var FullSanitizedName: string
+    var FullSanitizedRefinementName: string
+    // var CompileName: string // exists in ancestor
+    var FullCompileName: string
+    var SubExpressions: System.Collections.Generic.IEnumerable<Expression>
   }
 
   trait {:compile false} {:extern} Field extends MemberDecl {
     var IsMutable: bool
     var IsUserMutable: bool
     var Type: Type
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} SpecialFunction extends Function, ICodeContext, ICallable {
     var Module: ModuleDefinition
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var NameRelativeToModule: string // explicit interface
   }
 
   trait {:compile false} {:extern} SpecialField extends Field {
     var SpecialId: SpecialField__ID
     var IdParam: object
+    // var FullName: string // exists in ancestor
+    // var FullSanitizedName: string // exists in ancestor
+    // var FullSanitizedRefinementName: string // exists in ancestor
+    // var CompileName: string // exists in ancestor
+    // var FullCompileName: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} DatatypeDestructor extends SpecialField {
@@ -745,13 +992,37 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} ConstantField extends SpecialField, ICallable {
     var Rhs: Expression
+    // var WhatKind: string // exists in ancestor
+    // var IsGhost: bool // exists in ancestor
+    var TypeArgs: System.Collections.Generic.List<TypeParameter>
+    var Ins: System.Collections.Generic.List<Formal>
+    var EnclosingModule: ModuleDefinition
+    var MustReverify: bool
+    var AllowsNontermination: bool
+    var Tok: Microsoft.Boogie.IToken
+    var NameRelativeToModule: string
+    var Decreases: Specification<Expression>
+    var InferredDecreases: bool
+    var AllowsAllocation: bool
   }
 
   trait {:compile false} {:extern} OpaqueTypeDecl extends TopLevelDeclWithMembers, TypeParameter__ParentType, RevealableTypeDecl {
     var Characteristics: TypeParameter__TypeParameterCharacteristics
+    // var WhatKind: string // exists in ancestor
+    var SupportsEquality: bool
+    var AsTopLevelDecl: TopLevelDecl
   }
 
   trait {:compile false} {:extern} RedirectingTypeDecl extends ICallable {
+    var {:extern "Name"} Interface_Name: string // interface property
+    var {:extern "tok"} Interface_tok: Microsoft.Boogie.IToken // interface property
+    var {:extern "Attributes"} Interface_Attributes: Attributes // interface property
+    var {:extern "Module"} Interface_Module: ModuleDefinition // interface property
+    var {:extern "Var"} Interface_Var: BoundVar // interface property
+    var {:extern "Constraint"} Interface_Constraint: Expression // interface property
+    var {:extern "WitnessKind"} Interface_WitnessKind: SubsetTypeDecl__WKind // interface property
+    var {:extern "Witness"} Interface_Witness: Expression // interface property
+    var {:extern "IdGenerator"} Interface_IdGenerator: FreshIdGenerator // interface property
   }
 
   trait {:compile false} {:extern} NativeType {
@@ -767,6 +1038,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} RevealableTypeDecl {
+    var {:extern "AsTopLevelDecl"} Interface_AsTopLevelDecl: TopLevelDecl // interface property
   }
 
   trait {:compile false} {:extern} NewtypeDecl extends TopLevelDeclWithMembers, RevealableTypeDecl, RedirectingTypeDecl {
@@ -776,14 +1048,58 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var WitnessKind: SubsetTypeDecl__WKind
     var Witness: Expression
     var NativeType: NativeType
+    // var WhatKind: string // exists in ancestor
+    // var AsTopLevelDecl: TopLevelDecl // explicit interface
+    var EqualitySupport: TypeParameter__EqualitySupportValue
+    // var Name: string // exists in ancestor
+    // var tok: Microsoft.Boogie.IToken // exists in ancestor
+    // var Attributes: Attributes // exists in ancestor
+    // var Module: ModuleDefinition // explicit interface
+    // var Var: BoundVar // explicit interface
+    // var Constraint: Expression // explicit interface
+    // var WitnessKind: SubsetTypeDecl__WKind // explicit interface
+    // var Witness: Expression // explicit interface
+    // var IdGenerator: FreshIdGenerator // exists in ancestor
+    // var IsGhost: bool // explicit interface
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // exists in ancestor
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    // var AllowsNontermination: bool // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
   }
 
   trait {:compile false} {:extern} TypeSynonymDeclBase extends TopLevelDecl, RedirectingTypeDecl {
     var Characteristics: TypeParameter__TypeParameterCharacteristics
     var Rhs: Type
+    // var WhatKind: string // exists in ancestor
+    var SupportsEquality: bool
+    // var Name: string // exists in ancestor
+    // var tok: Microsoft.Boogie.IToken // exists in ancestor
+    // var Attributes: Attributes // exists in ancestor
+    // var Module: ModuleDefinition // explicit interface
+    // var Var: BoundVar // explicit interface
+    // var Constraint: Expression // explicit interface
+    // var WitnessKind: SubsetTypeDecl__WKind // explicit interface
+    // var Witness: Expression // explicit interface
+    // var IdGenerator: FreshIdGenerator // exists in ancestor
+    // var IsGhost: bool // explicit interface
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // exists in ancestor
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    // var AllowsNontermination: bool // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
   }
 
   trait {:compile false} {:extern} TypeSynonymDecl extends TypeSynonymDeclBase, RedirectingTypeDecl, RevealableTypeDecl {
+    // var AsTopLevelDecl: TopLevelDecl // explicit interface
   }
 
   trait {:compile false} {:extern} InternalTypeSynonymDecl extends TypeSynonymDeclBase, RedirectingTypeDecl {
@@ -796,17 +1112,43 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Witness: Expression
     var ConstraintIsCompilable: bool
     var CheckedIfConstraintIsCompilable: bool
+    // var WhatKind: string // exists in ancestor
+    // var Var: BoundVar // explicit interface
+    // var Constraint: Expression // explicit interface
+    // var WitnessKind: SubsetTypeDecl__WKind // explicit interface
+    // var Witness: Expression // explicit interface
   }
 
   trait {:compile false} {:extern} NonNullTypeDecl extends SubsetTypeDecl {
     var Class: ClassDecl
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} IVariable {
     var CompileNameIdGenerator: FreshIdGenerator
+    var {:extern "Name"} Interface_Name: string // interface property
+    var {:extern "DisplayName"} Interface_DisplayName: string // interface property
+    var {:extern "UniqueName"} Interface_UniqueName: string // interface property
+    var {:extern "HasBeenAssignedUniqueName"} Interface_HasBeenAssignedUniqueName: bool // interface property
+    var {:extern "CompileName"} Interface_CompileName: string // interface property
+    var {:extern "Type"} Interface_Type: Type // interface property
+    var {:extern "OptionalType"} Interface_OptionalType: Type // interface property
+    var {:extern "IsMutable"} Interface_IsMutable: bool // interface property
+    var {:extern "IsGhost"} Interface_IsGhost: bool // interface property
+    var {:extern "Tok"} Interface_Tok: Microsoft.Boogie.IToken // interface property
   }
 
   trait {:compile false} {:extern} IVariableContracts extends IVariable {
+    var Name: string
+    var DisplayName: string
+    var UniqueName: string
+    var HasBeenAssignedUniqueName: bool
+    var CompileName: string
+    var Type: Type
+    var OptionalType: Type
+    var IsMutable: bool
+    var IsGhost: bool
+    var Tok: Microsoft.Boogie.IToken
   }
 
   trait {:compile false} {:extern} NonglobalVariable extends IVariable {
@@ -817,6 +1159,17 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var compileName: string
     var {:extern "type"} CSharp_type: Type
     var isGhost: bool
+    var Name: string
+    var DisplayName: string
+    var UniqueName: string
+    var HasBeenAssignedUniqueName: bool
+    var CompileName: string
+    var SyntacticType: Type
+    var Type: Type
+    // var OptionalType: Type // explicit interface
+    var IsMutable: bool
+    var IsGhost: bool
+    var Tok: Microsoft.Boogie.IToken
   }
 
   trait {:compile false} {:extern} Formal extends NonglobalVariable {
@@ -825,6 +1178,9 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var DefaultValue: Expression
     var IsNameOnly: bool
     var NameForCompilation: string
+    // var IsMutable: bool // exists in ancestor
+    var HasName: bool
+    // var CompileName: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} ImplicitFormal extends Formal {
@@ -834,6 +1190,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} BoundVar extends NonglobalVariable {
+    // var IsMutable: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} ActualBinding {
@@ -845,6 +1202,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} ActualBindings {
     var ArgumentBindings: System.Collections.Generic.List<ActualBinding>
     var arguments: System.Collections.Generic.List<Expression>
+    var WasResolved: bool
+    var Arguments: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} Function extends MemberDecl, TypeParameter__ParentType, ICallable {
@@ -869,33 +1228,61 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var AllCalls: System.Collections.Generic.List<FunctionCallExpr>
     var CoClusterTarget: Function__CoCallClusterInvolvement
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
+    // var WhatKind: string // exists in ancestor
+    var IsTailRecursive: bool
+    var IsAccumulatorTailRecursive: bool
+    var SignatureIsOmitted: bool
+    var Original: Function
+    // var IsOverrideThatAddsBody: bool // exists in ancestor
+    var AllowsAllocation: bool
+    var ContainsQuantifier: bool
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    var AllowsNontermination: bool
+    // var IsGhost: bool // exists in ancestor
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // explicit interface
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    var ReadsHeap: bool
   }
 
   trait {:compile false} {:extern} Predicate extends Function {
     var BodyOrigin: Predicate__BodyOriginKind
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} PrefixPredicate extends Function {
     var K: Formal
     var ExtremePred: ExtremePredicate
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} ExtremePredicate extends Function {
     var TypeOfK: ExtremePredicate__KType
     var Uses: System.Collections.Generic.List<FunctionCallExpr>
     var PrefixPredicate: PrefixPredicate
+    var KNat: bool
   }
 
   trait {:compile false} {:extern} LeastPredicate extends ExtremePredicate {
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} GreatestPredicate extends ExtremePredicate {
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} TwoStateFunction extends Function {
+    // var WhatKind: string // exists in ancestor
+    // var ReadsHeap: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} TwoStatePredicate extends TwoStateFunction {
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} Method extends MemberDecl, TypeParameter__ParentType, IMethodCodeContext {
@@ -917,31 +1304,67 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var OverriddenMethod: Method
     var emptyBody: BlockStmt
     var {:extern "_inferredDecr"} CSharp__inferredDecr: bool
+    // var WhatKind: string // exists in ancestor
+    var SignatureIsOmitted: bool
+    var Original: Method
+    // var IsOverrideThatAddsBody: bool // exists in ancestor
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var IsGhost: bool // exists in ancestor
+    // var TypeArgs: System.Collections.Generic.List<TypeParameter> // explicit interface
+    // var Ins: System.Collections.Generic.List<Formal> // explicit interface
+    // var Outs: System.Collections.Generic.List<Formal> // explicit interface
+    // var Modifies: Specification<FrameExpression> // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
+    // var NameRelativeToModule: string // explicit interface
+    // var Decreases: Specification<Expression> // explicit interface
+    // var InferredDecreases: bool // explicit interface
+    var AllowsAllocation: bool
+    // var EnclosingModule: ModuleDefinition // explicit interface
+    // var MustReverify: bool // explicit interface
+    var AllowsNontermination: bool
+    // var CompileName: string // exists in ancestor
+    var Body: BlockStmt
+    var IsLemmaLike: bool
+    var BodyForRefinement: BlockStmt
   }
 
   trait {:compile false} {:extern} Lemma extends Method {
+    // var WhatKind: string // exists in ancestor
+    // var AllowsAllocation: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} TwoStateLemma extends Method {
+    // var WhatKind: string // exists in ancestor
+    // var AllowsAllocation: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} Constructor extends Method {
+    // var WhatKind: string // exists in ancestor
+    var BodyInit: System.Collections.Generic.List<Statement>
+    var BodyProper: System.Collections.Generic.List<Statement>
+    var HasName: bool
   }
 
   trait {:compile false} {:extern} PrefixLemma extends Method {
     var K: Formal
     var ExtremeLemma: ExtremeLemma
+    // var WhatKind: string // exists in ancestor
+    // var AllowsAllocation: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} ExtremeLemma extends Method {
     var TypeOfK: ExtremePredicate__KType
     var PrefixLemma: PrefixLemma
+    var KNat: bool
+    // var AllowsAllocation: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} LeastLemma extends ExtremeLemma {
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} GreatestLemma extends ExtremeLemma {
+    // var WhatKind: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} Statement extends IAttributeBearingDeclaration {
@@ -950,6 +1373,11 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Labels: LList<Label>
     var attributes: Attributes
     var IsGhost: bool
+    var Attributes: Attributes
+    var SubStatements: System.Collections.Generic.IEnumerable<Statement>
+    var SubExpressions: System.Collections.Generic.IEnumerable<Expression>
+    var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression>
+    var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression>
   }
 
   trait {:compile false} {:extern} LList<T> {
@@ -975,23 +1403,29 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} AssertStmt extends PredicateStmt {
     var Proof: BlockStmt
     var Label: AssertLabel
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ExpectStmt extends PredicateStmt {
     var Message: Expression
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AssumeStmt extends PredicateStmt {
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} PrintStmt extends Statement {
     var Args: System.Collections.Generic.List<Expression>
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} RevealStmt extends Statement {
     var Exprs: System.Collections.Generic.List<Expression>
     var LabeledAsserts: System.Collections.Generic.List<AssertLabel>
     var ResolvedStatements: System.Collections.Generic.List<Statement>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} BreakStmt extends Statement {
@@ -1003,6 +1437,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} ProduceStmt extends Statement {
     var rhss: System.Collections.Generic.List<AssignmentRhs>
     var hiddenUpdate: UpdateStmt
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ReturnStmt extends ProduceStmt {
@@ -1015,10 +1451,16 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} AssignmentRhs {
     var Tok: Microsoft.Boogie.IToken
     var attributes: Attributes
+    var Attributes: Attributes
+    var CanAffectPreviouslyKnownExpressions: bool
+    var SubExpressions: System.Collections.Generic.IEnumerable<Expression>
+    var SubStatements: System.Collections.Generic.IEnumerable<Statement>
   }
 
   trait {:compile false} {:extern} ExprRhs extends AssignmentRhs {
     var Expr: Expression
+    // var CanAffectPreviouslyKnownExpressions: bool // exists in ancestor
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} TypeRhs extends AssignmentRhs {
@@ -1030,20 +1472,29 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Path: Type
     var InitCall: CallStmt
     var Type: Type
+    var Arguments: System.Collections.Generic.List<Expression>
+    // var CanAffectPreviouslyKnownExpressions: bool // exists in ancestor
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} HavocRhs extends AssignmentRhs {
+    // var CanAffectPreviouslyKnownExpressions: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} VarDeclStmt extends Statement {
     var Locals: System.Collections.Generic.List<LocalVariable>
     var Update: ConcreteUpdateStatement
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} VarDeclPattern extends Statement {
     var LHS: CasePattern<LocalVariable>
     var RHS: Expression
     var HasGhostModifier: bool
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    var LocalVars: System.Collections.Generic.IEnumerable<LocalVariable>
   }
 
   trait {:compile false} {:extern} ConcreteUpdateStatement extends Statement {
@@ -1055,9 +1506,11 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var AssumeToken: Microsoft.Boogie.IToken
     var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
     var MissingBounds: System.Collections.Generic.List<IVariable>
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern "AssignSuchThatStmt.WiggleWaggleBound"} AssignSuchThatStmt__WiggleWaggleBound extends ComprehensionExpr__BoundedPool {
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern} UpdateStmt extends ConcreteUpdateStatement {
@@ -1065,6 +1518,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var CanMutateKnownState: bool
     var OriginalInitialLhs: Expression
     var ResolvedStatements: System.Collections.Generic.List<Statement>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AssignOrReturnStmt extends ConcreteUpdateStatement {
@@ -1072,11 +1526,14 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Rhss: System.Collections.Generic.List<AssignmentRhs>
     var KeywordToken: Microsoft.Boogie.IToken
     var ResolvedStatements: System.Collections.Generic.List<Statement>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AssignStmt extends Statement {
     var Lhs: Expression
     var Rhs: AssignmentRhs
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} LocalVariable extends IVariable, IAttributeBearingDeclaration {
@@ -1089,6 +1546,16 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var compileName: string
     var OptionalType: Type
     var {:extern "type"} CSharp_type: Type
+    var Name: string
+    var DisplayName: string
+    var UniqueName: string
+    var HasBeenAssignedUniqueName: bool
+    var CompileName: string
+    // var OptionalType: Type // explicit interface
+    var Type: Type
+    var IsMutable: bool
+    // var IsGhost: bool // explicit interface
+    // var Tok: Microsoft.Boogie.IToken // explicit interface
   }
 
   trait {:compile false} {:extern} CallStmt extends Statement {
@@ -1096,10 +1563,17 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var MethodSelect: MemberSelectExpr
     var Bindings: ActualBindings
     var OriginalInitialLhs: Expression
+    var Args: System.Collections.Generic.List<Expression>
+    var Receiver: Expression
+    var Method: Method
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} BlockStmt extends Statement, IRegion {
     var Body: System.Collections.Generic.List<Statement>
+    // var BodyStartTok: Microsoft.Boogie.IToken // explicit interface
+    // var BodyEndTok: Microsoft.Boogie.IToken // explicit interface
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} DividedBlockStmt extends BlockStmt {
@@ -1113,6 +1587,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Guard: Expression
     var Thn: BlockStmt
     var Els: Statement
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} GuardedAlternative {
@@ -1126,6 +1602,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} AlternativeStmt extends Statement {
     var UsesOptionalBraces: bool
     var Alternatives: System.Collections.Generic.List<GuardedAlternative>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} LoopStmt extends Statement {
@@ -1133,15 +1611,21 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Decreases: Specification<Expression>
     var InferredDecreases: bool
     var Mod: Specification<FrameExpression>
+    var LoopSpecificationExpressions: System.Collections.Generic.IEnumerable<Expression>
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} OneBodyLoopStmt extends LoopStmt {
     var Body: BlockStmt
     var BodySurrogate: WhileStmt__LoopBodySurrogate
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} WhileStmt extends OneBodyLoopStmt {
     var Guard: Expression
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern "WhileStmt.LoopBodySurrogate"} WhileStmt__LoopBodySurrogate {
@@ -1157,11 +1641,14 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Start: Expression
     var End: Expression
     var GoingUp: bool
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AlternativeLoopStmt extends LoopStmt {
     var UsesOptionalBraces: bool
     var Alternatives: System.Collections.Generic.List<GuardedAlternative>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ForallStmt extends Statement {
@@ -1173,11 +1660,17 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var CanConvert: bool
     var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
     var Kind: ForallStmt__BodyKind
+    var S0: Statement
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ModifyStmt extends Statement {
     var Mod: Specification<FrameExpression>
     var Body: BlockStmt
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} CalcStmt extends Statement {
@@ -1189,6 +1682,9 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Steps: System.Collections.Generic.List<Expression>
     var Result: Expression
     var DefaultOp: CalcStmt__CalcOp
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var SpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    var AllCalcOps: System.Collections.Generic.IEnumerable<CalcStmt__CalcOp>
   }
 
   trait {:compile false} {:extern "CalcStmt.CalcOp"} CalcStmt__CalcOp {
@@ -1209,41 +1705,64 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var MissingCases: System.Collections.Generic.List<DatatypeCtor>
     var UsesOptionalBraces: bool
     var OrigUnresolved: MatchStmt
+    var Source: Expression
+    var Cases: System.Collections.Generic.List<MatchCaseStmt>
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} MatchCaseStmt extends MatchCase {
     var body: System.Collections.Generic.List<Statement>
     var Attributes: Attributes
+    var Body: System.Collections.Generic.List<Statement>
   }
 
   trait {:compile false} {:extern} SkeletonStatement extends Statement {
     var S: Statement
     var ConditionEllipsis: Microsoft.Boogie.IToken
     var BodyEllipsis: Microsoft.Boogie.IToken
+    var ConditionOmitted: bool
+    var BodyOmitted: bool
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} TokenWrapper extends Microsoft.Boogie.IToken {
     var WrappedToken: Microsoft.Boogie.IToken
+    var col: int
+    var filename: string
+    var IsValid: bool
+    var kind: int
+    var line: int
+    var pos: int
+    var val: string
   }
 
   trait {:compile false} {:extern} NestedToken extends TokenWrapper {
     var Inner: Microsoft.Boogie.IToken
     var Message: string
+    var Outer: Microsoft.Boogie.IToken
   }
 
   trait {:compile false} {:extern} IncludeToken extends TokenWrapper {
     var Include: Include
+    // var val: string // exists in ancestor
   }
 
   trait {:compile false} {:extern} Expression {
     var tok: Microsoft.Boogie.IToken
     var {:extern "type"} CSharp_type: Type
+    var Resolved: Expression
+    var Type: Type
+    var SubExpressions: System.Collections.Generic.IEnumerable<Expression>
+    var ComponentTypes: System.Collections.Generic.IEnumerable<Type>
+    var IsImplicit: bool
   }
 
   trait {:compile false} {:extern} StaticReceiverExpr extends LiteralExpr {
     var UnresolvedType: Type
     var Implicit: bool
     var OriginalResolved: Expression
+    // var IsImplicit: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} LiteralExpr extends Expression {
@@ -1264,6 +1783,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Ctor: DatatypeCtor
     var InferredTypeArgs: System.Collections.Generic.List<Type>
     var IsCoCall: bool
+    var Arguments: System.Collections.Generic.List<Expression>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ThisExpr extends Expression {
@@ -1275,6 +1796,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   }
 
   trait {:compile false} {:extern} ImplicitThisExpr extends ThisExpr {
+    // var IsImplicit: bool // exists in ancestor
   }
 
   trait {:compile false} {:extern} ImplicitThisExpr_ConstructorCall extends ImplicitThisExpr {
@@ -1304,6 +1826,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} DisplayExpression extends Expression {
     var Elements: System.Collections.Generic.List<Expression>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} SetDisplayExpr extends DisplayExpression {
@@ -1316,6 +1839,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} MapDisplayExpr extends Expression {
     var Finite: bool
     var Elements: System.Collections.Generic.List<ExpressionPair>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} SeqDisplayExpr extends DisplayExpression {
@@ -1329,6 +1853,8 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var TypeApplication_AtEnclosingClass: System.Collections.Generic.List<Type>
     var TypeApplication_JustMember: System.Collections.Generic.List<Type>
     var ResolvedOutparameterTypes: System.Collections.Generic.List<Type>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} SeqSelectExpr extends Expression {
@@ -1336,11 +1862,13 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Seq: Expression
     var E0: Expression
     var E1: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} MultiSelectExpr extends Expression {
     var Array: Expression
     var Indices: System.Collections.Generic.List<Expression>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} SeqUpdateExpr extends Expression {
@@ -1348,11 +1876,13 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Index: Expression
     var Value: Expression
     var ResolvedUpdateExpr: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ApplyExpr extends Expression {
     var Function: Expression
     var Args: System.Collections.Generic.List<Expression>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} FunctionCallExpr extends Expression {
@@ -1367,32 +1897,41 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var CoCall: FunctionCallExpr__CoCallResolution
     var CoCallHint: string
     var Function: Function
+    var Args: System.Collections.Generic.List<Expression>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} SeqConstructionExpr extends Expression {
     var ExplicitElementType: Type
     var N: Expression
     var Initializer: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} MultiSetFormingExpr extends Expression {
     var E: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} OldExpr extends Expression {
     var E: Expression
     var At: string
     var AtLabel: Label
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} UnchangedExpr extends Expression {
     var Frame: System.Collections.Generic.List<FrameExpression>
     var At: string
     var AtLabel: Label
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} UnaryExpr extends Expression {
     var E: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} UnaryOpExpr extends UnaryExpr {
@@ -1406,6 +1945,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} TypeUnaryExpr extends UnaryExpr {
     var ToType: Type
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ConversionExpr extends TypeUnaryExpr {
@@ -1420,6 +1960,9 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var E0: Expression
     var E1: Expression
     var AccumulatesForTailRecursion: BinaryExpr__AccumulationOperand
+    var ResolvedOp: BinaryExpr__ResolvedOpcode
+    var ResolvedOp_PossiblyStillUndetermined: BinaryExpr__ResolvedOpcode
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} TernaryExpr extends Expression {
@@ -1428,6 +1971,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var E1: Expression
     var E2: Expression
     var PrefixEqUsesNat: bool
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} LetExpr extends Expression, IAttributeBearingDeclaration, IBoundVarsBearingExpression {
@@ -1441,6 +1985,12 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var lastTranslatorUsed: Translator
     var BodyStartTok: Microsoft.Boogie.IToken
     var BodyEndTok: Microsoft.Boogie.IToken
+    // var BodyStartTok: Microsoft.Boogie.IToken // explicit interface
+    // var BodyEndTok: Microsoft.Boogie.IToken // explicit interface
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
+    var BoundVars: System.Collections.Generic.IEnumerable<BoundVar>
+    var AllBoundVars: System.Collections.Generic.IEnumerable<BoundVar>
   }
 
   trait {:compile false} {:extern} LetOrFailExpr extends ConcreteSyntaxExpression {
@@ -1457,40 +2007,56 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var BodyEndTok: Microsoft.Boogie.IToken
     var Attributes: Attributes
     var Bounds: System.Collections.Generic.List<ComprehensionExpr__BoundedPool>
+    var WhatKind: string
+    var Term: Expression
+    var AllBoundVars: System.Collections.Generic.IEnumerable<BoundVar>
+    // var BodyStartTok: Microsoft.Boogie.IToken // explicit interface
+    // var BodyEndTok: Microsoft.Boogie.IToken // explicit interface
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.BoundedPool"} ComprehensionExpr__BoundedPool {
+    var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.ExactBoundedPool"} ComprehensionExpr__ExactBoundedPool extends ComprehensionExpr__BoundedPool {
     var E: Expression
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.BoolBoundedPool"} ComprehensionExpr__BoolBoundedPool extends ComprehensionExpr__BoundedPool {
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.CharBoundedPool"} ComprehensionExpr__CharBoundedPool extends ComprehensionExpr__BoundedPool {
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.AllocFreeBoundedPool"} ComprehensionExpr__AllocFreeBoundedPool extends ComprehensionExpr__BoundedPool {
     var Type: Type
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.ExplicitAllocatedBoundedPool"} ComprehensionExpr__ExplicitAllocatedBoundedPool extends ComprehensionExpr__BoundedPool {
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.SpecialAllocIndependenceAllocatedBoundedPool"} ComprehensionExpr__SpecialAllocIndependenceAllocatedBoundedPool extends ComprehensionExpr__BoundedPool {
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.IntBoundedPool"} ComprehensionExpr__IntBoundedPool extends ComprehensionExpr__BoundedPool {
     var LowerBound: Expression
     var UpperBound: Expression
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.CollectionBoundedPool"} ComprehensionExpr__CollectionBoundedPool extends ComprehensionExpr__BoundedPool {
     var BoundVariableType: Type
     var CollectionElementType: Type
     var IsFiniteCollection: bool
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.SetBoundedPool"} ComprehensionExpr__SetBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
@@ -1500,10 +2066,12 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern "ComprehensionExpr.SubSetBoundedPool"} ComprehensionExpr__SubSetBoundedPool extends ComprehensionExpr__BoundedPool {
     var UpperBound: Expression
     var IsFiniteCollection: bool
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.SuperSetBoundedPool"} ComprehensionExpr__SuperSetBoundedPool extends ComprehensionExpr__BoundedPool {
     var LowerBound: Expression
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.MultiSetBoundedPool"} ComprehensionExpr__MultiSetBoundedPool extends ComprehensionExpr__CollectionBoundedPool {
@@ -1520,10 +2088,12 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern "ComprehensionExpr.DatatypeBoundedPool"} ComprehensionExpr__DatatypeBoundedPool extends ComprehensionExpr__BoundedPool {
     var Decl: DatatypeDecl
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern "ComprehensionExpr.DatatypeInclusionBoundedPool"} ComprehensionExpr__DatatypeInclusionBoundedPool extends ComprehensionExpr__BoundedPool {
     var IsIndDatatype: bool
+    // var Virtues: ComprehensionExpr__BoundedPool__PoolVirtues // exists in ancestor
   }
 
   trait {:compile false} {:extern} QuantifierExpr extends ComprehensionExpr, TypeParameter__ParentType {
@@ -1531,27 +2101,45 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var TypeArgs: System.Collections.Generic.List<TypeParameter>
     var currentQuantId: int
     var {:extern "_SplitQuantifier"} CSharp__SplitQuantifier: System.Collections.Generic.List<Expression>
+    // var WhatKind: string // exists in ancestor
+    var SplitResolvedOp: BinaryExpr__ResolvedOpcode
+    var SplitQuantifier: System.Collections.Generic.List<Expression>
+    var SplitQuantifierExpression: Expression
+    var FullName: string
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ForallExpr extends QuantifierExpr {
+    // var WhatKind: string // exists in ancestor
+    // var SplitResolvedOp: BinaryExpr__ResolvedOpcode // exists in ancestor
   }
 
   trait {:compile false} {:extern} ExistsExpr extends QuantifierExpr {
+    // var WhatKind: string // exists in ancestor
+    // var SplitResolvedOp: BinaryExpr__ResolvedOpcode // exists in ancestor
   }
 
   trait {:compile false} {:extern} SetComprehension extends ComprehensionExpr {
     var Finite: bool
     var TermIsImplicit: bool
+    // var WhatKind: string // exists in ancestor
+    var TermIsSimple: bool
   }
 
   trait {:compile false} {:extern} MapComprehension extends ComprehensionExpr {
     var Finite: bool
     var TermLeft: Expression
     var ProjectionFunctions: System.Collections.Generic.List<Microsoft.Boogie.Function>
+    // var WhatKind: string // exists in ancestor
+    var IsGeneralMapComprehension: bool
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} LambdaExpr extends ComprehensionExpr {
     var Reads: System.Collections.Generic.List<FrameExpression>
+    // var WhatKind: string // exists in ancestor
+    var Body: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} WildcardExpr extends Expression {
@@ -1560,6 +2148,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} StmtExpr extends Expression {
     var S: Statement
     var E: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ITEExpr extends Expression {
@@ -1567,6 +2156,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Test: Expression
     var Thn: Expression
     var Els: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} MatchExpr extends Expression {
@@ -1576,6 +2166,10 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var MissingCases: System.Collections.Generic.List<DatatypeCtor>
     var UsesOptionalBraces: bool
     var OrigUnresolved: MatchExpr
+    var Source: Expression
+    var Cases: System.Collections.Generic.List<MatchCaseExpr>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} CasePattern<VT> {
@@ -1585,6 +2179,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Var: VT
     var Arguments: System.Collections.Generic.List<CasePattern<VT>>
     var Expr: Expression
+    var Vars: System.Collections.Generic.IEnumerable<VT>
   }
 
   trait {:compile false} {:extern} MatchCase {
@@ -1596,6 +2191,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} MatchCaseExpr extends MatchCase {
     var body: Expression
     var Attributes: Attributes
+    var Body: Expression
   }
 
   trait {:compile false} {:extern} MatchingContext {
@@ -1623,6 +2219,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} LitPattern extends ExtendedPattern {
     var OrigLit: Expression
+    var OptimisticallyDesugaredLit: LiteralExpr
   }
 
   trait {:compile false} {:extern} IdPattern extends ExtendedPattern {
@@ -1651,6 +2248,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Source: Expression
     var Cases: System.Collections.Generic.List<NestedMatchCaseStmt>
     var UsesOptionalBraces: bool
+    // var NonSpecificationSubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} NestedMatchExpr extends ConcreteSyntaxExpression {
@@ -1664,18 +2262,21 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var E: Expression
     var FromType: Type
     var ToType: Type
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} UnboxingCastExpr extends Expression {
     var E: Expression
     var FromType: Type
     var ToType: Type
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AttributedExpression {
     var E: Expression
     var Label: AssertLabel
     var attributes: Attributes
+    var Attributes: Attributes
   }
 
   trait {:compile false} {:extern} FrameExpression {
@@ -1687,10 +2288,13 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} ConcreteSyntaxExpression extends Expression {
     var ResolvedExpression: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
+    // var ComponentTypes: System.Collections.Generic.IEnumerable<Type> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ConcreteSyntaxStatement extends Statement {
     var ResolvedStatement: Statement
+    // var SubStatements: System.Collections.Generic.IEnumerable<Statement> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ParensExpression extends ConcreteSyntaxExpression {
@@ -1705,6 +2309,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
     var Root: Expression
     var Updates: System.Collections.Generic.List<CSharpUtils.Tuple3<Microsoft.Boogie.IToken, string, Expression>>
     var LegalSourceConstructors: System.Collections.Generic.List<DatatypeCtor>
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} AutoGeneratedExpression extends ParensExpression {
@@ -1719,6 +2324,7 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
 
   trait {:compile false} {:extern} NegationExpression extends ConcreteSyntaxExpression {
     var E: Expression
+    // var SubExpressions: System.Collections.Generic.IEnumerable<Expression> // exists in ancestor
   }
 
   trait {:compile false} {:extern} ChainingExpression extends ConcreteSyntaxExpression {
@@ -1746,11 +2352,13 @@ module {:extern "__AUTOGEN__Microsoft.Dafny"} CSharpDafnyAST {
   trait {:compile false} {:extern} ApplySuffix extends SuffixExpr {
     var AtTok: Microsoft.Boogie.IToken
     var Bindings: ActualBindings
+    var Args: System.Collections.Generic.List<Expression>
   }
 
   trait {:compile false} {:extern} Specification<T> {
     var Expressions: System.Collections.Generic.List<T>
     var attributes: Attributes
+    var Attributes: Attributes
   }
 
   trait {:compile false} {:extern} BottomUpVisitor {
