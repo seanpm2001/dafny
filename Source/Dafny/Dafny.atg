@@ -699,6 +699,7 @@ CHARACTERS
   tab       = '\t'.
   space = ' '.
   nondigit = letter + special.
+  nonlf = ANY - lf.
   idchar = nondigit + digit.
   nonidchar = ANY - idchar.
   /* exclude the characters in 'array' and 'bv' and '\'' */
